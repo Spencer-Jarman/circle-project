@@ -1,0 +1,972 @@
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600&family=Rubik:wght@400&display=swap" onload="this.onload=null;this.rel='stylesheet'">
+
+<style>
+  /* ════════════════════════════════════════════
+     FONTS (Cinzel = sidebar group headings, Rubik = sidebar links)
+     ════════════════════════════════════════════ */
+
+  /* Paint the document dark immediately (kills white flash before Circle renders) */
+  html, body {
+    background-color: #090b0e;
+  }
+  
+  /* Sidebar group/category headings */
+  [data-testid="standard-layout-v2-sidebar"] h3 {
+    font-family: 'Cinzel', serif !important;
+    font-weight: 600 !important;
+    letter-spacing: 0.05em;
+  }
+
+  /* Sidebar space links and buttons */
+  [data-testid="standard-layout-v2-sidebar"] a,
+  [data-testid="standard-layout-v2-sidebar"] a span,
+  .border-c-sidebar button {
+    font-family: 'Rubik', sans-serif !important;
+    font-weight: 400 !important;
+  }
+</style>
+
+<style>
+  /* ════════════════════════════════════════════
+     COLORS
+     ════════════════════════════════════════════ */
+  :root {
+    --primary-color: #0a0b0d;
+    --secondary-color: #090b0e;
+    --post-color: #111316;
+    --border-color: #343536;
+    --brand-color: #70180d;
+    --text-color: #F0F3F5;
+    --text-muted-color: #A5A9AD;
+    --alert-color: #e02f2f;
+    --success-color: #22BB22;
+    --link-color: #60A5FA;
+  }
+
+
+  /* ════════════════════════════════════════════
+     COLOR CHANGES
+     ════════════════════════════════════════════ */
+
+  /* ---- Brand ---- */
+
+  /* Circle brand variable takeover */
+  html {
+    --brand: var(--brand-color) !important;
+    --brand-light: hsl(from var(--brand-color) h s calc(l + 12)) !important;
+    --brand-dark: hsl(from var(--brand-color) h s calc(l - 8)) !important;
+    --brand-button-hover: hsl(from var(--brand-color) h s calc(l + 8)) !important;
+  }
+
+  /* Sidebar active/hover states (hover = brand 10% darker) */
+  html {
+    --color-community-sidebar-active-background: var(--brand-color) !important;
+    --color-community-sidebar-hover-background: hsl(from var(--brand-color) h s calc(l - 10)) !important;
+  }
+
+  /* Branded buttons, badges, icons, links (compass family) */
+  html {
+    --compass-branded-button-bg: var(--brand-color) !important;
+    --compass-branded-button-bg-dark: var(--brand-color) !important;
+    --compass-branded-badge-bg: var(--brand-color) !important;
+    --compass-branded-badge-bg-dark: var(--brand-color) !important;
+    --compass-branded-badge-border: var(--brand-color) !important;
+    --compass-branded-badge-border-dark: var(--brand-color) !important;
+    --compass-branded-icon: var(--brand-color) !important;
+    --compass-branded-icon-dark: var(--brand-color) !important;
+    --compass-branded-link-text: var(--brand-color) !important;
+    --compass-branded-link-text-dark: var(--brand-color) !important;
+  }
+
+  /* ---- Text ---- */
+
+  /* Bright text (headings, body, sidebar, header, active items) */
+  html {
+    --color-text-darkest: var(--text-color) !important;
+    --color-text-very-dark: var(--text-color) !important;
+    --color-text-dark: var(--text-color) !important;
+    --color-text-feature-dark: var(--text-color) !important;
+    --color-text-feature-light: var(--text-color) !important;
+    --color-text-selector-active: var(--text-color) !important;
+    --color-community-sidebar-text: var(--text-color) !important;
+    --color-community-sidebar-icon: var(--text-color) !important;
+    --color-community-sidebar-icon-hover: var(--text-color) !important;
+    --color-community-header-text: var(--text-color) !important;
+    --color-community-header-active-text: var(--text-color) !important;
+    --color-community-active-item-text-color: var(--text-color) !important;
+  }
+
+  /* Muted text (timestamps, placeholders, secondary labels, icons) */
+  html {
+    --color-text-default: var(--text-muted-color) !important;
+    --color-text-light: var(--text-muted-color) !important;
+    --color-text-lightest: var(--text-muted-color) !important;
+    --color-text-timestamp-light: var(--text-muted-color) !important;
+    --color-text-placeholder: var(--text-muted-color) !important;
+    --color-text-icon-text: var(--text-muted-color) !important;
+    --color-event-sidebar-item: var(--text-muted-color) !important;
+  }
+
+  /* ---- Links ---- */
+
+  /* Inline links and date links */
+  html {
+    --color-text-link: var(--link-color) !important;
+    --color-text-date-blue: var(--link-color) !important;
+    --color-messaging-info-blue: 96 165 250 !important; /* --link-color as RGB triple */
+  }
+
+  /* ---- Alerts & status ---- */
+
+  /* Alert red (unread badges, errors) */
+  html {
+    --color-community-sidebar-badge-background: var(--alert-color) !important;
+    --color-feedback-error: var(--alert-color) !important;
+  }
+
+  /* Success green (online dots, green chips) */
+  html {
+    --color-online-background: var(--success-color) !important;
+    --color-text-chip: var(--success-color) !important;
+  }
+
+  /* ---- Surfaces (variable takeover) ---- */
+
+  /* Hover/selected surfaces (tertiary = +2%, selected = +4%) */
+  html {
+    --color-background-tertiary: hsl(from var(--post-color) h s calc(l + 2)) !important;
+    --color-background-selector-active: hsl(from var(--post-color) h s calc(l + 4)) !important;
+    --color-community-header-hover-background: hsl(from var(--post-color) h s calc(l + 2)) !important;
+    --color-message-highlight-background: hsl(from var(--post-color) h s calc(l + 4)) !important;
+  }
+
+  /* Panel/widget surfaces */
+  html {
+    --color-background-secondary-dark: var(--secondary-color) !important;
+    --color-background-overlay-dark: var(--post-color) !important;
+    --color-background-avatar-primary: var(--post-color) !important;
+    --color-community-switcher-background: var(--post-color) !important;
+    --color-support-widget-background: var(--post-color) !important;
+    --color-ring-primary: var(--post-color) !important;
+  }
+
+  /* Editor toolbar surfaces (rest / hover / active) */
+  html {
+    --color-background-text-editor-modifier: var(--post-color) !important;
+    --color-background-text-editor-modifier-hover: hsl(from var(--post-color) h s calc(l + 2)) !important;
+    --color-background-text-editor-modifier-active: hsl(from var(--post-color) h s calc(l + 4)) !important;
+  }
+
+  /* Emoji picker (RGB triples of post-color / +2%) */
+  html {
+    --color-background-emoji-picker: 17, 19, 22 !important;
+    --color-background-emoji-picker-hover: 22, 25, 29 !important;
+  }
+
+  /* Toggles (active = brand, inactive = border) */
+  html {
+    --color-background-toggle-active: var(--brand-color) !important;
+    --color-background-toggle-inactive: var(--border-color) !important;
+  }
+
+  /* Gray scale takeover (sweeps remaining default surfaces — delete if anything recolors unexpectedly) */
+  html {
+    --color-gray-800: 17, 19, 22 !important;   /* post-color triple */
+    --color-gray-900: 9, 11, 14 !important;    /* secondary-color triple */
+  }
+
+  /* Background-primary variable takeover (var-only consumers) */
+  html {
+    --color-background-primary: var(--post-color) !important;
+  }
+
+  /* ---- Borders (variable takeover) ---- */
+
+  /* Border variables */
+  html {
+    --color-border-secondary-dark: var(--border-color) !important;
+    --color-border-tertiary: var(--border-color) !important;
+    --color-border-dark: var(--border-color) !important;
+    --color-border-selector-inactive: var(--border-color) !important;
+    --color-border-input: var(--border-color) !important;
+    --color-community-sidebar-border: var(--border-color) !important;
+    --color-sidebar-footer-live-indicator: var(--border-color) !important;
+  }
+
+  /* ---- Utility class takeover (catches elements the variables miss) ---- */
+
+  /* Primary surfaces (cards, pills, dropdowns, empty states) */
+  html .bg-primary,
+  html .\!bg-primary {
+    background-color: var(--post-color) !important;
+  }
+
+  /* Tertiary surfaces (hovers, toggles, tooltips) */
+  html .bg-tertiary,
+  html .\!bg-tertiary,
+  html .hover\:bg-tertiary:hover,
+  html .hover\:\!bg-tertiary:hover,
+  html .focus\:bg-tertiary:focus,
+  html .focus-visible\:bg-tertiary:focus-visible {
+    background-color: hsl(from var(--post-color) h s calc(l + 2)) !important;
+  }
+
+  /* Secondary-dark surfaces */
+  html .bg-secondary-dark {
+    background-color: var(--secondary-color) !important;
+  }
+
+  /* Important border utility */
+  html .\!border-primary {
+    border-color: var(--border-color) !important;
+  }
+
+  /* Tooltips (alt text popups) */
+  [role="tooltip"],
+  .tippy-box {
+    background-color: hsl(from var(--post-color) h s calc(l + 4)) !important;
+    color: var(--text-color) !important;
+  }
+
+  /* Sidebar surface class (all instances incl. hidden drawers, footer rows) */
+  html .bg-c-sidebar,
+  html .standard-layout-v2__sidebar {
+    background-color: var(--primary-color) !important;
+  }
+
+  /* Form controls and selectors (post editor, settings) */
+  html .form-control,
+  html .form-control__prefix,
+  html .option-group__option,
+  html .space-group-selector,
+  html .react-space-selector-dropdown__wrapper {
+    background-color: var(--post-color) !important;
+  }
+
+  /* Post editor floating pill (space selector) */
+  html .float-right.h-11.self-end {
+    background-color: var(--post-color) !important;
+  }
+
+  /* Mobile top bar (legacy header component) stays primary */
+  #mainHeader,
+  header.header-v2,
+  html .\!bg-c-header {
+    background-color: var(--primary-color) !important;
+  }
+
+  /* ---- Scrollbars ---- */
+
+  /* Scrollbars (narrow, secondary track, post-color thumb) */
+  ::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+  }
+  ::-webkit-scrollbar-track {
+    background: var(--secondary-color);
+  }
+  ::-webkit-scrollbar-thumb {
+    background: var(--post-color);
+    border-radius: 8px;
+    border: 2px solid var(--secondary-color);
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: hsl(from var(--post-color) h s calc(l + 4));
+  }
+  html {
+    scrollbar-width: thin;
+    scrollbar-color: var(--post-color) var(--secondary-color);
+  }
+  .os-scrollbar-handle {
+    background: var(--post-color) !important;
+  }
+  .os-scrollbar-track {
+    background: var(--secondary-color) !important;
+  }
+
+  /* ---- Top bar & sidebar ---- */
+
+  /* Top bar background */
+  [data-testid="navigation-bar-wrapper"] {
+    background-color: var(--primary-color) !important;
+  }
+
+  /* Top bar icon buttons hover (+2%) — all popover buttons incl. reply-in-thread */
+  [data-testid="navigation-bar-wrapper"] .hover\:\!bg-c-header-hover:hover {
+    background-color: hsl(from var(--post-color) h s calc(l + 2)) !important;
+  }
+
+  /* Top bar icon buttons focus after close (+2%) */
+  [data-testid="navigation-bar-wrapper"] .focus\:\!bg-c-header-hover:focus,
+  [data-testid="navigation-bar-wrapper"] .focus-visible\:\!bg-c-header-hover:focus-visible {
+    background-color: hsl(from var(--post-color) h s calc(l + 2)) !important;
+  }
+
+  /* Top bar icon buttons open (+4%) — all popover buttons incl. reply-in-thread */
+  [data-testid="navigation-bar-wrapper"] .\!bg-c-header-active {
+    background-color: hsl(from var(--post-color) h s calc(l + 4)) !important;
+  }
+
+  /* Sidebar background */
+  [data-testid="standard-layout-v2-sidebar"] .bg-c-sidebar {
+    background-color: var(--primary-color) !important;
+  }
+
+  /* ---- Popover dropdowns ---- */
+
+  /* Popover panel backgrounds (notifications, DMs, bookmarks, chat threads) */
+  .\-ml-2\.5.border-primary.bg-primary,
+  .\-ml-2\.5.border-primary.bg-primary .bg-primary {
+    background-color: var(--secondary-color) !important;
+  }
+
+  /* ---- Space backgrounds ---- */
+
+  /* Space background */
+  .bg-secondary {
+    background-color: var(--secondary-color) !important;
+  }
+
+  /* Space header bar */
+  #standard-layout-header-child {
+    background-color: var(--secondary-color) !important;
+  }
+
+  /* Cover image box */
+  #standard-layout-v2-cover-image-container .bg-primary {
+    background-color: var(--secondary-color) !important;
+  }
+
+  /* Cover padding wrapper: zero horizontal padding (eats 72px in guest layout) */
+  div:has(> [data-testid="cover-image-container"]) {
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+  }
+  
+  /* Cover image margins */
+  div.standard-layout-v2__content-wrapper {
+    background-color: var(--secondary-color) !important;
+  }
+
+  /* ---- Posts ---- */
+
+  /* Post modals */
+  [data-testid="post-container"] {
+    background-color: var(--post-color) !important;
+  }
+
+  /* Expanded post modal */
+  [data-testid="modal"] {
+    background-color: var(--post-color) !important;
+  }
+
+  /* Expanded post comment section */
+  .post__reply {
+    background-color: var(--post-color) !important;
+  }
+
+  /* ---- Chat ---- */
+
+  /* Chat space background */
+  [data-testid="chat-room-wrapper"],
+  [data-testid="chat-room-wrapper"] .bg-primary {
+    background-color: var(--secondary-color) !important;
+  }
+
+  /* Chat loading flash */
+  .main__wrapper.bg-primary,
+  .main__wrapper.bg-primary .bg-primary.w-full.overflow-auto {
+    background-color: var(--secondary-color) !important;
+  }
+
+  /* Chat loading pane (full-size spinner flex) */
+  html .bg-primary.flex.size-full.items-center.justify-center {
+    background-color: var(--secondary-color) !important;
+  }
+
+  /* Chat details panel */
+  #rail-content {
+    background-color: var(--secondary-color) !important;
+  }
+
+  /* Chat thread reply backgrounds */
+  #rail-content .bg-primary,
+  #rail-content .bg-secondary-dark {
+    background-color: var(--secondary-color) !important;
+  }
+
+  /* Chat message hover */
+  [data-testid="message-item"]:hover {
+    background-color: var(--post-color) !important;
+  }
+
+  /* Center embeds (X posts etc.) inside post bodies */
+  .node-embed .overflow-auto > div,
+  .node-embed iframe {
+    margin-left: auto !important;
+    margin-right: auto !important;
+    display: block;
+  }
+
+  /* Chat thread reply bubble (rest + hover) */
+  #rail-content [data-testid="message-item"] {
+    background-color: var(--secondary-color) !important;
+  }
+  #rail-content [data-testid="message-item"]:hover {
+    background-color: var(--post-color) !important;
+  }
+
+  /* Chat compose box hover/focus states (2% brighter on hover, 30% brighter border on focus) */
+  [data-testid="tiptap-editor"] {
+    background-color: var(--post-color) !important;
+    border-color: var(--border-color) !important;
+  }
+  [data-testid="tiptap-editor"]:hover {
+    background-color: hsl(from var(--post-color) h s calc(l + 2)) !important;
+    border-color: hsl(from var(--border-color) h s calc(l + 2)) !important;
+  }
+  [data-testid="tiptap-editor"]:focus-within {
+    background-color: hsl(from var(--post-color) h s calc(l + 2)) !important;
+    border-color: hsl(from var(--border-color) h s calc(l + 30)) !important;
+  }
+
+  /* Chat compose box thread reply (mirrors normal compose box) */
+  #rail-content [data-testid="tiptap-editor"] {
+    background-color: var(--post-color) !important;
+  }
+  #rail-content [data-testid="tiptap-editor"]:hover {
+    background-color: hsl(from var(--post-color) h s calc(l + 2)) !important;
+    border-color: hsl(from var(--border-color) h s calc(l + 2)) !important;
+  }
+  #rail-content [data-testid="tiptap-editor"]:focus-within {
+    background-color: hsl(from var(--post-color) h s calc(l + 2)) !important;
+    border-color: hsl(from var(--border-color) h s calc(l + 30)) !important;
+  }
+
+  /* ---- Borders ---- */
+
+  /* Separator lines */
+  .border-primary {
+    border-color: var(--border-color) !important;
+  }
+
+  /* Sidebar dividers */
+  .border-c-sidebar {
+    border-color: var(--border-color) !important;
+  }
+
+  /* Sidebar vertical divider */
+  [data-testid="standard-layout-v2-sidebar"] {
+    border-right: 1px solid var(--border-color) !important;
+  }
+
+  /* Popover panel borders (notifications, DMs, bookmarks, chat threads) */
+  .\-ml-2\.5.border-primary.bg-primary,
+  .\-ml-2\.5.border-primary.bg-primary .border-primary {
+    border-color: var(--border-color) !important;
+  }
+
+  /* Go live button */
+  .border-c-sidebar button {
+    background-color: var(--post-color) !important;
+    border-color: var(--border-color) !important;
+  }
+
+  /* ---- Loading states ---- */
+
+  /* Top bar load placeholders */
+  [data-testid="navigation-bar-wrapper"] .bg-tertiary,
+  [data-testid="navigation-bar-wrapper"] .bg-secondary-dark,
+  [data-testid="navigation-bar-wrapper"] .bg-primary {
+    background-color: var(--primary-color) !important;
+  }
+
+  /* Feed skeleton loader */
+  div[class*="skeleton-loader"],
+  div[class*="skeleton-loader"] div {
+    background-color: var(--secondary-color) !important;
+    border-color: var(--secondary-color) !important;
+  }
+
+  /* Events skeleton placeholders */
+  .react-page-space-show .bg-tertiary,
+  .react-page-space-show .animate-pulse {
+    background-color: var(--secondary-color) !important;
+  }
+
+  /* Expanded post skeleton */
+  [data-testid="modal"] .bg-tertiary,
+  [data-testid="modal"] .bg-primary {
+    background-color: var(--post-color) !important;
+  }
+
+  /* Spinner loading background */
+  .react-loader,
+  .default-loader {
+    background-color: var(--secondary-color) !important;
+  }
+  :has(> .react-loader) {
+    background-color: var(--secondary-color) !important;
+  }
+
+
+  /* ════════════════════════════════════════════
+     STRUCTURE (non-color)
+     ════════════════════════════════════════════ */
+
+/* Kill elastic overscroll bounce at page level + main scroll containers
+     (left sidebar keeps its native bounce) */
+  html,
+  body {
+    overscroll-behavior: none;
+  }
+  .main__wrapper,
+  main.standard-layout-v2__content,
+  [data-testid="chat-room-wrapper"],
+  .bg-primary.w-full.overflow-auto,
+  #rail-content,
+  #cc-overlay {
+    overscroll-behavior: none;
+  }
+
+  /* Hide top bar search (logged-in + logged-out headers) */
+  div.group.relative:has(.icon-20-flux-search):has(> button),
+  [data-testid="right-action-block"] > div.group.relative.justify-self-center {
+    display: none !important;
+  }
+
+  /* Hide logo dropdown chevron + its hover circle (logo unchanged) */
+  [data-testid="community-menu"] .icon-12-chevron-down,
+  [data-testid="community-menu"] div:has(> .icon-12-chevron-down) {
+    display: none !important;
+  }
+
+  /* Space header removal (bar collapsed, key controls float top-right) */
+  #standard-layout-header-child > div {
+    position: relative !important;
+    height: 0 !important;
+    min-height: 0 !important;
+    padding: 0 !important;
+    border: none !important;
+    overflow: visible !important;
+  }
+  #standard-layout-header-child > div > div {
+    display: none !important;
+  }
+  #standard-layout-header-child > div > div:has([data-testid="dropdown"]):not(:has(h1)) {
+    display: block !important;
+    position: absolute !important;
+    top: 12px;
+    right: 24px;
+    z-index: 30;
+  }
+
+  /* Space header removal — keep sort dropdown + members stack */
+  #standard-layout-header-child > div > div:has([data-testid="dropdown"]):not(:has(h1)) .gap-6 > div:not([data-testid="dropdown"]):not(:has([data-testid="dropdown"])):not(:has([data-testid="three-user-row"])) {
+    display: none !important;
+  }
+
+  /* Members stack sits left of the sort dropdown */
+  #standard-layout-header-child .gap-6 > div:has([data-testid="three-user-row"]) {
+    order: -1;
+  }
+
+  /* Space header removal — hide feed settings dropdown (keep only sort) */
+  #standard-layout-header-child .gap-6 > div:has([data-testid="feed-settings"]) {
+    display: none !important;
+  }
+
+  /* Space header removal — chat pages hide space settings (posts/events keep the ⋯ menu) */
+  body:has([data-testid="chat-room-wrapper"]) #standard-layout-header-child [data-testid="space-settings-v3"] {
+    display: none !important;
+  }
+
+  /* Space header removal — hide New post button (header + feed quick post) */
+  #standard-layout-header-child button.bg-brand,
+  #sidebar--right__btn-quick-post {
+    display: none !important;
+  }
+
+  /* Chat column height (overrides inline calc(100vh - 136px); header removed, bar 64px) */
+  .main__wrapper.bg-primary .bg-primary.w-full.overflow-auto {
+    height: calc(100vh - 64px) !important;
+  }
+  [data-testid="chat-room-wrapper"] {
+    height: 100% !important;
+  }
+
+  /* Chat message hover width (clear floating controls) */
+  [data-testid="chat-room-wrapper"] [data-testid="message-item"] {
+    margin-right: 120px !important;
+  }
+
+  /* Phantom scroll fix (post + event spaces) */
+  [data-testid="community-content"] > .standard-layout-v2 {
+    overflow: hidden !important;
+  }
+
+  /* Events space background color reaching bottom of screen */
+  main.standard-layout-v2__content {
+    min-height: 100% !important;
+  }
+
+  /* Centering expanded post modal */
+  .fixed.inset-0.z-\[1060\] > div {
+    align-items: center !important;
+  }
+</style>
+
+<style>
+  /* ════════════════════════════════════════════
+     CUSTOM TOP BAR NAV (buttons + overlay)
+     ════════════════════════════════════════════ */
+
+  /* Nav container (centered on viewport) */
+  [data-testid="header-navigation-bar"] {
+    pointer-events: none;
+    z-index: 20;
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 8px;
+    height: 64px;
+    align-items: center;
+  }
+
+  /* Nav tab button */
+  .cc-nav-btn {
+    pointer-events: auto;
+    position: relative;
+    height: 64px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    color: var(--text-color);
+    /* fluid width 130px→72px (starts ~1495px), smooth transition */
+    width: clamp(72px, calc(9.7vw - 15px), 130px);
+    transition: width 0.18s ease;
+  }
+
+  /* Nav tab hover pill (+2%, inset from bar edges) */
+  .cc-nav-btn::before {
+    content: '';
+    position: absolute;
+    top: 8px;
+    bottom: 8px;
+    left: 0;
+    right: 0;
+    border-radius: 8px;
+    background: transparent;
+  }
+  .cc-nav-btn:hover::before {
+    background: hsl(from var(--post-color) h s calc(l + 2));
+  }
+
+  /* Nav tab active (brand icon + underline, 3px inset each side) */
+  .cc-nav-btn.cc-active {
+    color: var(--brand-color);
+  }
+  .cc-nav-btn.cc-active::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 3px;
+    right: 3px;
+    height: 3px;
+    background: var(--brand-color);
+    border-radius: 3px 3px 0 0;
+  }
+
+  .cc-nav-btn svg { width: 28px; height: 28px; position: relative; }
+
+  /* Responsive: tighter gap, then hide entirely */
+  @media (max-width: 1000px) {
+    [data-testid="header-navigation-bar"] { gap: 4px; }
+  }
+  @media (max-width: 880px) {
+    [data-testid="header-navigation-bar"] { display: none; }
+  }
+
+  /* Custom overlay (shorts / twitch / games) */
+  #cc-overlay {
+    position: fixed;
+    top: 64px;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: var(--secondary-color);
+    z-index: 45;
+    overflow: auto;
+  }
+</style>
+
+<style>
+  /* ════════════════════════════════════════════
+     SHORTS PLAYER (button 3 overlay content)
+     ════════════════════════════════════════════ */
+  .reels-wrapper { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; background: #000; overflow: hidden; box-sizing: border-box; }
+  .reels-main { display: flex; flex-direction: row; align-items: stretch; height: calc(100% - 30px); width: 100%; justify-content: center; gap: 0; margin: 15px 0; transform: translateX(30px); }
+  .reels-player { position: relative; aspect-ratio: 9 / 16; height: 100%; width: auto; border-radius: 16px; overflow: hidden; background: #111; flex-shrink: 0; }
+  .reels-scroll-track { position: absolute; top: 0; left: 0; width: 100%; height: 100%; transition: transform 0.42s cubic-bezier(0.4, 0, 0.2, 1); }
+  .reels-player iframe { position: absolute; left: 0; width: 100%; height: 100%; border: none; }
+  .reels-player iframe.reels-frame { pointer-events: none; }
+  .reels-player iframe.reels-frame.active { pointer-events: auto; }
+  .reels-loader, .reels-empty-message { position: absolute; inset: 0; display: grid; place-items: center; color: rgba(255,255,255,0.78); font-size: 13px; text-align: center; padding: 24px; z-index: 2; }
+  .reels-loader::before { content: ""; width: 42px; height: 42px; border-radius: 50%; border: 2px solid rgba(255,255,255,0.15); border-top-color: rgba(255,255,255,0.9); animation: reelsSpin 0.8s linear infinite; }
+  @keyframes reelsSpin { to { transform: rotate(360deg); } }
+  .reels-top-left { position: absolute; top: 16px; left: 16px; display: flex; gap: 10px; z-index: 10; opacity: 0; transition: opacity 0.2s ease; pointer-events: none; }
+  .reels-player:hover .reels-top-left { opacity: 1; pointer-events: auto; }
+  .reels-play-pill { display: flex; align-items: center; justify-content: center; background: rgba(40,40,40,0.65); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); border-radius: 999px; border: none; width: 40px; height: 40px; cursor: pointer; color: #fff; flex-shrink: 0; transition: background 0.15s; }
+  .reels-play-pill:hover { background: rgba(55,55,55,0.8); }
+  .reels-volume-pill { display: flex; align-items: center; gap: 8px; background: rgba(40,40,40,0.65); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); border-radius: 999px; padding: 0 14px 0 10px; height: 40px; cursor: pointer; overflow: hidden; transition: background 0.15s; }
+  .reels-volume-pill:hover { background: rgba(55,55,55,0.8); }
+  .reels-volume-pill-icon { display: flex; align-items: center; justify-content: center; flex-shrink: 0; color: #fff; width: 20px; }
+  .reels-volume-pill-slider { width: 90px; height: 4px; appearance: none; -webkit-appearance: none; background: rgba(255,255,255,0.35); border-radius: 2px; outline: none; cursor: pointer; flex-shrink: 0; }
+  .reels-volume-pill-slider::-webkit-slider-thumb { -webkit-appearance: none; width: 14px; height: 14px; border-radius: 50%; background: #fff; cursor: pointer; box-shadow: 0 1px 4px rgba(0,0,0,0.4); }
+  .reels-volume-pill-slider::-moz-range-thumb { width: 14px; height: 14px; border-radius: 50%; background: #fff; cursor: pointer; border: none; box-shadow: 0 1px 4px rgba(0,0,0,0.4); }
+  .reels-sidebar { display: flex; flex-direction: column; align-items: center; justify-content: flex-end; padding-bottom: 80px; padding-left: 16px; gap: 20px; flex-shrink: 0; width: 60px; }
+  .reels-engagement-item { display: flex; flex-direction: column; align-items: center; gap: 4px; cursor: pointer; }
+  .reels-engagement-item svg { color: #fff; display: block; }
+  .reels-engagement-count { font-size: 12px; color: #fff; font-weight: 500; text-align: center; }
+  .reels-nav-arrows { position: absolute; right: 16px; top: 50%; transform: translateY(-50%); display: flex; flex-direction: column; gap: 14px; align-items: center; z-index: 20; }
+  .reels-nav-arrow { width: 44px; height: 44px; border-radius: 50%; background: transparent; border: 2px solid rgba(255,255,255,0.55); display: flex; align-items: center; justify-content: center; cursor: pointer; color: rgba(255,255,255,0.85); transition: all 0.15s; user-select: none; flex-shrink: 0; }
+  .reels-nav-arrow:hover { border-color: rgba(255,255,255,0.9); color: #fff; background: rgba(255,255,255,0.08); }
+  .reels-nav-arrow:active { transform: scale(0.93); }
+  .reels-nav-arrow.disabled { opacity: 0.25; cursor: default; transform: none; }
+  #reels-volume-control { display: none; }
+  .reels-nav-arrow svg { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-width: 2.5; stroke-linecap: round; stroke-linejoin: round; }
+</style>
+
+<style>
+  /* ════════════════════════════════════════════
+     TWITCH PLAYER (button 4 overlay content)
+     ════════════════════════════════════════════ */
+  #twitch-container {
+    position: absolute;
+    inset: 0;
+    background-color: #000000;
+    border: none;
+    overflow: hidden;
+  }
+  #video-wrapper {
+    display: flex;
+    width: 100%;
+    height: calc(100% - 40px);
+    transition: width 0.3s ease-in-out;
+    position: relative;
+  }
+  #video-wrapper iframe { background-color: #000000 !important; }
+  .chat-frame {
+    border: none;
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    background-color: #18181b;
+    display: none;
+  }
+  #chat-wrapper {
+    position: absolute;
+    right: -25%;
+    top: 0;
+    width: 25%;
+    height: calc(100% - 40px);
+    transition: right 0.3s ease-in-out;
+  }
+  #control-bar {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 40px;
+    background-color: var(--primary-color);
+    display: flex;
+    align-items: center;
+    justify-content: start;
+    padding-left: 10px;
+    gap: 10px;
+    z-index: 1;
+    box-sizing: border-box;
+  }
+  #stream-buttons {
+    display: flex;
+    gap: 4px;
+    flex: 1;
+    min-width: 0;
+    overflow: hidden;
+    flex-shrink: 1;
+  }
+  .stream-button,
+  .control-button,
+  .pagination-arrow {
+    font-family: 'Rubik', sans-serif;
+    font-size: 12.5px;
+    height: 30px;
+    padding: 4px 12px;
+    background-color: var(--brand-color);
+    color: #fff;
+    border: 1px solid #000000;
+    background-image: linear-gradient(to bottom, hsl(from var(--brand-color) h s calc(l + 6)), hsl(from var(--brand-color) h s calc(l - 6)));
+    box-shadow: 0 1px 2px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.18);
+    border-radius: 4px;
+    cursor: pointer;
+    white-space: nowrap;
+    flex-shrink: 0;
+    transition: background-color 0.15s ease;
+  }
+  .stream-button:hover,
+  .control-button:hover,
+  .pagination-arrow:hover:not(:disabled) {
+    background-color: hsl(from var(--brand-color) h s calc(l + 8));
+  }
+  .stream-button.cc-live-active {
+    box-shadow: inset 0 0 0 1.5px rgba(255, 255, 255, 0.55);
+  }
+  .pagination-arrow {
+    padding: 4px 10px;
+    font-size: 15px;
+    min-width: 30px;
+    line-height: 1;
+  }
+  .pagination-arrow:disabled { opacity: 0.3; cursor: not-allowed; }
+</style>
+
+<style>
+  /* ════════════════════════════════════════════
+     MINI GAMES (button 5 overlay content)
+     ════════════════════════════════════════════ */
+  #games-container { position: absolute; inset: 0; display: flex; background: var(--secondary-color); }
+
+  /* Left game menu */
+  #games-menu { width: 220px; flex-shrink: 0; border-right: 1px solid var(--border-color); padding: 16px 10px; display: flex; flex-direction: column; gap: 6px; }
+  .games-menu-title { color: #A5A9AD; font-size: 12px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; padding: 0 10px 8px; }
+  .games-menu-btn { display: flex; align-items: center; gap: 10px; padding: 10px 12px; border: none; border-radius: 8px; background: transparent; color: #E4E7EB; font-size: 14px; cursor: pointer; text-align: left; }
+  .games-menu-btn:hover { background: hsl(from var(--post-color) h s calc(l + 2)); }
+  .games-menu-btn.games-active { background: var(--brand-color); color: #fff; }
+
+  /* Game stage */
+  #games-stage { flex: 1; display: flex; align-items: center; justify-content: center; position: relative; overflow: hidden; }
+
+  /* Spinner wheel */
+  #wheel-area { position: relative; display: flex; align-items: center; justify-content: center; }
+  #wheel-canvas { display: block; }
+  #wheel-pointer { position: absolute; top: -6px; left: 50%; transform: translateX(-50%); width: 0; height: 0; border-left: 16px solid transparent; border-right: 16px solid transparent; border-top: 26px solid #ffd54a; filter: drop-shadow(0 2px 3px rgba(0,0,0,0.5)); z-index: 3; }
+  #wheel-spin-btn { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 92px; height: 92px; border-radius: 50%; border: 5px solid #fff; background: var(--brand-color); color: #fff; font-size: 16px; font-weight: 800; letter-spacing: 0.06em; cursor: pointer; z-index: 3; box-shadow: 0 4px 18px rgba(0,0,0,0.55); transition: transform 0.12s; }
+  #wheel-spin-btn:hover { transform: translate(-50%, -50%) scale(1.06); }
+  #wheel-spin-btn:disabled { opacity: 0.6; cursor: default; transform: translate(-50%, -50%); }
+
+  /* Slarky Run */
+  #slark-area { display: none; flex-direction: column; align-items: center; gap: 12px; }
+  #slark-area.active { display: flex; }
+  #slark-canvas { border-radius: 12px; box-shadow: 0 4px 24px rgba(0,0,0,0.45); }
+  .slark-hint { color: #A5A9AD; font-size: 13px; }
+
+  /* Game popups (winner / death) */
+  .games-popup { position: absolute; inset: 0; display: none; align-items: center; justify-content: center; background: rgba(0,0,0,0.65); z-index: 10; }
+  .games-popup.show { display: flex; }
+  .games-popup-card { background: var(--post-color); border: 2px solid #ffd54a; border-radius: 20px; padding: 44px 64px; text-align: center; animation: winnerPop 0.55s cubic-bezier(0.2, 1.6, 0.4, 1); box-shadow: 0 0 60px rgba(255, 213, 74, 0.35); }
+  .games-popup-card.death { border-color: #4dd8c7; box-shadow: 0 0 60px rgba(77, 216, 199, 0.3); }
+  .games-popup-label { color: #ffd54a; font-size: 14px; font-weight: 700; letter-spacing: 0.2em; text-transform: uppercase; margin-bottom: 10px; }
+  .games-popup-card.death .games-popup-label { color: #4dd8c7; }
+  .games-popup-name { color: #fff; font-size: 44px; font-weight: 900; }
+  .games-popup-sub { color: #A5A9AD; font-size: 16px; margin-top: 8px; }
+  .games-popup-highscore { color: #ffd54a; font-size: 18px; font-weight: 800; margin-top: 10px; display: none; }
+  .games-popup-highscore.show { display: block; }
+  .games-popup-close { margin-top: 22px; padding: 8px 26px; border: none; border-radius: 999px; background: var(--brand-color); color: #fff; font-weight: 700; cursor: pointer; }
+  @keyframes winnerPop { 0% { transform: scale(0.3); opacity: 0; } 100% { transform: scale(1); opacity: 1; } }
+</style>
+
+<!-- Shorts player HTML (hidden until Shorts tab is pressed) -->
+<div id="reels-wrapper" class="reels-wrapper" style="display: none;">
+  <div class="reels-main">
+    <div class="reels-player" id="reels-player">
+      <div class="reels-top-left">
+        <button class="reels-play-pill" id="reels-play-btn" title="Play/Pause" aria-label="Play or pause">
+          <svg id="reels-play-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+        </button>
+        <div class="reels-volume-pill" id="reels-volume-btn" title="Toggle mute" aria-label="Toggle mute">
+          <div class="reels-volume-pill-icon">
+            <svg id="reels-volume-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/></svg>
+          </div>
+          <input type="range" class="reels-volume-pill-slider" id="reels-volume-slider" min="0" max="100" value="40" step="1">
+        </div>
+      </div>
+    </div>
+    <div class="reels-sidebar">
+      <div class="reels-engagement-item">
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 9V5a3 3 0 0 0-3-3l-4 9v11h11.28a2 2 0 0 0 2-1.7l1.38-9a2 2 0 0 0-2-2.3H14z"/><path d="M7 22H4a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2h3"/></svg>
+        <span class="reels-engagement-count" id="reels-likes-count">—</span>
+      </div>
+      <div class="reels-engagement-item">
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+        <span class="reels-engagement-count" id="reels-comments-count">—</span>
+      </div>
+      <div class="reels-engagement-item">
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
+        <span class="reels-engagement-count" id="reels-shares-count">—</span>
+      </div>
+    </div>
+  </div>
+  <div class="reels-nav-arrows">
+    <div class="reels-nav-arrow" id="reels-nav-up" title="Previous video (↑)" role="button" tabindex="0" aria-label="Previous video"><svg viewBox="0 0 24 24"><polyline points="18 15 12 9 6 15"/></svg></div>
+    <div class="reels-nav-arrow" id="reels-nav-down" title="Next video (↓)" role="button" tabindex="0" aria-label="Next video"><svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg></div>
+  </div>
+</div>
+
+<!-- Twitch player HTML (hidden until Twitch tab is pressed) -->
+<div id="twitch-container" style="display: none;">
+  <div id="video-wrapper"></div>
+  <div id="chat-wrapper"></div>
+  <div id="control-bar">
+    <button id="toggle-chat-button" class="control-button" style="width: 90px;">Show Chat</button>
+    <div style="margin-left: 15px; color: white; font-weight: bold;">Live Streamers:</div>
+    <div id="stream-buttons"></div>
+    <div id="twitch-pagination" style="display: flex; gap: 6px; margin-left: auto; margin-right: 10px;">
+      <button id="prev-button" class="pagination-arrow" disabled>‹</button>
+      <button id="next-button" class="pagination-arrow" disabled>›</button>
+    </div>
+  </div>
+</div>
+
+<!-- Mini games HTML (hidden until Games tab is pressed) -->
+<div id="games-container" style="display: none;">
+  <div id="games-menu">
+    <div class="games-menu-title">Mini Games</div>
+    <button class="games-menu-btn games-active" data-game="wheel">🎡 Hero Wheel</button>
+    <button class="games-menu-btn" data-game="slark">🦈 Slarky Run</button>
+  </div>
+  <div id="games-stage">
+    <div id="wheel-area">
+      <div id="wheel-pointer"></div>
+      <canvas id="wheel-canvas" width="640" height="640"></canvas>
+      <button id="wheel-spin-btn">SPIN</button>
+    </div>
+    <div id="slark-area">
+      <canvas id="slark-canvas" width="900" height="320"></canvas>
+      <div class="slark-hint">Space / ↑ / click to jump &nbsp;•&nbsp; hold ↓ to duck</div>
+    </div>
+    <div id="wheel-winner" class="games-popup">
+      <div class="games-popup-card">
+        <div class="games-popup-label">Winner</div>
+        <div class="games-popup-name" id="wheel-winner-name"></div>
+        <button class="games-popup-close" id="wheel-winner-close">Spin Again</button>
+      </div>
+    </div>
+    <div id="slark-death" class="games-popup">
+      <div class="games-popup-card death">
+        <div class="games-popup-label">You Died</div>
+        <div class="games-popup-name" id="slark-death-score"></div>
+        <div class="games-popup-sub" id="slark-death-best"></div>
+        <div class="games-popup-highscore" id="slark-death-record">🏆 NEW HIGH SCORE!</div>
+        <button class="games-popup-close" id="slark-death-close">Play Again</button>
+      </div>
+    </div>
+  </div>
+</div>
