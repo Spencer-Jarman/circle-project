@@ -4,33 +4,6 @@
    @import must stay on line 1; browsers ignore it otherwise.
    ════════════════════════════════════════════════════════════ */
 
-  /* ════════════════════════════════════════════
-     FONTS (Cinzel = sidebar group headings, Rubik = sidebar links)
-     ════════════════════════════════════════════ */
-
-  /* Paint the document dark immediately (kills white flash before Circle renders) */
-  html, body {
-    background-color: #090b0e;
-  }
-  
-  /* Sidebar group/category headings */
-  [data-testid="standard-layout-v2-sidebar"] h3 {
-    font-family: 'Cinzel', serif !important;
-    font-weight: 600 !important;
-    letter-spacing: 0.05em;
-  }
-
-  /* Sidebar space links and buttons */
-  [data-testid="standard-layout-v2-sidebar"] a,
-  [data-testid="standard-layout-v2-sidebar"] a span,
-  .border-c-sidebar button {
-    font-family: 'Rubik', sans-serif !important;
-    font-weight: 400 !important;
-  }
-
-
-  
-
 /* ════════════════════════════════════════════════════════════
    SECTION A — COLOUR
    Everything that sets a colour lives here and nowhere else.
@@ -58,7 +31,7 @@
    ════════════════════════════════════════════════════════════ */
 
   :root {
-  --primary-color: #0a0b0d;
+    --primary-color: #0a0b0d;
     --secondary-color: #090b0e;
     --post-color: #111316;
     --border-color: #343536;
@@ -71,6 +44,12 @@
 
     /* audit marker: magenta = token not themed yet */
     --unassigned: #ff00ff;
+  }
+
+  /* Paint the document dark immediately (kills the white flash before
+     Circle renders). Palette-driven, so it tracks --secondary-color. */
+  html, body {
+    background-color: var(--secondary-color);
   }
 
   html {
@@ -339,6 +318,141 @@
     --color-gray-200: 34, 36, 40 !important;
     --color-gray-300: 52, 53, 54 !important;
     --color-gray-900: 9, 11, 14 !important;
+
+    /* ---- status colours, pinned ----
+       Circle declares these as var(--color-red-400) etc., so they resolve
+       THROUGH the primitives below. Pinned to explicit values here so the
+       green primitive markers cannot turn every warning and error green.
+       Change these only if you want to restyle error/success states. */
+    --color-background-danger: #f87171 !important;
+    --color-background-danger-active: #ef4444 !important;
+    --color-background-danger-hover: #b91c1c !important;
+    --color-background-danger-light: #483136 !important;
+    --color-background-idle: #f59e0b !important;
+    --color-background-info: #60a5fa !important;
+    --color-background-info-light: #2d3b50 !important;
+    --color-background-online: #22c55e !important;
+    --color-background-success: #4ade80 !important;
+    --color-background-success-light: #2a4539 !important;
+    --color-background-warning: #fcd34d !important;
+    --color-background-warning-light: #493f2d !important;
+    --color-border-danger: #fca5a5 !important;
+    --color-border-info: #93c5fd !important;
+    --color-border-success: #86efac !important;
+    --color-border-warning: #fcd34d !important;
+    --color-icon-danger: #fca5a5 !important;
+    --color-icon-info: #93c5fd !important;
+    --color-icon-success: #86efac !important;
+    --color-icon-warning: #fcd34d !important;
+    --color-text-danger: #fca5a5 !important;
+    --color-text-info: #93c5fd !important;
+    --color-text-success: #86efac !important;
+    --color-text-warning: #fcd34d !important;
+    --icon-flagged: #f23434 !important;
+    --success: #6ec87c !important;
+    --success-dark: #469b52 !important;
+
+    /* ---- primitives ----
+       Circle's raw colour scales. Semantic tokens above no longer read
+       these, so anything rendering GREEN (#90ee90) is an element painting
+       itself straight from a primitive — skeleton loaders, pulse states
+       and similar. Green means "primitive"; magenta means "not chosen yet".
+       The --color-gray-* family uses bare R, G, B triples because Circle
+       wraps them in rgba(); the rest are hex. Keep each in its own format. */
+    --color-almond-100: #90ee90 !important;
+    --color-almond-200: #90ee90 !important;
+    --color-almond-300: #90ee90 !important;
+    --color-almond-400: #90ee90 !important;
+    --color-amber-100: #90ee90 !important;
+    --color-amber-200: #90ee90 !important;
+    --color-amber-300: #90ee90 !important;
+    --color-amber-400: #90ee90 !important;
+    --color-amber-50: #90ee90 !important;
+    --color-amber-500: #90ee90 !important;
+    --color-amber-600: #90ee90 !important;
+    --color-amber-700: #90ee90 !important;
+    --color-amber-800: #90ee90 !important;
+    --color-amber-900: #90ee90 !important;
+    --color-blue-100: #90ee90 !important;
+    --color-blue-200: #90ee90 !important;
+    --color-blue-300: #90ee90 !important;
+    --color-blue-400: #90ee90 !important;
+    --color-blue-50: #90ee90 !important;
+    --color-blue-500: #90ee90 !important;
+    --color-blue-600: #90ee90 !important;
+    --color-blue-700: #90ee90 !important;
+    --color-blue-800: #90ee90 !important;
+    --color-blue-900: #90ee90 !important;
+    --color-burnt-sienna-100: #90ee90 !important;
+    --color-burnt-sienna-200: #90ee90 !important;
+    --color-burnt-sienna-300: #90ee90 !important;
+    --color-burnt-sienna-400: #90ee90 !important;
+    --color-carolina-blue-100: #90ee90 !important;
+    --color-carolina-blue-200: #90ee90 !important;
+    --color-carolina-blue-300: #90ee90 !important;
+    --color-carolina-blue-400: #90ee90 !important;
+    --color-gray-400: 144, 238, 144 !important;
+    --color-gray-500: 144, 238, 144 !important;
+    --color-gray-600: 144, 238, 144 !important;
+    --color-gray-700: 144, 238, 144 !important;
+    --color-green-100: #90ee90 !important;
+    --color-green-200: #90ee90 !important;
+    --color-green-300: #90ee90 !important;
+    --color-green-400: #90ee90 !important;
+    --color-green-50: #90ee90 !important;
+    --color-green-500: #90ee90 !important;
+    --color-green-600: #90ee90 !important;
+    --color-green-700: #90ee90 !important;
+    --color-green-800: #90ee90 !important;
+    --color-green-900: #90ee90 !important;
+    --color-grey-100: #90ee90 !important;
+    --color-grey-200: #90ee90 !important;
+    --color-grey-300: #90ee90 !important;
+    --color-grey-400: #90ee90 !important;
+    --color-grey-50: #90ee90 !important;
+    --color-grey-500: #90ee90 !important;
+    --color-grey-600: #90ee90 !important;
+    --color-grey-700: #90ee90 !important;
+    --color-grey-800: #90ee90 !important;
+    --color-grey-850: #90ee90 !important;
+    --color-grey-900: #90ee90 !important;
+    --color-haiti-100: #90ee90 !important;
+    --color-haiti-200: #90ee90 !important;
+    --color-haiti-300: #90ee90 !important;
+    --color-haiti-400: #90ee90 !important;
+    --color-indigo-100: #90ee90 !important;
+    --color-indigo-200: #90ee90 !important;
+    --color-indigo-300: #90ee90 !important;
+    --color-indigo-400: #90ee90 !important;
+    --color-red-100: #90ee90 !important;
+    --color-red-200: #90ee90 !important;
+    --color-red-300: #90ee90 !important;
+    --color-red-400: #90ee90 !important;
+    --color-red-50: #90ee90 !important;
+    --color-red-500: #90ee90 !important;
+    --color-red-600: #90ee90 !important;
+    --color-red-700: #90ee90 !important;
+    --color-red-800: #90ee90 !important;
+    --color-red-900: #90ee90 !important;
+    --color-royal-blue-100: #90ee90 !important;
+    --color-royal-blue-200: #90ee90 !important;
+    --color-royal-blue-300: #90ee90 !important;
+    --color-royal-blue-400: #90ee90 !important;
+    --color-royal-blue-500: #90ee90 !important;
+    --color-royal-blue-600: #90ee90 !important;
+    --color-royal-blue-700: #90ee90 !important;
+    --color-salmon-100: #90ee90 !important;
+    --color-salmon-200: #90ee90 !important;
+    --color-salmon-300: #90ee90 !important;
+    --color-salmon-400: #90ee90 !important;
+    --color-sea-100: #90ee90 !important;
+    --color-sea-200: #90ee90 !important;
+    --color-sea-300: #90ee90 !important;
+    --color-sea-400: #90ee90 !important;
+    --color-sunglow-100: #90ee90 !important;
+    --color-sunglow-200: #90ee90 !important;
+    --color-sunglow-300: #90ee90 !important;
+    --color-sunglow-400: #90ee90 !important;
   }
 
   /* ---- colour rules with no token behind them ---- */
@@ -376,6 +490,20 @@
    Layout, spacing, typography, visibility, and our own components
    (Shorts player, Twitch panel, mini games). No colour theming here.
    ════════════════════════════════════════════════════════════ */
+
+  /* ---- Fonts (Cinzel = sidebar group headings, Rubik = sidebar links) ---- */
+  [data-testid="standard-layout-v2-sidebar"] h3 {
+    font-family: 'Cinzel', serif !important;
+    font-weight: 600 !important;
+    letter-spacing: 0.05em;
+  }
+
+  [data-testid="standard-layout-v2-sidebar"] a,
+  [data-testid="standard-layout-v2-sidebar"] a span,
+  .border-c-sidebar button {
+    font-family: 'Rubik', sans-serif !important;
+    font-weight: 400 !important;
+  }
 
   
   /* Sidebar group/category headings */
