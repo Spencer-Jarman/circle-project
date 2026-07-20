@@ -1,4 +1,10 @@
 /* ════════════════════════════════════════════════════════════
+   endmid.gg — application code.
+   Loaded by the Circle snippet only AFTER markup.html is in the
+   DOM, so every section finds the nodes it queries.
+   ════════════════════════════════════════════════════════════ */
+
+/* ════════════════════════════════════════════════════════════
    SECTION 1 — CUSTOM TOP BAR NAV
    Regions: config · overlay · buttons · navigation memory ·
    publish redirect · centering · header controls · escapes ·
@@ -1480,140 +1486,6 @@ async function setupReelsPlayer() {
   };
 })();
 
-  /* ════════════════════════════════════════════
-     MINI GAMES (button 5 overlay content)
-     ════════════════════════════════════════════ */
-  #games-container { position: absolute; inset: 0; display: flex; background: var(--secondary-color); }
-
-  /* Left game menu */
-  #games-menu { width: 220px; flex-shrink: 0; border-right: 1px solid var(--border-color); padding: 16px 10px; display: flex; flex-direction: column; gap: 6px; }
-  .games-menu-title { color: #A5A9AD; font-size: 12px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; padding: 0 10px 8px; }
-  .games-menu-btn { display: flex; align-items: center; gap: 10px; padding: 10px 12px; border: none; border-radius: 8px; background: transparent; color: #E4E7EB; font-size: 14px; cursor: pointer; text-align: left; }
-  .games-menu-btn:hover { background: hsl(from var(--post-color) h s calc(l + 2)); }
-  .games-menu-btn.games-active { background: var(--brand-color); color: #fff; }
-
-  /* Game stage */
-  #games-stage { flex: 1; display: flex; align-items: center; justify-content: center; position: relative; overflow: hidden; }
-
-  /* Spinner wheel */
-  #wheel-area { position: relative; display: flex; align-items: center; justify-content: center; }
-  #wheel-canvas { display: block; }
-  #wheel-pointer { position: absolute; top: -6px; left: 50%; transform: translateX(-50%); width: 0; height: 0; border-left: 16px solid transparent; border-right: 16px solid transparent; border-top: 26px solid #ffd54a; filter: drop-shadow(0 2px 3px rgba(0,0,0,0.5)); z-index: 3; }
-  #wheel-spin-btn { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 92px; height: 92px; border-radius: 50%; border: 5px solid #fff; background: var(--brand-color); color: #fff; font-size: 16px; font-weight: 800; letter-spacing: 0.06em; cursor: pointer; z-index: 3; box-shadow: 0 4px 18px rgba(0,0,0,0.55); transition: transform 0.12s; }
-  #wheel-spin-btn:hover { transform: translate(-50%, -50%) scale(1.06); }
-  #wheel-spin-btn:disabled { opacity: 0.6; cursor: default; transform: translate(-50%, -50%); }
-
-  /* Slarky Run */
-  #slark-area { display: none; flex-direction: column; align-items: center; gap: 12px; }
-  #slark-area.active { display: flex; }
-  #slark-canvas { border-radius: 12px; box-shadow: 0 4px 24px rgba(0,0,0,0.45); }
-  .slark-hint { color: #A5A9AD; font-size: 13px; }
-
-  /* Game popups (winner / death) */
-  .games-popup { position: absolute; inset: 0; display: none; align-items: center; justify-content: center; background: rgba(0,0,0,0.65); z-index: 10; }
-  .games-popup.show { display: flex; }
-  .games-popup-card { background: var(--post-color); border: 2px solid #ffd54a; border-radius: 20px; padding: 44px 64px; text-align: center; animation: winnerPop 0.55s cubic-bezier(0.2, 1.6, 0.4, 1); box-shadow: 0 0 60px rgba(255, 213, 74, 0.35); }
-  .games-popup-card.death { border-color: #4dd8c7; box-shadow: 0 0 60px rgba(77, 216, 199, 0.3); }
-  .games-popup-label { color: #ffd54a; font-size: 14px; font-weight: 700; letter-spacing: 0.2em; text-transform: uppercase; margin-bottom: 10px; }
-  .games-popup-card.death .games-popup-label { color: #4dd8c7; }
-  .games-popup-name { color: #fff; font-size: 44px; font-weight: 900; }
-  .games-popup-sub { color: #A5A9AD; font-size: 16px; margin-top: 8px; }
-  .games-popup-highscore { color: #ffd54a; font-size: 18px; font-weight: 800; margin-top: 10px; display: none; }
-  .games-popup-highscore.show { display: block; }
-  .games-popup-close { margin-top: 22px; padding: 8px 26px; border: none; border-radius: 999px; background: var(--brand-color); color: #fff; font-weight: 700; cursor: pointer; }
-  @keyframes winnerPop { 0% { transform: scale(0.3); opacity: 0; } 100% { transform: scale(1); opacity: 1; } }
-</style>
-
-<!-- Shorts player HTML (hidden until Shorts tab is pressed) -->
-<div id="reels-wrapper" class="reels-wrapper" style="display: none;">
-  <div class="reels-main">
-    <div class="reels-player" id="reels-player">
-      <div class="reels-top-left">
-        <button class="reels-play-pill" id="reels-play-btn" title="Play/Pause" aria-label="Play or pause">
-          <svg id="reels-play-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polygon points="5 3 19 12 5 21 5 3"/></svg>
-        </button>
-        <div class="reels-volume-pill" id="reels-volume-btn" title="Toggle mute" aria-label="Toggle mute">
-          <div class="reels-volume-pill-icon">
-            <svg id="reels-volume-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/></svg>
-          </div>
-          <input type="range" class="reels-volume-pill-slider" id="reels-volume-slider" min="0" max="100" value="40" step="1">
-        </div>
-      </div>
-    </div>
-    <div class="reels-sidebar">
-      <div class="reels-engagement-item">
-        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 9V5a3 3 0 0 0-3-3l-4 9v11h11.28a2 2 0 0 0 2-1.7l1.38-9a2 2 0 0 0-2-2.3H14z"/><path d="M7 22H4a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2h3"/></svg>
-        <span class="reels-engagement-count" id="reels-likes-count">—</span>
-      </div>
-      <div class="reels-engagement-item">
-        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
-        <span class="reels-engagement-count" id="reels-comments-count">—</span>
-      </div>
-      <div class="reels-engagement-item">
-        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
-        <span class="reels-engagement-count" id="reels-shares-count">—</span>
-      </div>
-    </div>
-  </div>
-  <div class="reels-nav-arrows">
-    <div class="reels-nav-arrow" id="reels-nav-up" title="Previous video (↑)" role="button" tabindex="0" aria-label="Previous video"><svg viewBox="0 0 24 24"><polyline points="18 15 12 9 6 15"/></svg></div>
-    <div class="reels-nav-arrow" id="reels-nav-down" title="Next video (↓)" role="button" tabindex="0" aria-label="Next video"><svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg></div>
-  </div>
-</div>
-
-<!-- Twitch player HTML (hidden until Twitch tab is pressed) -->
-<div id="twitch-container" style="display: none;">
-  <div id="video-wrapper"></div>
-  <div id="chat-wrapper"></div>
-  <div id="control-bar">
-    <button id="toggle-chat-button" class="control-button" style="width: 90px;">Show Chat</button>
-    <div style="margin-left: 15px; color: white; font-weight: bold;">Live Streamers:</div>
-    <div id="stream-buttons"></div>
-    <div id="twitch-pagination" style="display: flex; gap: 6px; margin-left: auto; margin-right: 10px;">
-      <button id="prev-button" class="pagination-arrow" disabled>‹</button>
-      <button id="next-button" class="pagination-arrow" disabled>›</button>
-    </div>
-  </div>
-</div>
-
-<!-- Mini games HTML (hidden until Games tab is pressed) -->
-<div id="games-container" style="display: none;">
-  <div id="games-menu">
-    <div class="games-menu-title">Mini Games</div>
-    <button class="games-menu-btn games-active" data-game="wheel">🎡 Hero Wheel</button>
-    <button class="games-menu-btn" data-game="slark">🦈 Slarky Run</button>
-  </div>
-  <div id="games-stage">
-    <div id="wheel-area">
-      <div id="wheel-pointer"></div>
-      <canvas id="wheel-canvas" width="640" height="640"></canvas>
-      <button id="wheel-spin-btn">SPIN</button>
-    </div>
-    <div id="slark-area">
-      <canvas id="slark-canvas" width="900" height="320"></canvas>
-      <div class="slark-hint">Space / ↑ / click to jump &nbsp;•&nbsp; hold ↓ to duck</div>
-    </div>
-    <div id="wheel-winner" class="games-popup">
-      <div class="games-popup-card">
-        <div class="games-popup-label">Winner</div>
-        <div class="games-popup-name" id="wheel-winner-name"></div>
-        <button class="games-popup-close" id="wheel-winner-close">Spin Again</button>
-      </div>
-    </div>
-    <div id="slark-death" class="games-popup">
-      <div class="games-popup-card death">
-        <div class="games-popup-label">You Died</div>
-        <div class="games-popup-name" id="slark-death-score"></div>
-        <div class="games-popup-sub" id="slark-death-best"></div>
-        <div class="games-popup-highscore" id="slark-death-record">🏆 NEW HIGH SCORE!</div>
-        <button class="games-popup-close" id="slark-death-close">Play Again</button>
-      </div>
-    </div>
-  </div>
-</div>
-
-
-<script>
 /* ════════════════════════════════════════════════════════════
    SECTION 4 — MINI GAMES (in head box: JS field character limit)
    ════════════════════════════════════════════════════════════ */

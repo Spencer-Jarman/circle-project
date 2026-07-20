@@ -1,0 +1,90 @@
+<!-- ════════════════════════════════════════════════════════════
+     endmid.gg — markup, injected into <body> by app.js on load.
+     ════════════════════════════════════════════════════════════ -->
+<!-- Shorts player HTML (hidden until Shorts tab is pressed) -->
+<div id="reels-wrapper" class="reels-wrapper" style="display: none;">
+  <div class="reels-main">
+    <div class="reels-player" id="reels-player">
+      <div class="reels-top-left">
+        <button class="reels-play-pill" id="reels-play-btn" title="Play/Pause" aria-label="Play or pause">
+          <svg id="reels-play-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+        </button>
+        <div class="reels-volume-pill" id="reels-volume-btn" title="Toggle mute" aria-label="Toggle mute">
+          <div class="reels-volume-pill-icon">
+            <svg id="reels-volume-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/></svg>
+          </div>
+          <input type="range" class="reels-volume-pill-slider" id="reels-volume-slider" min="0" max="100" value="40" step="1">
+        </div>
+      </div>
+    </div>
+    <div class="reels-sidebar">
+      <div class="reels-engagement-item">
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 9V5a3 3 0 0 0-3-3l-4 9v11h11.28a2 2 0 0 0 2-1.7l1.38-9a2 2 0 0 0-2-2.3H14z"/><path d="M7 22H4a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2h3"/></svg>
+        <span class="reels-engagement-count" id="reels-likes-count">—</span>
+      </div>
+      <div class="reels-engagement-item">
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+        <span class="reels-engagement-count" id="reels-comments-count">—</span>
+      </div>
+      <div class="reels-engagement-item">
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
+        <span class="reels-engagement-count" id="reels-shares-count">—</span>
+      </div>
+    </div>
+  </div>
+  <div class="reels-nav-arrows">
+    <div class="reels-nav-arrow" id="reels-nav-up" title="Previous video (↑)" role="button" tabindex="0" aria-label="Previous video"><svg viewBox="0 0 24 24"><polyline points="18 15 12 9 6 15"/></svg></div>
+    <div class="reels-nav-arrow" id="reels-nav-down" title="Next video (↓)" role="button" tabindex="0" aria-label="Next video"><svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg></div>
+  </div>
+</div>
+
+<!-- Twitch player HTML (hidden until Twitch tab is pressed) -->
+<div id="twitch-container" style="display: none;">
+  <div id="video-wrapper"></div>
+  <div id="chat-wrapper"></div>
+  <div id="control-bar">
+    <button id="toggle-chat-button" class="control-button" style="width: 90px;">Show Chat</button>
+    <div style="margin-left: 15px; color: white; font-weight: bold;">Live Streamers:</div>
+    <div id="stream-buttons"></div>
+    <div id="twitch-pagination" style="display: flex; gap: 6px; margin-left: auto; margin-right: 10px;">
+      <button id="prev-button" class="pagination-arrow" disabled>‹</button>
+      <button id="next-button" class="pagination-arrow" disabled>›</button>
+    </div>
+  </div>
+</div>
+
+<!-- Mini games HTML (hidden until Games tab is pressed) -->
+<div id="games-container" style="display: none;">
+  <div id="games-menu">
+    <div class="games-menu-title">Mini Games</div>
+    <button class="games-menu-btn games-active" data-game="wheel">🎡 Hero Wheel</button>
+    <button class="games-menu-btn" data-game="slark">🦈 Slarky Run</button>
+  </div>
+  <div id="games-stage">
+    <div id="wheel-area">
+      <div id="wheel-pointer"></div>
+      <canvas id="wheel-canvas" width="640" height="640"></canvas>
+      <button id="wheel-spin-btn">SPIN</button>
+    </div>
+    <div id="slark-area">
+      <canvas id="slark-canvas" width="900" height="320"></canvas>
+      <div class="slark-hint">Space / ↑ / click to jump &nbsp;•&nbsp; hold ↓ to duck</div>
+    </div>
+    <div id="wheel-winner" class="games-popup">
+      <div class="games-popup-card">
+        <div class="games-popup-label">Winner</div>
+        <div class="games-popup-name" id="wheel-winner-name"></div>
+        <button class="games-popup-close" id="wheel-winner-close">Spin Again</button>
+      </div>
+    </div>
+    <div id="slark-death" class="games-popup">
+      <div class="games-popup-card death">
+        <div class="games-popup-label">You Died</div>
+        <div class="games-popup-name" id="slark-death-score"></div>
+        <div class="games-popup-sub" id="slark-death-best"></div>
+        <div class="games-popup-highscore" id="slark-death-record">🏆 NEW HIGH SCORE!</div>
+        <button class="games-popup-close" id="slark-death-close">Play Again</button>
+      </div>
+    </div>
+  </div>
+</div>
