@@ -43,7 +43,211 @@
     --alert-color: #e02f2f;
     --success-color: #22BB22;
     --link-color: #60A5FA;
+
+    /* audit marker: magenta = token not themed yet */
+    --unassigned: #ff00ff;
   }
+
+  /* ════════════════════════════════════════════
+     CIRCLE TOKEN TAKEOVER
+     188 of Circle's semantic tokens, claimed in one place.
+     Anything still on var(--unassigned) renders MAGENTA on the
+     site — that is a to-do marker, not a bug. Swap it for a
+     palette colour as you audit.
+     Status colours (danger/success/warning/info) and Circle's raw
+     colour scales are deliberately left alone.
+     ════════════════════════════════════════════ */
+  html {
+    --background-body: var(--unassigned);
+    --background-body-fullscreen: var(--unassigned);
+    --background-brand-03: var(--unassigned);
+    --background-brand-10: var(--unassigned);
+    --background-brand-100: var(--unassigned);
+    --background-brand-25: var(--unassigned);
+    --background-brand-33: var(--unassigned);
+    --background-brand-50: var(--unassigned);
+    --background-brand-66: var(--unassigned);
+    --background-brand-75: var(--unassigned);
+    --background-primary-10: var(--unassigned);
+    --background-primary-100: var(--unassigned);
+    --background-primary-15: var(--unassigned);
+    --background-primary-25: var(--unassigned);
+    --background-primary-33: var(--unassigned);
+    --background-primary-50: var(--unassigned);
+    --background-primary-66: var(--unassigned);
+    --background-primary-75: var(--unassigned);
+    --border-dark: var(--unassigned);
+    --border-light: var(--unassigned);
+    --border-light-hover: var(--unassigned);
+    --border-lightest: var(--unassigned);
+    --border-medium: var(--unassigned);
+    --brand-button-text: var(--unassigned);
+    --button-background: var(--unassigned);
+    --button-border: var(--unassigned);
+    --button-text-color: var(--unassigned);
+    --circle-primary: var(--unassigned);
+    --circle-primary-dark: var(--unassigned);
+    --color-background-active: var(--unassigned);
+    --color-background-badge-branded: var(--unassigned);
+    --color-background-brand: var(--unassigned);
+    --color-background-button-branded: var(--unassigned);
+    --color-background-content-disabled: var(--unassigned);
+    --color-background-disabled: var(--unassigned);
+    --color-background-highlight: var(--unassigned);
+    --color-background-hover: var(--unassigned);
+    --color-background-inverse: var(--unassigned);
+    --color-background-inverse-active: var(--unassigned);
+    --color-background-inverse-hover: var(--unassigned);
+    --color-background-level-basic: var(--unassigned);
+    --color-background-level-mid: var(--unassigned);
+    --color-background-level-top: var(--unassigned);
+    --color-background-overlay: var(--unassigned);
+    --color-background-secondary: var(--unassigned);
+    --color-background-secondary-hover: var(--unassigned);
+    --color-background-slider-branded: var(--unassigned);
+    --color-border-accent: var(--unassigned);
+    --color-border-active: var(--unassigned);
+    --color-border-badge-branded: var(--unassigned);
+    --color-border-darkest: var(--unassigned);
+    --color-border-disabled: var(--unassigned);
+    --color-border-focus: var(--unassigned);
+    --color-border-hover: var(--unassigned);
+    --color-border-primary: var(--unassigned);
+    --color-border-secondary: var(--unassigned);
+    --color-community-sidebar-accent-background: var(--unassigned);
+    --color-community-sidebar-background: var(--unassigned);
+    --color-community-sidebar-badge-text: var(--unassigned);
+    --color-community-sidebar-text-on-accent: var(--unassigned);
+    --color-community-switcher-new-community-button-bg: var(--unassigned);
+    --color-community-switcher-new-community-button-icon: var(--unassigned);
+    --color-grey-0: var(--unassigned);
+    --color-icon: var(--unassigned);
+    --color-icon-disabled: var(--unassigned);
+    --color-icon-hover: var(--unassigned);
+    --color-icon-inverse: var(--unassigned);
+    --color-icon-primary: var(--unassigned);
+    --color-icon-secondary: var(--unassigned);
+    --color-icon-tertiary: var(--unassigned);
+    --color-text-badge-branded: var(--unassigned);
+    --color-text-button-branded: var(--unassigned);
+    --color-text-disabled: var(--unassigned);
+    --color-text-icon-branded: var(--unassigned);
+    --color-text-inverse: var(--unassigned);
+    --color-text-level-basic: var(--unassigned);
+    --color-text-level-mid: var(--unassigned);
+    --color-text-level-top: var(--unassigned);
+    --color-text-link-branded: var(--unassigned);
+    --color-text-link-hover: var(--unassigned);
+    --color-text-primary: var(--unassigned);
+    --color-text-secondary: var(--unassigned);
+    --color-text-tertiary: var(--unassigned);
+    --comment-border-bottom: var(--unassigned);
+    --comment-scroll-highlight-background: var(--unassigned);
+    --comments-wrapper-background: var(--unassigned);
+    --community-switcher-bg: var(--unassigned);
+    --community-switcher-icon-bg: var(--unassigned);
+    --date-group-background: var(--unassigned);
+    --divider-border: var(--unassigned);
+    --dropdown-background: var(--unassigned);
+    --dropdown-descriptor: var(--unassigned);
+    --dropdown-icon: var(--unassigned);
+    --dropdown-link: var(--unassigned);
+    --dropdown-link-hover: var(--unassigned);
+    --dropdown-title: var(--unassigned);
+    --header-sticky-nav: var(--unassigned);
+    --icon-add: var(--unassigned);
+    --icon-brand: var(--unassigned);
+    --icon-comment: var(--unassigned);
+    --icon-fill-color: var(--unassigned);
+    --icon-fill-color-hover: var(--unassigned);
+    --icon-hover: var(--unassigned);
+    --icon-like: var(--unassigned);
+    --icon-mention: var(--unassigned);
+    --icon-message: var(--unassigned);
+    --icon-muted: var(--unassigned);
+    --icon-reply: var(--unassigned);
+    --icon-stroke-color: var(--unassigned);
+    --icon-stroke-color-hover: var(--unassigned);
+    --input-background: var(--unassigned);
+    --input-focus: var(--unassigned);
+    --input-gray-background: var(--unassigned);
+    --input-gray-darker-background: var(--unassigned);
+    --input-gray-explainer: var(--unassigned);
+    --input-gray-explainer-light: var(--unassigned);
+    --input-placeholder: var(--unassigned);
+    --label-description-color: var(--unassigned);
+    --label-title-color: var(--unassigned);
+    --list-item-hover: var(--unassigned);
+    --mobile-menu-overlay: var(--unassigned);
+    --mobile-menu-sidebar-bg: var(--unassigned);
+    --mobile-menu-sidebar-border: var(--unassigned);
+    --modal-bg: var(--unassigned);
+    --modal-title: var(--unassigned);
+    --multi-step-panel-navigation-panel-bg: var(--unassigned);
+    --neutral-highlight: var(--unassigned);
+    --neutral-highlight-hover: var(--unassigned);
+    --new-notification-bg: var(--unassigned);
+    --new-notification-hover-bg: var(--unassigned);
+    --placeholder-gray: var(--unassigned);
+    --placeholder-light-grey: var(--unassigned);
+    --post-background: var(--unassigned);
+    --post-headline-tag-background: var(--unassigned);
+    --post-light-line: var(--unassigned);
+    --post-pinned-background: var(--unassigned);
+    --post-pinned-border: var(--unassigned);
+    --post-post-background: var(--unassigned);
+    --post-text: var(--unassigned);
+    --search-autocomplete-background: var(--unassigned);
+    --search-autocomplete-link-hover-background: var(--unassigned);
+    --search-autocomplete-link-hover-text: var(--unassigned);
+    --search-autocomplete-link-text: var(--unassigned);
+    --search-bar-background: var(--unassigned);
+    --shadow-dark-color: var(--unassigned);
+    --sidebar-block-border: var(--unassigned);
+    --sidebar-block-count: var(--unassigned);
+    --sidebar-block-count-bg: var(--unassigned);
+    --sidebar-block-header: var(--unassigned);
+    --sidebar-block-header-link: var(--unassigned);
+    --sidebar-link: var(--unassigned);
+    --sidebar-link-active: var(--unassigned);
+    --sidebar-link-active-bg: var(--unassigned);
+    --sidebar-link-highlight: var(--unassigned);
+    --sidebar-link-hover: var(--unassigned);
+    --sidebar-onboarding-block-bg: var(--unassigned);
+    --sidebar-onboarding-block-border: var(--unassigned);
+    --t-header-light-grey: var(--unassigned);
+    --text-body: var(--unassigned);
+    --text-body-10: var(--unassigned);
+    --text-body-100: var(--unassigned);
+    --text-body-25: var(--unassigned);
+    --text-body-33: var(--unassigned);
+    --text-body-50: var(--unassigned);
+    --text-body-66: var(--unassigned);
+    --text-body-75: var(--unassigned);
+    --text-secondary: var(--unassigned);
+    --text-secondary-hover: var(--unassigned);
+    --text-secondary-light: var(--unassigned);
+    --text-secondary-muted: var(--unassigned);
+    --tooltip-active: var(--unassigned);
+    --tooltip-background: var(--unassigned);
+    --trix-body-background: var(--unassigned);
+    --trix-border: var(--unassigned);
+    --trix-editor-color: var(--unassigned);
+    --trix-shadow: var(--unassigned);
+    --trix-toolbar-background: var(--unassigned);
+    --tw-ring-color: var(--unassigned);
+    --tw-ring-offset-color: var(--unassigned);
+    --user-badge: var(--unassigned);
+    --user-badge-bg: var(--unassigned);
+    --user-joined: var(--unassigned);
+    --user-joined-bg: var(--unassigned);
+    --user-location-links: var(--unassigned);
+    --user-profile-card-bg: var(--unassigned);
+    --user-profile-card-border: var(--unassigned);
+    --user-tagline: var(--unassigned);
+    --user-text: var(--unassigned);
+  }
+
 
 
   /* ════════════════════════════════════════════
@@ -195,68 +399,6 @@
     --color-sidebar-footer-live-indicator: var(--border-color) !important;
   }
 
-  /* ---- Utility class takeover (catches elements the variables miss) ---- */
-
-  /* Primary surfaces (cards, pills, dropdowns, empty states) */
-  html .bg-primary,
-  html .\!bg-primary {
-    background-color: var(--post-color) !important;
-  }
-
-  /* Tertiary surfaces (hovers, toggles, tooltips) */
-  html .bg-tertiary,
-  html .\!bg-tertiary,
-  html .hover\:bg-tertiary:hover,
-  html .hover\:\!bg-tertiary:hover,
-  html .focus\:bg-tertiary:focus,
-  html .focus-visible\:bg-tertiary:focus-visible {
-    background-color: hsl(from var(--post-color) h s calc(l + 2)) !important;
-  }
-
-  /* Secondary-dark surfaces */
-  html .bg-secondary-dark {
-    background-color: var(--secondary-color) !important;
-  }
-
-  /* Important border utility */
-  html .\!border-primary {
-    border-color: var(--border-color) !important;
-  }
-
-  /* Tooltips (alt text popups) */
-  [role="tooltip"],
-  .tippy-box {
-    background-color: hsl(from var(--post-color) h s calc(l + 4)) !important;
-    color: var(--text-color) !important;
-  }
-
-  /* Sidebar surface class (all instances incl. hidden drawers, footer rows) */
-  html .bg-c-sidebar,
-  html .standard-layout-v2__sidebar {
-    background-color: var(--primary-color) !important;
-  }
-
-  /* Form controls and selectors (post editor, settings) */
-  html .form-control,
-  html .form-control__prefix,
-  html .option-group__option,
-  html .space-group-selector,
-  html .react-space-selector-dropdown__wrapper {
-    background-color: var(--post-color) !important;
-  }
-
-  /* Post editor floating pill (space selector) */
-  html .float-right.h-11.self-end {
-    background-color: var(--post-color) !important;
-  }
-
-  /* Mobile top bar (legacy header component) stays primary */
-  #mainHeader,
-  header.header-v2,
-  html .\!bg-c-header {
-    background-color: var(--primary-color) !important;
-  }
-
   /* ---- Scrollbars ---- */
 
   /* Scrollbars (narrow, secondary track, post-color thumb) */
@@ -286,120 +428,10 @@
     background: var(--secondary-color) !important;
   }
 
-  /* ---- Top bar & sidebar ---- */
-
-  /* Top bar background */
-  [data-testid="navigation-bar-wrapper"] {
-    background-color: var(--primary-color) !important;
-  }
-
-  /* Top bar icon buttons hover (+2%) — all popover buttons incl. reply-in-thread */
-  [data-testid="navigation-bar-wrapper"] .hover\:\!bg-c-header-hover:hover {
-    background-color: hsl(from var(--post-color) h s calc(l + 2)) !important;
-  }
-
-  /* Top bar icon buttons focus after close (+2%) */
-  [data-testid="navigation-bar-wrapper"] .focus\:\!bg-c-header-hover:focus,
-  [data-testid="navigation-bar-wrapper"] .focus-visible\:\!bg-c-header-hover:focus-visible {
-    background-color: hsl(from var(--post-color) h s calc(l + 2)) !important;
-  }
-
-  /* Top bar icon buttons open (+4%) — all popover buttons incl. reply-in-thread */
-  [data-testid="navigation-bar-wrapper"] .\!bg-c-header-active {
-    background-color: hsl(from var(--post-color) h s calc(l + 4)) !important;
-  }
-
-  /* Sidebar background */
-  [data-testid="standard-layout-v2-sidebar"] .bg-c-sidebar {
-    background-color: var(--primary-color) !important;
-  }
-
-  /* ---- Popover dropdowns ---- */
-
-  /* Popover panel backgrounds (notifications, DMs, bookmarks, chat threads) */
-  .\-ml-2\.5.border-primary.bg-primary,
-  .\-ml-2\.5.border-primary.bg-primary .bg-primary {
-    background-color: var(--secondary-color) !important;
-  }
-
-  /* ---- Space backgrounds ---- */
-
-  /* Space background */
-  .bg-secondary {
-    background-color: var(--secondary-color) !important;
-  }
-
-  /* Space header bar */
-  #standard-layout-header-child {
-    background-color: var(--secondary-color) !important;
-  }
-
-  /* Cover image box */
-  #standard-layout-v2-cover-image-container .bg-primary {
-    background-color: var(--secondary-color) !important;
-  }
-
   /* Cover padding wrapper: zero horizontal padding (eats 72px in guest layout) */
   div:has(> [data-testid="cover-image-container"]) {
     padding-left: 0 !important;
     padding-right: 0 !important;
-  }
-  
-  /* Cover image margins */
-  div.standard-layout-v2__content-wrapper {
-    background-color: var(--secondary-color) !important;
-  }
-
-  /* ---- Posts ---- */
-
-  /* Post modals */
-  [data-testid="post-container"] {
-    background-color: var(--post-color) !important;
-  }
-
-  /* Expanded post modal */
-  [data-testid="modal"] {
-    background-color: var(--post-color) !important;
-  }
-
-  /* Expanded post comment section */
-  .post__reply {
-    background-color: var(--post-color) !important;
-  }
-
-  /* ---- Chat ---- */
-
-  /* Chat space background */
-  [data-testid="chat-room-wrapper"],
-  [data-testid="chat-room-wrapper"] .bg-primary {
-    background-color: var(--secondary-color) !important;
-  }
-
-  /* Chat loading flash */
-  .main__wrapper.bg-primary,
-  .main__wrapper.bg-primary .bg-primary.w-full.overflow-auto {
-    background-color: var(--secondary-color) !important;
-  }
-
-  /* Chat loading pane (full-size spinner flex) */
-  html .bg-primary.flex.size-full.items-center.justify-center {
-    background-color: var(--secondary-color) !important;
-  }
-
-  /* Chat details panel */
-  #rail-content {
-    background-color: var(--secondary-color) !important;
-  }
-
-  /* Chat thread reply backgrounds */
-  #rail-content .bg-primary,
-  #rail-content .bg-secondary-dark {
-    background-color: var(--secondary-color) !important;
-  }
-
-  /* Chat message hover */
-  [data-testid="message-item"]:hover {
-    background-color: var(--post-color) !important;
   }
 
   /* Center embeds (X posts etc.) inside post bodies */
@@ -410,105 +442,9 @@
     display: block;
   }
 
-  /* Chat thread reply bubble (rest + hover) */
-  #rail-content [data-testid="message-item"] {
-    background-color: var(--secondary-color) !important;
-  }
-  #rail-content [data-testid="message-item"]:hover {
-    background-color: var(--post-color) !important;
-  }
-
-  /* Chat compose box hover/focus states (2% brighter on hover, 30% brighter border on focus) */
-  [data-testid="tiptap-editor"] {
-    background-color: var(--post-color) !important;
-    border-color: var(--border-color) !important;
-  }
-  [data-testid="tiptap-editor"]:hover {
-    background-color: hsl(from var(--post-color) h s calc(l + 2)) !important;
-    border-color: hsl(from var(--border-color) h s calc(l + 2)) !important;
-  }
-  [data-testid="tiptap-editor"]:focus-within {
-    background-color: hsl(from var(--post-color) h s calc(l + 2)) !important;
-    border-color: hsl(from var(--border-color) h s calc(l + 30)) !important;
-  }
-
-  /* Chat compose box thread reply (mirrors normal compose box) */
-  #rail-content [data-testid="tiptap-editor"] {
-    background-color: var(--post-color) !important;
-  }
-  #rail-content [data-testid="tiptap-editor"]:hover {
-    background-color: hsl(from var(--post-color) h s calc(l + 2)) !important;
-    border-color: hsl(from var(--border-color) h s calc(l + 2)) !important;
-  }
-  #rail-content [data-testid="tiptap-editor"]:focus-within {
-    background-color: hsl(from var(--post-color) h s calc(l + 2)) !important;
-    border-color: hsl(from var(--border-color) h s calc(l + 30)) !important;
-  }
-
-  /* ---- Borders ---- */
-
-  /* Separator lines */
-  .border-primary {
-    border-color: var(--border-color) !important;
-  }
-
-  /* Sidebar dividers */
-  .border-c-sidebar {
-    border-color: var(--border-color) !important;
-  }
-
   /* Sidebar vertical divider */
   [data-testid="standard-layout-v2-sidebar"] {
     border-right: 1px solid var(--border-color) !important;
-  }
-
-  /* Popover panel borders (notifications, DMs, bookmarks, chat threads) */
-  .\-ml-2\.5.border-primary.bg-primary,
-  .\-ml-2\.5.border-primary.bg-primary .border-primary {
-    border-color: var(--border-color) !important;
-  }
-
-  /* Go live button */
-  .border-c-sidebar button {
-    background-color: var(--post-color) !important;
-    border-color: var(--border-color) !important;
-  }
-
-  /* ---- Loading states ---- */
-
-  /* Top bar load placeholders */
-  [data-testid="navigation-bar-wrapper"] .bg-tertiary,
-  [data-testid="navigation-bar-wrapper"] .bg-secondary-dark,
-  [data-testid="navigation-bar-wrapper"] .bg-primary {
-    background-color: var(--primary-color) !important;
-  }
-
-  /* Feed skeleton loader */
-  div[class*="skeleton-loader"],
-  div[class*="skeleton-loader"] div {
-    background-color: var(--secondary-color) !important;
-    border-color: var(--secondary-color) !important;
-  }
-
-  /* Events skeleton placeholders */
-  .react-page-space-show .bg-tertiary,
-  .react-page-space-show .animate-pulse {
-    background-color: var(--secondary-color) !important;
-  }
-
-  /* Expanded post skeleton */
-  [data-testid="modal"] .bg-tertiary,
-  [data-testid="modal"] .bg-primary {
-    background-color: var(--post-color) !important;
-  }
-
-  /* Spinner loading background */
-  .react-loader,
-  .default-loader {
-    background-color: var(--secondary-color) !important;
-  }
-  :has(> .react-loader) {
-    background-color: var(--secondary-color) !important;
   }
 
 
