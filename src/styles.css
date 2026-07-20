@@ -38,18 +38,10 @@
     --brand-color: #70180d;
     --text-color: #F0F3F5;
     --text-muted-color: #A5A9AD;
-    --alert-color: #ff00ff; /* AUDIT: find where this is used */
-    --success-color: #ff00ff; /* AUDIT: find where this is used */
-    --link-color: #ff00ff; /* AUDIT: find where this is used */
-
-    /* audit marker: magenta = token not themed yet */
+    --alert-color: #ff00ff;
+    --success-color: #ff00ff;
+    --link-color: #ff00ff;
     --unassigned: #ff00ff;
-  }
-
-  /* Paint the document dark immediately (kills the white flash before
-     Circle renders). Palette-driven, so it tracks --secondary-color. */
-  html, body {
-    background-color: var(--secondary-color);
   }
 
   html {
@@ -92,17 +84,25 @@
     --color-background-brand: var(--brand-color) !important;
     --color-background-button-branded: var(--brand-color) !important;
     --color-background-content-disabled: var(--secondary-color) !important;
+    --color-background-danger: #f87171 !important;
+    --color-background-danger-active: #ef4444 !important;
+    --color-background-danger-hover: #b91c1c !important;
+    --color-background-danger-light: #483136 !important;
     --color-background-disabled: var(--post-color) !important;
     --color-background-emoji-picker: 17, 19, 22 !important;
     --color-background-emoji-picker-hover: 22, 25, 29 !important;
     --color-background-highlight: hsl(from var(--post-color) h s calc(l + 2)) !important;
     --color-background-hover: hsl(from var(--post-color) h s calc(l + 2)) !important;
+    --color-background-idle: #f59e0b !important;
+    --color-background-info: #60a5fa !important;
+    --color-background-info-light: #2d3b50 !important;
     --color-background-inverse: var(--text-color) !important;
     --color-background-inverse-active: var(--text-color) !important;
     --color-background-inverse-hover: var(--text-color) !important;
     --color-background-level-basic: var(--post-color) !important;
     --color-background-level-mid: var(--post-color) !important;
     --color-background-level-top: var(--post-color) !important;
+    --color-background-online: #22c55e !important;
     --color-background-overlay: rgba(0, 0, 0, 0.6) !important;
     --color-background-overlay-dark: var(--post-color) !important;
     --color-background-primary: var(--post-color) !important;
@@ -111,26 +111,34 @@
     --color-background-secondary-hover: hsl(from var(--post-color) h s calc(l + 2)) !important;
     --color-background-selector-active: hsl(from var(--post-color) h s calc(l + 4)) !important;
     --color-background-slider-branded: var(--brand-color) !important;
+    --color-background-success: #4ade80 !important;
+    --color-background-success-light: #2a4539 !important;
     --color-background-tertiary: hsl(from var(--post-color) h s calc(l + 2)) !important;
     --color-background-text-editor-modifier: var(--post-color) !important;
     --color-background-text-editor-modifier-active: hsl(from var(--post-color) h s calc(l + 4)) !important;
     --color-background-text-editor-modifier-hover: hsl(from var(--post-color) h s calc(l + 2)) !important;
     --color-background-toggle-active: var(--brand-color) !important;
     --color-background-toggle-inactive: var(--border-color) !important;
+    --color-background-warning: #fcd34d !important;
+    --color-background-warning-light: #493f2d !important;
     --color-border-accent: var(--border-color) !important;
     --color-border-active: var(--border-color) !important;
     --color-border-badge-branded: var(--brand-color) !important;
+    --color-border-danger: #fca5a5 !important;
     --color-border-dark: var(--border-color) !important;
     --color-border-darkest: var(--border-color) !important;
     --color-border-disabled: var(--border-color) !important;
     --color-border-focus: var(--border-color) !important;
     --color-border-hover: var(--border-color) !important;
+    --color-border-info: #93c5fd !important;
     --color-border-input: var(--border-color) !important;
     --color-border-primary: var(--border-color) !important;
     --color-border-secondary: var(--border-color) !important;
     --color-border-secondary-dark: var(--border-color) !important;
     --color-border-selector-inactive: var(--border-color) !important;
+    --color-border-success: #86efac !important;
     --color-border-tertiary: var(--border-color) !important;
+    --color-border-warning: #fcd34d !important;
     --color-community-active-item-text-color: var(--text-color) !important;
     --color-community-header-active-text: var(--text-color) !important;
     --color-community-header-hover-background: hsl(from var(--post-color) h s calc(l + 2)) !important;
@@ -151,15 +159,18 @@
     --color-community-switcher-new-community-button-icon: var(--text-color) !important;
     --color-event-sidebar-item: var(--text-muted-color) !important;
     --color-feedback-error: var(--alert-color) !important;
-    --color-gray-800: 17, 19, 22 !important;
     --color-grey-0: var(--post-color) !important;
     --color-icon: var(--text-muted-color) !important;
+    --color-icon-danger: #fca5a5 !important;
     --color-icon-disabled: var(--text-muted-color) !important;
     --color-icon-hover: var(--text-muted-color) !important;
+    --color-icon-info: #93c5fd !important;
     --color-icon-inverse: var(--secondary-color) !important;
     --color-icon-primary: var(--text-color) !important;
     --color-icon-secondary: var(--text-muted-color) !important;
+    --color-icon-success: #86efac !important;
     --color-icon-tertiary: var(--text-muted-color) !important;
+    --color-icon-warning: #fcd34d !important;
     --color-message-highlight-background: hsl(from var(--post-color) h s calc(l + 4)) !important;
     --color-messaging-info-blue: 96 165 250 !important;
     --color-online-background: var(--success-color) !important;
@@ -169,6 +180,7 @@
     --color-text-badge-branded: var(--text-color) !important;
     --color-text-button-branded: var(--text-color) !important;
     --color-text-chip: var(--success-color) !important;
+    --color-text-danger: #fca5a5 !important;
     --color-text-dark: var(--text-color) !important;
     --color-text-darkest: var(--text-color) !important;
     --color-text-date-blue: var(--link-color) !important;
@@ -178,6 +190,7 @@
     --color-text-feature-light: var(--text-color) !important;
     --color-text-icon-branded: var(--brand-color) !important;
     --color-text-icon-text: var(--text-muted-color) !important;
+    --color-text-info: #93c5fd !important;
     --color-text-inverse: var(--secondary-color) !important;
     --color-text-level-basic: var(--text-color) !important;
     --color-text-level-mid: var(--text-color) !important;
@@ -191,9 +204,11 @@
     --color-text-primary: var(--text-color) !important;
     --color-text-secondary: var(--text-muted-color) !important;
     --color-text-selector-active: var(--text-color) !important;
+    --color-text-success: #86efac !important;
     --color-text-tertiary: var(--text-muted-color) !important;
     --color-text-timestamp-light: var(--text-muted-color) !important;
     --color-text-very-dark: var(--text-color) !important;
+    --color-text-warning: #fcd34d !important;
     --comment-border-bottom: var(--border-color) !important;
     --comment-scroll-highlight-background: hsl(from var(--post-color) h s calc(l + 2)) !important;
     --comments-wrapper-background: var(--secondary-color) !important;
@@ -223,6 +238,7 @@
     --icon-comment: var(--text-muted-color) !important;
     --icon-fill-color: var(--text-muted-color) !important;
     --icon-fill-color-hover: var(--text-muted-color) !important;
+    --icon-flagged: #f23434 !important;
     --icon-hover: var(--text-muted-color) !important;
     --icon-like: var(--text-muted-color) !important;
     --icon-mention: var(--text-muted-color) !important;
@@ -278,6 +294,9 @@
     --sidebar-link-hover: var(--text-color) !important;
     --sidebar-onboarding-block-bg: var(--primary-color) !important;
     --sidebar-onboarding-block-border: var(--border-color) !important;
+    --some-token: var(--post-color) !important;
+    --success: #6ec87c !important;
+    --success-dark: #469b52 !important;
     --t-header-light-grey: var(--text-muted-color) !important;
     --text-body: var(--text-color) !important;
     --text-body-10: color-mix(in srgb, var(--text-color) 10%, transparent) !important;
@@ -309,56 +328,9 @@
     --user-profile-card-border: var(--border-color) !important;
     --user-tagline: var(--text-muted-color) !important;
     --user-text: var(--text-color) !important;
+  }
 
-    /* Tailwind RGB triples. Skeleton loaders and pulse states read these
-       directly as rgba(var(--color-gray-N), opacity), so they cannot be
-       reached through the semantic tokens above. */
-    --color-gray-50:  17, 19, 22 !important;
-    --color-gray-100: 26, 28, 32 !important;
-    --color-gray-200: 34, 36, 40 !important;
-    --color-gray-300: 52, 53, 54 !important;
-    --color-gray-900: 9, 11, 14 !important;
-
-    /* ---- status colours, pinned ----
-       Circle declares these as var(--color-red-400) etc., so they resolve
-       THROUGH the primitives below. Pinned to explicit values here so the
-       green primitive markers cannot turn every warning and error green.
-       Change these only if you want to restyle error/success states. */
-    --color-background-danger: #f87171 !important;
-    --color-background-danger-active: #ef4444 !important;
-    --color-background-danger-hover: #b91c1c !important;
-    --color-background-danger-light: #483136 !important;
-    --color-background-idle: #f59e0b !important;
-    --color-background-info: #60a5fa !important;
-    --color-background-info-light: #2d3b50 !important;
-    --color-background-online: #22c55e !important;
-    --color-background-success: #4ade80 !important;
-    --color-background-success-light: #2a4539 !important;
-    --color-background-warning: #fcd34d !important;
-    --color-background-warning-light: #493f2d !important;
-    --color-border-danger: #fca5a5 !important;
-    --color-border-info: #93c5fd !important;
-    --color-border-success: #86efac !important;
-    --color-border-warning: #fcd34d !important;
-    --color-icon-danger: #fca5a5 !important;
-    --color-icon-info: #93c5fd !important;
-    --color-icon-success: #86efac !important;
-    --color-icon-warning: #fcd34d !important;
-    --color-text-danger: #fca5a5 !important;
-    --color-text-info: #93c5fd !important;
-    --color-text-success: #86efac !important;
-    --color-text-warning: #fcd34d !important;
-    --icon-flagged: #f23434 !important;
-    --success: #6ec87c !important;
-    --success-dark: #469b52 !important;
-
-    /* ---- primitives ----
-       Circle's raw colour scales. Semantic tokens above no longer read
-       these, so anything rendering GREEN (#90ee90) is an element painting
-       itself straight from a primitive — skeleton loaders, pulse states
-       and similar. Green means "primitive"; magenta means "not chosen yet".
-       The --color-gray-* family uses bare R, G, B triples because Circle
-       wraps them in rgba(); the rest are hex. Keep each in its own format. */
+  html {
     --color-almond-100: #90ee90 !important;
     --color-almond-200: #90ee90 !important;
     --color-almond-300: #90ee90 !important;
@@ -391,10 +363,16 @@
     --color-carolina-blue-200: #90ee90 !important;
     --color-carolina-blue-300: #90ee90 !important;
     --color-carolina-blue-400: #90ee90 !important;
+    --color-gray-100: 26, 28, 32 !important;
+    --color-gray-200: 34, 36, 40 !important;
+    --color-gray-300: 52, 53, 54 !important;
     --color-gray-400: 144, 238, 144 !important;
+    --color-gray-50: 17, 19, 22 !important;
     --color-gray-500: 144, 238, 144 !important;
     --color-gray-600: 144, 238, 144 !important;
     --color-gray-700: 144, 238, 144 !important;
+    --color-gray-800: 17, 19, 22 !important;
+    --color-gray-900: 9, 11, 14 !important;
     --color-green-100: #90ee90 !important;
     --color-green-200: #90ee90 !important;
     --color-green-300: #90ee90 !important;
@@ -455,21 +433,17 @@
     --color-sunglow-400: #90ee90 !important;
   }
 
-  /* ---- colour rules with no token behind them ---- */
 
-@import url("https://fonts.googleapis.com/css2?family=Cinzel:wght@600&family=Rubik:wght@400&display=swap");
 /* ════════════════════════════════════════════════════════════
-   endmid.gg — stylesheet
-   @import must stay on line 1; browsers ignore it otherwise.
+   SECTION B — STRUCTURE
+   Layout, spacing, typography, visibility, and our own components
+   (Shorts player, Twitch panel, mini games). No colour theming here.
    ════════════════════════════════════════════════════════════ */
 
-  /* ════════════════════════════════════════════
-     FONTS (Cinzel = sidebar group headings, Rubik = sidebar links)
-     ════════════════════════════════════════════ */
-
-  /* Paint the document dark immediately (kills white flash before Circle renders) */
+  /* ---- colour with no token behind it (browser pseudo-elements and
+     the pre-render paint); palette-driven, so they still track it ---- */
   html, body {
-    background-color: #090b0e;
+    background-color: var(--secondary-color);
   }
   ::-webkit-scrollbar-track {
     background: var(--secondary-color);
@@ -485,12 +459,6 @@
   }
 
 
-/* ════════════════════════════════════════════════════════════
-   SECTION B — STRUCTURE
-   Layout, spacing, typography, visibility, and our own components
-   (Shorts player, Twitch panel, mini games). No colour theming here.
-   ════════════════════════════════════════════════════════════ */
-
   /* ---- Fonts (Cinzel = sidebar group headings, Rubik = sidebar links) ---- */
   [data-testid="standard-layout-v2-sidebar"] h3 {
     font-family: 'Cinzel', serif !important;
@@ -498,21 +466,6 @@
     letter-spacing: 0.05em;
   }
 
-  [data-testid="standard-layout-v2-sidebar"] a,
-  [data-testid="standard-layout-v2-sidebar"] a span,
-  .border-c-sidebar button {
-    font-family: 'Rubik', sans-serif !important;
-    font-weight: 400 !important;
-  }
-
-  
-  /* Sidebar group/category headings */
-  [data-testid="standard-layout-v2-sidebar"] h3 {
-    font-family: 'Cinzel', serif !important;
-    font-weight: 600 !important;
-    letter-spacing: 0.05em;
-  }
-  /* Sidebar space links and buttons */
   [data-testid="standard-layout-v2-sidebar"] a,
   [data-testid="standard-layout-v2-sidebar"] a span,
   .border-c-sidebar button {
@@ -884,43 +837,4 @@
   .games-popup-highscore.show { display: block; }
   .games-popup-close { margin-top: 22px; padding: 8px 26px; border: none; border-radius: 999px; background: var(--brand-color); color: #fff; font-weight: 700; cursor: pointer; }
   @keyframes winnerPop { 0% { transform: scale(0.3); opacity: 0; } 100% { transform: scale(1); opacity: 1; } }
-/* ════════════════════════════════════════════════════════════
-   MINI GAMES (was stranded in the .js file by the char-limit split)
-   ════════════════════════════════════════════════════════════ */
-  /* ════════════════════════════════════════════
-     MINI GAMES (button 5 overlay content)
-     ════════════════════════════════════════════ */
-  #games-container { position: absolute; inset: 0; display: flex; background: var(--secondary-color); }
-  /* Left game menu */
-  #games-menu { width: 220px; flex-shrink: 0; border-right: 1px solid var(--border-color); padding: 16px 10px; display: flex; flex-direction: column; gap: 6px; }
-  .games-menu-title { color: #A5A9AD; font-size: 12px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; padding: 0 10px 8px; }
-  .games-menu-btn { display: flex; align-items: center; gap: 10px; padding: 10px 12px; border: none; border-radius: 8px; background: transparent; color: #E4E7EB; font-size: 14px; cursor: pointer; text-align: left; }
-  .games-menu-btn:hover { background: hsl(from var(--post-color) h s calc(l + 2)); }
-  .games-menu-btn.games-active { background: var(--brand-color); color: #fff; }
-  /* Game stage */
-  #games-stage { flex: 1; display: flex; align-items: center; justify-content: center; position: relative; overflow: hidden; }
-  /* Spinner wheel */
-  #wheel-area { position: relative; display: flex; align-items: center; justify-content: center; }
-  #wheel-canvas { display: block; }
-  #wheel-pointer { position: absolute; top: -6px; left: 50%; transform: translateX(-50%); width: 0; height: 0; border-left: 16px solid transparent; border-right: 16px solid transparent; border-top: 26px solid #ffd54a; filter: drop-shadow(0 2px 3px rgba(0,0,0,0.5)); z-index: 3; }
-  #wheel-spin-btn { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 92px; height: 92px; border-radius: 50%; border: 5px solid #fff; background: var(--brand-color); color: #fff; font-size: 16px; font-weight: 800; letter-spacing: 0.06em; cursor: pointer; z-index: 3; box-shadow: 0 4px 18px rgba(0,0,0,0.55); transition: transform 0.12s; }
-  #wheel-spin-btn:hover { transform: translate(-50%, -50%) scale(1.06); }
-  #wheel-spin-btn:disabled { opacity: 0.6; cursor: default; transform: translate(-50%, -50%); }
-  /* Slarky Run */
-  #slark-area { display: none; flex-direction: column; align-items: center; gap: 12px; }
-  #slark-area.active { display: flex; }
-  #slark-canvas { border-radius: 12px; box-shadow: 0 4px 24px rgba(0,0,0,0.45); }
-  .slark-hint { color: #A5A9AD; font-size: 13px; }
-  /* Game popups (winner / death) */
-  .games-popup { position: absolute; inset: 0; display: none; align-items: center; justify-content: center; background: rgba(0,0,0,0.65); z-index: 10; }
-  .games-popup.show { display: flex; }
-  .games-popup-card { background: var(--post-color); border: 2px solid #ffd54a; border-radius: 20px; padding: 44px 64px; text-align: center; animation: winnerPop 0.55s cubic-bezier(0.2, 1.6, 0.4, 1); box-shadow: 0 0 60px rgba(255, 213, 74, 0.35); }
-  .games-popup-card.death { border-color: #4dd8c7; box-shadow: 0 0 60px rgba(77, 216, 199, 0.3); }
-  .games-popup-label { color: #ffd54a; font-size: 14px; font-weight: 700; letter-spacing: 0.2em; text-transform: uppercase; margin-bottom: 10px; }
-  .games-popup-card.death .games-popup-label { color: #4dd8c7; }
-  .games-popup-name { color: #fff; font-size: 44px; font-weight: 900; }
-  .games-popup-sub { color: #A5A9AD; font-size: 16px; margin-top: 8px; }
-  .games-popup-highscore { color: #ffd54a; font-size: 18px; font-weight: 800; margin-top: 10px; display: none; }
-  .games-popup-highscore.show { display: block; }
-  .games-popup-close { margin-top: 22px; padding: 8px 26px; border: none; border-radius: 999px; background: var(--brand-color); color: #fff; font-weight: 700; cursor: pointer; }
-  @keyframes winnerPop { 0% { transform: scale(0.3); opacity: 0; } 100% { transform: scale(1); opacity: 1; } }
+
