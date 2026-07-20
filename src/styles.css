@@ -338,6 +338,7 @@
     --color-gray-100: 26, 28, 32 !important;
     --color-gray-200: 34, 36, 40 !important;
     --color-gray-300: 52, 53, 54 !important;
+    --color-gray-900: 9, 11, 14 !important;
   }
 
   /* ---- colour rules with no token behind them ---- */
