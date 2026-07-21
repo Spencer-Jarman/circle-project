@@ -58,6 +58,9 @@
     --background-body: var(--secondary-color) !important;
     --background-body-fullscreen: var(--secondary-color) !important;
     --color-background-content-disabled: var(--secondary-color) !important;
+    --color-background-primary: var(--secondary-color) !important;
+    --dropdown-background: var(--secondary-color) !important;
+    --new-notification-bg: var(--secondary-color) !important;
     --color-background-secondary: var(--secondary-color) !important;
     --color-background-secondary-dark: var(--secondary-color) !important;
     --color-icon-inverse: var(--secondary-color) !important;
@@ -93,16 +96,13 @@
     --color-background-disabled: var(--post-color) !important;
     --color-background-light-blue: var(--post-color) !important;
     --color-background-plus-banner: var(--post-color) !important;
-    --color-background-primary: var(--post-color) !important;
     --color-background-text-editor-modifier: var(--post-color) !important;
     --color-chip-background: var(--post-color) !important;
     --color-circle-button-background: var(--post-color) !important;
     --color-support-widget-background: var(--post-color) !important;
-    --dropdown-background: var(--post-color) !important;
     --input-background: var(--post-color) !important;
     --input-gray-background: var(--post-color) !important;
     --input-gray-darker-background: var(--post-color) !important;
-    --new-notification-bg: var(--post-color) !important;
     --post-background: var(--post-color) !important;
     --post-headline-tag-background: var(--post-color) !important;
     --post-pinned-background: var(--post-color) !important;
@@ -373,6 +373,18 @@
   }
 
   /* Tooltips. Changing the color of the tooltips and tooltip arrow */
+
+  /* ---- what stays raised after the switch ----
+     --color-background-primary now paints the page colour, because it is
+     what Circle uses for the settings pages and the dropdown panels. The
+     handful of things that genuinely are cards opt back in here. ---- */
+  html .post.bg-primary,
+  html [data-testid="post-container"],
+  html [data-testid="modal"]:has([data-testid="post-body"]) .bg-primary,
+  html .post__reply.bg-primary {
+    background-color: var(--post-color) !important;
+  }
+
   [role="tooltip"],
   .tippy-box {
     background-color: var(--hover-color) !important;
