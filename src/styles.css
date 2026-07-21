@@ -604,27 +604,29 @@
 
 
   /* ── Bookmarks drawer ──────────────────────────────────────────────
-     The drawer sits on the card colour, but the feed skeleton rule above
-     paints every loading placeholder the page colour — so switching tabs
-     flashed a page-coloured block against the card. Put those back.
-     (Scoped to the drawer, so the feed keeps its own behaviour. The
-     selector carries #compass-portal-container to outrank the unscoped
-     div[class*="skeleton-loader"] rule, which classes alone would tie
-     with and lose to on document order.) */
-  html #compass-portal-container [data-testid="bookmarks-drawer"] div[class*="skeleton-loader"],
-  html #compass-portal-container [data-testid="bookmarks-drawer"] div[class*="skeleton-loader"] div,
-  html #compass-portal-container [data-testid="bookmarks-drawer"] .animate-pulse,
-  html #compass-portal-container [data-testid="bookmarks-drawer"] [class*="skeleton"] {
+     The flicker is the list container itself. While the spinner is up,
+     #user-bookmarks-panel-header renders the page colour, then goes
+     transparent once the rows arrive — so every tab switch flashes a
+     page-coloured block against the card the drawer sits on. Pin it to
+     the card colour in both states. */
+  html #user-bookmarks-panel-header {
     background-color: var(--post-color) !important;
   }
 
-  /* Dividers between bookmarks. They are 1px bars painted with a panel
-     class, so on the card they came out the same colour as the card and
-     disappeared. */
-  html #compass-portal-container [data-testid="bookmarks-drawer"] .bg-secondary-dark[class*="h-[1px]"],
-  html #compass-portal-container [data-testid="bookmarks-drawer"] .bg-secondary[class*="h-[1px]"],
-  html #compass-portal-container [data-testid="bookmarks-drawer"] .bg-primary[class*="h-[1px]"] {
-    background-color: var(--border-color) !important;
+  /* Dividers between bookmarks. Circle ships none here — the rows are
+     plain siblings with nothing between them — so this draws them rather
+     than recolouring anything.
+
+     Drawn with an inset shadow, not a border, because border-top-color
+     will not move on these rows: an !important literal on an
+     id-plus-child selector still computes to Circle's default grey, even
+     though border-top-width from the very same declaration applies. The
+     shadow lands correctly, so it is used instead of spending more time
+     on the border.
+
+     :not(:first-child) keeps a line off the top row of each list. */
+  html #user-bookmarks-panel-header .infinite-scroll-component > div:not(:first-child) {
+    box-shadow: inset 0 1px 0 0 var(--border-color) !important;
   }
 
   /* Spinners — hidden outright, no swirling loaders anywhere */
