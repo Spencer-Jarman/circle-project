@@ -381,32 +381,24 @@
 
   /* Tooltips. Changing the color of the tooltips and tooltip arrow */
 
-  /* Full-bleed surfaces that Circle paints with .bg-primary
-     ---------------------------------------------------------------
-     .bg-primary is Circle's "raised card" colour, and that is right for
-     posts, modals and dropdowns. But Circle also puts it on things that
-     FILL their container — page wrappers, nav bars, the composer fields.
-     Those end up as a lighter box floating on a darker page.
+  /* Account settings nav — sits on the page, not on a card */
+  html nav.bg-primary {
+    background-color: var(--secondary-color) !important;
+  }
 
-     Anything that fills its parent goes transparent so it simply takes
-     whatever surface it sits on.
+  /* Composer title field — sits inside the post modal */
+  html textarea[data-testid="post_name"] {
+    background-color: var(--secondary-color) !important;
+  }
 
-     (Matching on the fill classes — size-full, h-full, w-full,
-     col-span-full, h-max-screen-dynamic — plus nav and textarea, which
-     are always full-bleed here. Cards are excluded because they are
-     sized by their content, not by their parent. html is prepended for
-     specificity: a bare nav.bg-primary loses to Circle's own rules.) */
-  html nav.bg-primary,
-  html textarea.bg-primary,
-  html .bg-primary.size-full,
-  html .bg-primary.h-full,
-  html .bg-primary.col-span-full,
-  html .bg-primary.col-span-12,
-  html .bg-primary.h-max-screen-dynamic,
-  html .bg-primary.absolute.bottom-0,
-  html .bg-primary.border-r,
-  html [data-testid="space-header"] {
-    background-color: transparent !important;
+  /* Page-level surfaces Circle paints with the card colour */
+  [data-testid="space-header"],
+  .bg-primary.col-span-12,
+  .bg-primary.col-span-full,
+  .bg-primary.border-r,
+  .bg-primary.absolute.bottom-0,
+  .bg-primary.h-full {
+    background-color: var(--secondary-color) !important;
   }
 
   [role="tooltip"],
@@ -435,7 +427,7 @@
     background-color: var(--post-color) !important;
   }
 
-  .\!bg-c-header-active {
+  html .\!bg-c-header-active {
     background-color: var(--brand-color) !important;
   }
 
@@ -469,6 +461,14 @@
     border-color: var(--secondary-color) !important;
   }
 
+  /* Spinners — hidden outright, no swirling loaders anywhere */
+  .react-loader,
+  .default-loader,
+  [class*="spinner"],
+  .animate-spin {
+    display: none !important;
+  }
+
   /* Events skeleton placeholders */
   .react-page-space-show .bg-tertiary,
   .react-page-space-show .animate-pulse {
@@ -479,13 +479,6 @@
   [data-testid="modal"] .bg-tertiary,
   [data-testid="modal"] .bg-primary {
     background-color: var(--post-color) !important;
-  }
-
-  /* Spinner loading background */
-  .react-loader,
-  .default-loader,
-  :has(> .react-loader) {
-    background-color: var(--secondary-color) !important;
   }
 
 
