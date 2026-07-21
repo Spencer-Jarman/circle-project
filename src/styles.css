@@ -421,61 +421,78 @@
 
   /* Tooltips. Changing the color of the tooltips and tooltip arrow */
 
-  /* ---- expanded direct messages ----
-     The DM view reuses the same testids as a chat space
-     (chat-room-wrapper, message-item), so the chat-space rules above
-     paint it the page colour. Scoping on body:has(chat-room-dm-list)
-     targets the DM view only, since that list exists nowhere else. ---- */
+
+  /* ════════════════════════════════════════════
+     EXPANDED DIRECT MESSAGES — everything post colour
+     ════════════════════════════════════════════
+     The DM view reuses the same testids as a chat space, and its profile
+     drawer sits inside #rail-content, so the chat rules above paint all
+     of it the page colour.
+
+     (Two things are needed to win. body:has([data-testid="new-message"])
+     scopes to the DM view only — that button exists on both Inbox and
+     Unread but nowhere else. And #rail-content has to appear in the
+     selector: the chat rule is #rail-content .bg-primary at (1,1,0), and
+     no amount of classes beats an ID.) */
+
+  /* Chat side */
   html body:has([data-testid="new-message"]) [data-testid="chat-room-wrapper"],
   html body:has([data-testid="new-message"]) [data-testid="chat-room-wrapper"] .bg-primary,
   html body:has([data-testid="new-message"]) [data-testid="message-item"],
   html body:has([data-testid="new-message"]) .bg-primary,
   html body:has([data-testid="new-message"]) .bg-secondary,
-  html body:has([data-testid="new-message"]) .bg-secondary-dark {
+  html body:has([data-testid="new-message"]) .bg-secondary-dark,
+
+  /* Profile drawer — outranks #rail-content by carrying the ID itself */
+  html #rail-content .bg-primary,
+  html #rail-content .profile-drawer,
+  html #rail-content .profile-drawer__header,
+  html #rail-content .profile-drawer__about,
+  html #rail-content .profile-drawer__about__section,
+  html #rail-content .profile-drawer__empty,
+  html #rail-content .profile-posts__post,
+  html #rail-content .profile-comments__item,
+  html #rail-content .profile-spaces,
+  html #rail-content .profile-spaces__item,
+  html #rail-content button.bg-primary,
+  html #rail-content [data-testid="tab-group"],
+  html #rail-content [data-testid="tab-panels"],
+  html #rail-content [data-testid="tab-panel"],
+  html #rail-content nav[data-testid="tab-list"],
+  html #rail-content div:has(> .profile-drawer),
+  html #rail-content [class*="min-h-[56px]"],
+  html #rail-content [data-testid="profile-info-section"],
+  html #rail-content [data-testid="profile-fields-section"],
+  html #rail-content [data-testid="activity-score-section"],
+  html #rail-content #profile-spaces-scrollable-target,
+
+  /* Same drawer when it is not inside the rail */
+  html div:has(> .profile-drawer),
+  html .profile-drawer,
+  html .profile-drawer__header,
+  html .profile-drawer__about,
+  html .profile-drawer__about__section,
+  html .profile-drawer__empty,
+  html .profile-posts__post,
+  html .profile-comments__item,
+  html .profile-spaces,
+  html .profile-spaces__item,
+  html [data-testid="tab-group"],
+  html [data-testid="tab-panels"],
+  html [data-testid="tab-panel"],
+  html [class*="min-h-[56px]"],
+  html [data-testid="profile-info-section"],
+  html [data-testid="profile-fields-section"],
+  html [data-testid="activity-score-section"],
+  html #profile-spaces-scrollable-target,
+  html nav[data-testid="tab-list"]:has([data-testid="tab-button"]) {
     background-color: var(--post-color) !important;
   }
 
   /* Selected conversation in the DM list */
   html body:has([data-testid="new-message"]) [data-testid="chat-room-dm-list"] [aria-selected="true"],
-  html body:has([data-testid="new-message"]) [data-testid="chat-room-dm-list"] [data-selected],
-  html body:has([data-testid="new-message"]) [data-testid="chat-room-dm-list"] li[aria-current] {
+  html body:has([data-testid="new-message"]) [data-testid="chat-room-dm-list"] [data-selected] {
     background-color: var(--hover-color) !important;
-  }
-
-
-  /* Profile drawer on the right of the DM view — header, tab strip, and
-     every tab (About, Posts, Comments, Spaces). These use stable BEM
-     class names rather than Tailwind utilities, so they can be targeted
-     directly. */
-  html [class*="min-h-[56px]"],
-  html .profile-drawer__header,
-  html .profile-drawer__about,
-  html .profile-drawer__about__section,
-  html .profile-posts__post,
-  html .profile-comments__item,
-  html .profile-spaces,
-  html .profile-spaces__item,
-  html [data-testid="profile-info-section"],
-  html [data-testid="profile-fields-section"],
-  html [data-testid="activity-score-section"],
-  html nav[data-testid="tab-list"]:has([data-testid="tab-button"]) {
-    background-color: var(--post-color) !important;
-  }
-
-
-  /* Profile drawer, every container level. The bottom sliver was the
-     outer scroll wrapper showing through below the content, which is why
-     targeting the drawer alone left a strip behind. */
-  html div:has(> .profile-drawer),
-  html .profile-drawer,
-  html [data-testid="tab-group"],
-  html [data-testid="tab-panels"],
-  html [data-testid="tab-panel"],
-  html .profile-drawer__empty,
-  html #profile-spaces-scrollable-target,
-  html .profile-drawer .infinite-scroll-component__outerdiv,
-  html .profile-drawer .infinite-scroll-component {
-    background-color: var(--post-color) !important;
   }
 
   [role="tooltip"],
