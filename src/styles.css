@@ -466,6 +466,15 @@
     color: var(--hover-color) !important;
   }
 
+  /* Composer fields. These carry .bg-primary, so they pick up
+     --post-color and sit as a lighter box inside the composer. They read
+     better transparent, taking whatever surface they are dropped on. */
+  textarea[data-testid="post_name"],
+  textarea.bg-primary.border-none,
+  [data-testid="tiptap-editor"] textarea.bg-primary {
+    background-color: transparent !important;
+  }
+
   /* Buttons whose hover class resolves to the page colour — tab pills,
      cancel buttons, profile actions. hover:bg-secondary would leave them
      the same colour as the surface behind them, so hover reads as dead. */
