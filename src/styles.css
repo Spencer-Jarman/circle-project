@@ -466,6 +466,37 @@
     color: var(--hover-color) !important;
   }
 
+  /* ---- .bg-primary surfaces that should be the page colour ----
+     .bg-primary paints both page-level surfaces and raised cards. The
+     token is set to --post-color for cards, so these have to opt out
+     explicitly. Each selector carries a class the cards do not have. ---- */
+  [data-testid="space-header"],
+  nav.bg-primary,
+  .bg-primary.col-span-12,
+  .bg-primary.col-span-full,
+  .bg-primary.border-r,
+  .bg-primary.absolute.bottom-0 {
+    background-color: var(--secondary-color) !important;
+  }
+
+  /* Profile / space tab pills stay raised against those surfaces */
+  [data-testid="tab-list"] button,
+  [data-testid="tab-list"] button.bg-primary {
+    background-color: var(--post-color) !important;
+  }
+
+  /* ---- top bar: open popover = brand ----
+     Circle marks the open button with aria-expanded / headlessui state,
+     not a background class, so the hover colour would otherwise stick
+     while the popover is open. ---- */
+  header button[aria-expanded="true"],
+  header button[data-headlessui-state~="open"],
+  header [data-popup-open] > button,
+  header button[aria-expanded="true"] > div,
+  header button[data-headlessui-state~="open"] > div {
+    background-color: var(--brand-color) !important;
+  }
+
   /* ---- skeleton loaders ----
      The rows read --color-gray-* but the card wrapper reads
      --color-background-primary, which is --post-color and therefore
