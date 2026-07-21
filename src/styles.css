@@ -594,13 +594,18 @@
     border-color: var(--secondary-color) !important;
   }
 
-  /* ── Bookmarks drawer ──────────────────────────────────────────────
-     The flicker is the list container itself. While the spinner is up,
-     #user-bookmarks-panel-header renders the page colour, then goes
-     transparent once the rows arrive — so every tab switch flashes a
-     page-coloured block against the card the drawer sits on. Pin it to
-     the card colour in both states. */
-  html #user-bookmarks-panel-header {
+  /* Loading spinners. The container that holds Circle's default-loader
+     renders the page colour while the spinner is up, then goes
+     transparent once content arrives — so anything sitting on a card
+     flashes a page-coloured block. Seen in the bookmarks drawer on every
+     tab switch and on the settings profile page on a cold load.
+
+     One rule covers both because it keys on the loader itself rather than
+     on either page. It also survives hydration: the earlier settings fix
+     targeted .react-form's FORM, which does not exist yet when the URL is
+     opened directly, which is why that flash only stopped when arriving
+     via a tab switch. */
+  html div:has(> [data-testid="default-loader"]) {
     background-color: var(--post-color) !important;
   }
 
