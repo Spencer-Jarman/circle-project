@@ -358,10 +358,21 @@
 
 
   /* ────────────────────────────────────────────
-     LOADING & FLICKER
-     Anything that shows for a moment while a section loads: the flashes,
-     the skeleton placeholders and the spinners.
+     SPECIFIC FIXES
+     Things no variable can reach, so they need their own rule.
      ──────────────────────────────────────────── */
+
+  /* Circle has no variable for either of these. This is the background
+     on page load and making the sidebar border border-color */
+  html, body {
+    background-color: var(--secondary-color);
+  }
+
+  [data-testid="standard-layout-v2-sidebar"] {
+    border-right: 1px solid var(--border-color) !important;
+  }
+
+  /* Tooltips. Changing the color of the tooltips and tooltip arrow */
 
   /* Loading flashes. These all render the page colour for a moment while
      a section loads, which reads as a flicker against the post-coloured
@@ -381,12 +392,33 @@
     background-color: var(--post-color) !important;
   }
 
+
+
   /* Settings content panel. It carries .bg-secondary and shows the page
      colour while a section swaps in, which is the flicker on the profile
      and privacy pages. */
   html [class*="ease-out"] > div.bg-secondary {
     background-color: var(--post-color) !important;
   }
+
+  /* Dividers between notifications. They are 1px bars painted with a
+     background, not borders, so they read as page colour instead of a line. */
+  html .bg-secondary-dark[class*="h-[1px]"] {
+    background-color: var(--border-color) !important;
+  }
+
+  /* Connections panel: the outer frame and the strip between the tabs
+     take the hover colour, the tabs themselves take the card colour.
+     (The selected tab hardcodes !bg-white dark:!bg-black, so the button
+     rule is routed through the nav to outrank it.) */
+  html [data-overlayscrollbars-contents]:has([data-testid^="connect-panel-tab-"]),
+  html nav[data-testid="tab-list"]:has([data-testid^="connect-panel-tab-"]) {
+    background-color: var(--hover-color) !important;
+  }
+  html nav[data-testid="tab-list"] button[data-testid^="connect-panel-tab-"] {
+    background-color: var(--post-color) !important;
+  }
+
 
   /* Settings forms. The form element itself renders the page colour for a
      moment while a section loads, then goes transparent — that is the
@@ -395,6 +427,67 @@
      behind it is the same colour. */
   html .react-form > form {
     background-color: var(--post-color) !important;
+  }
+
+
+  /* Checkboxes use Circle's own accent rather than the palette. A checked
+     box fills with currentColor, which comes from .text-light, so it was
+     picking up --text-muted-color. Same idea as leaving the toggles on
+     Circle's defaults.
+     (#506cf0 is Circle's stock accent, #545861 its default border.) */
+  html input[type="checkbox"] {
+    color: #506cf0 !important;
+    border-color: #545861 !important;
+  }
+  html input[type="checkbox"]:checked {
+    background-color: #506cf0 !important;
+    border-color: #506cf0 !important;
+  }
+
+  [role="tooltip"],
+  .tippy-box {
+    background-color: var(--hover-color) !important;
+    color: var(--text-color) !important;
+  }
+
+  .tippy-arrow {
+    color: var(--hover-color) !important;
+  }
+
+  /* Top bar buttons hover hover-color then become brand color when active */
+  .bg-c-header-hover,
+  .hover\:bg-c-header-hover:hover,
+  .hover\:\!bg-c-header-hover:hover,
+  .focus\:\!bg-c-header-hover:focus,
+  .focus-visible\:\!bg-c-header-hover:focus-visible,
+  .hover\:\!bg-c-header-active:hover,
+  .group:hover .group-hover\:bg-c-header-active {
+    background-color: var(--post-color) !important;
+  }
+
+  html .\!bg-c-header-active,
+  html .\!bg-c-header-active:hover,
+  html .\!bg-c-header-active:focus {
+    background-color: var(--brand-color) !important;
+  }
+
+  /* Making the buttons on the profile page hover on hover-color */
+  button.hover\:bg-secondary:hover {
+    background-color: var(--hover-color) !important;
+  }
+
+  /* Making the settings area match my same theme */
+  [class*="--color-background-primary:#34373D"] {
+    --color-background-primary: var(--post-color) !important;
+  }
+  [class*="--color-background-secondary:#2B2E33"] {
+    --color-background-secondary: var(--secondary-color) !important;
+  }
+  [class*="--color-background-tertiary:#4A4E55"] {
+    --color-background-tertiary: var(--hover-color) !important;
+  }
+  [class*="--color-border-primary:#5E636B"] {
+    --color-border-primary: var(--border-color) !important;
   }
 
   /* ---- Loading Skeletons Removed ---- */
@@ -433,61 +526,6 @@
     background-color: var(--post-color) !important;
   }
 
-  /* Chat loading flash */
-  .main__wrapper.bg-primary,
-  .main__wrapper.bg-primary .bg-primary.w-full.overflow-auto {
-    background-color: var(--secondary-color) !important;
-  }
-
-  /* Chat loading pane (full-size spinner flex) */
-  html .bg-primary.flex.size-full.items-center.justify-center {
-    background-color: var(--secondary-color) !important;
-  }
-
-  /* Spinner / loader backgrounds */
-  .react-loader,
-  .default-loader,
-  :has(> .react-loader) {
-    background-color: var(--secondary-color) !important;
-  }
-
-  /* ────────────────────────────────────────────
-     ONE TOKEN, TWO ROLES
-     Circle paints different things with the same variable, so these
-     cannot be fixed by changing a colour — each needs its own rule.
-     ──────────────────────────────────────────── */
-
-  /* Dividers between notifications. They are 1px bars painted with a
-     background, not borders, so they read as page colour instead of a line. */
-  html .bg-secondary-dark[class*="h-[1px]"] {
-    background-color: var(--border-color) !important;
-  }
-
-  /* Connections panel: the outer frame and the strip between the tabs
-     take the hover colour, the tabs themselves take the card colour.
-     (The selected tab hardcodes !bg-white dark:!bg-black, so the button
-     rule is routed through the nav to outrank it.) */
-  html [data-overlayscrollbars-contents]:has([data-testid^="connect-panel-tab-"]),
-  html nav[data-testid="tab-list"]:has([data-testid^="connect-panel-tab-"]) {
-    background-color: var(--hover-color) !important;
-  }
-  html nav[data-testid="tab-list"] button[data-testid^="connect-panel-tab-"] {
-    background-color: var(--post-color) !important;
-  }
-
-  /* Making the settings area match my same theme */
-  [class*="--color-background-primary:#34373D"] {
-    --color-background-primary: var(--post-color) !important;
-  }
-  [class*="--color-background-secondary:#2B2E33"] {
-    --color-background-secondary: var(--secondary-color) !important;
-  }
-  [class*="--color-background-tertiary:#4A4E55"] {
-    --color-background-tertiary: var(--hover-color) !important;
-  }
-  [class*="--color-border-primary:#5E636B"] {
-    --color-border-primary: var(--border-color) !important;
-  }
 
   /* ---- where one token serves two roles ----
      Circle paints 127 different things from --color-background-primary,
@@ -503,6 +541,24 @@
   /* Chat space background */
   [data-testid="chat-room-wrapper"],
   [data-testid="chat-room-wrapper"] .bg-primary {
+    background-color: var(--secondary-color) !important;
+  }
+
+  /* Chat loading flash */
+  .main__wrapper.bg-primary,
+  .main__wrapper.bg-primary .bg-primary.w-full.overflow-auto {
+    background-color: var(--secondary-color) !important;
+  }
+
+  /* Chat loading pane (full-size spinner flex) */
+  html .bg-primary.flex.size-full.items-center.justify-center {
+    background-color: var(--secondary-color) !important;
+  }
+
+  /* Spinner / loader backgrounds */
+  .react-loader,
+  .default-loader,
+  :has(> .react-loader) {
     background-color: var(--secondary-color) !important;
   }
 
@@ -531,154 +587,6 @@
   #rail-content [data-testid="tiptap-editor"]:focus-within {
     background-color: var(--hover-color) !important;
     border-color: hsl(from var(--border-color) h s calc(l + 30)) !important;
-  }
-
-  /* ────────────────────────────────────────────
-     DIRECT MESSAGES
-     ──────────────────────────────────────────── */
-
-  /* ════════════════════════════════════════════
-     EXPANDED DIRECT MESSAGES — everything page colour
-     ════════════════════════════════════════════
-     The DM view reuses the same testids as a chat space, and its profile
-     drawer sits inside #rail-content, so the chat rules above repaint it.
-
-     (body:has([data-testid="new-message"]) scopes to the DM view only —
-     that button is in the DM sidebar and nowhere else, on both Inbox and
-     Unread. #rail-content has to appear in the drawer selectors: the chat
-     rule is #rail-content .bg-primary at (1,1,0), and classes never beat
-     an ID.) */
-
-  html body:has([data-testid="new-message"]) [data-testid="chat-room-wrapper"],
-  html body:has([data-testid="new-message"]) [data-testid="chat-room-wrapper"] .bg-primary,
-  html body:has([data-testid="new-message"]) [data-testid="message-item"],
-  html body:has([data-testid="new-message"]) [data-testid="tiptap-editor"],
-  html body:has([data-testid="new-message"]) [data-testid="tab-group"],
-  html body:has([data-testid="new-message"]) [data-testid="tab-panels"],
-  html body:has([data-testid="new-message"]) [data-testid="tab-panel"],
-  html body:has([data-testid="new-message"]) nav[data-testid="tab-list"],
-  html body:has([data-testid="new-message"]) #scrollable-dms-div,
-  html body:has([data-testid="new-message"]) .bg-primary,
-  html body:has([data-testid="new-message"]) .bg-secondary,
-  html body:has([data-testid="new-message"]) .bg-secondary-dark,
-  html body:has([data-testid="new-message"]) [class*="skeleton-loader"],
-  html body:has([data-testid="new-message"]) [class*="skeleton-loader"] div,
-  html body:has([data-testid="new-message"]) .animate-pulse,
-  html body:has([data-testid="new-message"]) .bg-primary.border-l,
-
-  /* Profile drawer on the right — carries #rail-content to outrank the
-     chat rule of the same name */
-  html #rail-content .bg-primary,
-  html #rail-content .profile-drawer,
-  html #rail-content .profile-drawer__header,
-  html #rail-content .profile-drawer__about,
-  html #rail-content .profile-drawer__about__section,
-  html #rail-content .profile-drawer__empty,
-  html #rail-content .profile-posts__post,
-  html #rail-content .profile-comments__item,
-  html #rail-content .profile-spaces,
-  html #rail-content .profile-spaces__item,
-  html #rail-content button.bg-primary,
-  html #rail-content [data-testid="tab-group"],
-  html #rail-content [data-testid="tab-panels"],
-  html #rail-content [data-testid="tab-panel"],
-  html #rail-content nav[data-testid="tab-list"],
-  html #rail-content div:has(> .profile-drawer),
-  html #rail-content [class*="min-h-[56px]"],
-  html #rail-content [data-testid="profile-info-section"],
-  html #rail-content [data-testid="profile-fields-section"],
-  html #rail-content [data-testid="activity-score-section"],
-  html #rail-content #profile-spaces-scrollable-target {
-    background-color: var(--secondary-color) !important;
-  }
-
-  /* Conversation rows. The selected rule repeats every selector with
-     :hover so it keeps winning while the pointer is over it — otherwise
-     the hover rule ties on specificity and takes over. */
-  html body:has([data-testid="new-message"]) button[data-testid="chat-room-dm-list"]:hover,
-  html body:has([data-testid="new-message"]) button[data-testid="chat-room-dm-list"]:focus-visible {
-    background-color: var(--hover-color) !important;
-  }
-  html body:has([data-testid="new-message"]) button[data-testid="chat-room-dm-list"].bg-secondary-dark,
-  html body:has([data-testid="new-message"]) button[data-testid="chat-room-dm-list"].bg-secondary-dark:hover,
-  html body:has([data-testid="new-message"]) button[data-testid="chat-room-dm-list"].bg-secondary-dark:focus-visible,
-  html body:has([data-testid="new-message"]) button[data-testid="chat-room-dm-list"][aria-selected="true"],
-  html body:has([data-testid="new-message"]) button[data-testid="chat-room-dm-list"][aria-selected="true"]:hover,
-  html body:has([data-testid="new-message"]) button[data-testid="chat-room-dm-list"][data-selected],
-  html body:has([data-testid="new-message"]) button[data-testid="chat-room-dm-list"][data-selected]:hover {
-    background-color: var(--post-color) !important;
-  }
-
-  /* ────────────────────────────────────────────
-     HOVER, ACTIVE AND SELECTED STATES
-     ──────────────────────────────────────────── */
-
-  /* Checkboxes use Circle's own accent rather than the palette. A checked
-     box fills with currentColor, which comes from .text-light, so it was
-     picking up --text-muted-color. Same idea as leaving the toggles on
-     Circle's defaults.
-     (#506cf0 is Circle's stock accent, #545861 its default border.) */
-  html input[type="checkbox"] {
-    color: #506cf0 !important;
-    border-color: #545861 !important;
-  }
-  html input[type="checkbox"]:checked {
-    background-color: #506cf0 !important;
-    border-color: #506cf0 !important;
-  }
-
-  /* Top bar buttons hover hover-color then become brand color when active */
-  .bg-c-header-hover,
-  .hover\:bg-c-header-hover:hover,
-  .hover\:\!bg-c-header-hover:hover,
-  .focus\:\!bg-c-header-hover:focus,
-  .focus-visible\:\!bg-c-header-hover:focus-visible,
-  .hover\:\!bg-c-header-active:hover,
-  .group:hover .group-hover\:bg-c-header-active {
-    background-color: var(--post-color) !important;
-  }
-
-  html .\!bg-c-header-active,
-  html .\!bg-c-header-active:hover,
-  html .\!bg-c-header-active:focus {
-    background-color: var(--brand-color) !important;
-  }
-
-  /* Making the buttons on the profile page hover on hover-color */
-  button.hover\:bg-secondary:hover {
-    background-color: var(--hover-color) !important;
-  }
-
-  /* ────────────────────────────────────────────
-     NO VARIABLE EXISTS
-     Circle has no colour variable for these at all.
-     ──────────────────────────────────────────── */
-
-  /* Circle has no variable for either of these. This is the background
-     on page load and making the sidebar border border-color */
-  html, body {
-    background-color: var(--secondary-color);
-  }
-
-  [data-testid="standard-layout-v2-sidebar"] {
-    border-right: 1px solid var(--border-color) !important;
-  }
-
-  /* Tooltips. Changing the color of the tooltips and tooltip arrow */
-
-  /* Dividers between conversations read as a line, not a block */
-  html body:has([data-testid="new-message"]) .bg-secondary-dark[class*="h-[1px]"] {
-    background-color: var(--border-color) !important;
-  }
-
-  [role="tooltip"],
-  .tippy-box {
-    background-color: var(--hover-color) !important;
-    color: var(--text-color) !important;
-  }
-
-  .tippy-arrow {
-    color: var(--hover-color) !important;
   }
 
 
