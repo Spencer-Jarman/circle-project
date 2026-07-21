@@ -153,7 +153,7 @@
     --color-background-button-branded: var(--brand-color) !important;
     --color-background-slider-branded: var(--brand-color) !important;
     --color-border-badge-branded: var(--brand-color) !important;
-    --color-community-header-active-background: var(--brand-color) !important;
+    --color-community-header-active-background: var(--post-color) !important;
     --color-community-sidebar-active-background: var(--brand-color) !important;
     --color-community-sidebar-hover-background: var(--brand-color) !important;
     --color-ring-primary: var(--brand-color) !important;
@@ -466,6 +466,19 @@
     color: var(--hover-color) !important;
   }
 
+  /* ---- skeleton loaders ----
+     The rows read --color-gray-* but the card wrapper reads
+     --color-background-primary, which is --post-color and therefore
+     visible against the page. Painting the whole placeholder the page
+     colour is what actually makes it disappear. ---- */
+  [class*="skeleton-loader"],
+  [class*="skeleton-loader"] *,
+  .animate-pulse,
+  .animate-pulse * {
+    background-color: var(--secondary-color) !important;
+    border-color: var(--secondary-color) !important;
+  }
+
   /* ---- members directory background ----
      .bg-primary paints both the page wrapper and the member cards. The
      wrapper is the only one with h-full, so that is what separates them:
@@ -651,8 +664,10 @@
      up to .community__content, which spans the full window width behind
      the sidebar — so scrolling over the sidebar scrolled the feed.
      overscroll-behavior stops the chain at the sidebar. ---- */
-  [data-testid="standard-layout-v2-sidebar"],
-  [data-testid="standard-layout-v2-sidebar"] > div,
+  [data-testid="standard-layout-v2-sidebar"] {
+    overflow-y: auto !important;
+    overscroll-behavior: contain !important;
+  }
   [data-testid="standard-layout-v2-sidebar"] * {
     overscroll-behavior: contain !important;
   }
