@@ -381,24 +381,43 @@
 
   /* Tooltips. Changing the color of the tooltips and tooltip arrow */
 
-  /* Account settings nav — sits on the page, not on a card */
+
+  /* Account settings nav bar */
   html nav.bg-primary {
     background-color: var(--secondary-color) !important;
   }
 
-  /* Composer title field — sits inside the post modal */
+  /* Composer title field */
   html textarea[data-testid="post_name"] {
     background-color: var(--secondary-color) !important;
   }
 
-  /* Page-level surfaces Circle paints with the card colour */
-  [data-testid="space-header"],
-  .bg-primary.col-span-12,
-  .bg-primary.col-span-full,
-  .bg-primary.border-r,
-  .bg-primary.absolute.bottom-0,
-  .bg-primary.h-full {
+  /* Signed-in devices table, its header row and its pagination bar */
+  html table.bg-primary,
+  html table.bg-primary thead,
+  html table.bg-primary ~ .bg-primary {
     background-color: var(--secondary-color) !important;
+  }
+
+  /* Profile panes either side of the profile modal */
+  html .bg-primary.col-span-12,
+  html .bg-primary.col-span-full,
+  html .bg-primary.border-r {
+    background-color: var(--secondary-color) !important;
+  }
+
+  /* Space title bar */
+  html [data-testid="space-header"] {
+    background-color: var(--secondary-color) !important;
+  }
+
+  /* Expanded post modal stays the card colour
+     (its header and the reply box both carry .bg-primary, and the rules
+     above must not reach into it) */
+  html [data-testid="modal-header"],
+  html .post__reply.bg-primary,
+  html [data-testid="modal"] .bg-primary {
+    background-color: var(--post-color) !important;
   }
 
   [role="tooltip"],
@@ -427,7 +446,9 @@
     background-color: var(--post-color) !important;
   }
 
-  html .\!bg-c-header-active {
+  html .\!bg-c-header-active,
+  html .\!bg-c-header-active:hover,
+  html .\!bg-c-header-active:focus {
     background-color: var(--brand-color) !important;
   }
 
