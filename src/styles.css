@@ -438,6 +438,68 @@
     color: var(--text-color) !important;
   }
 
+  /* ---- where one token serves two roles ----
+     Circle paints 127 different things from --color-background-primary,
+     including both post cards and the chat room. That token is set to
+     --post-color so cards look right, which means anywhere that needs the
+     page colour instead has to say so explicitly.
+
+     These are NOT redundant overrides. They encode distinctions the token
+     system cannot express, because a token can only say "everything using
+     me is colour X". Deleting them is what put the chat background back to
+     #111316. ---- */
+
+  /* Chat space background */
+  [data-testid="chat-room-wrapper"],
+  [data-testid="chat-room-wrapper"] .bg-primary {
+    background-color: var(--secondary-color) !important;
+  }
+
+  /* Chat loading flash */
+  .main__wrapper.bg-primary,
+  .main__wrapper.bg-primary .bg-primary.w-full.overflow-auto {
+    background-color: var(--secondary-color) !important;
+  }
+
+  /* Chat loading pane (full-size spinner flex) */
+  html .bg-primary.flex.size-full.items-center.justify-center {
+    background-color: var(--secondary-color) !important;
+  }
+
+  /* Spinner / loader backgrounds */
+  .react-loader,
+  .default-loader,
+  :has(> .react-loader) {
+    background-color: var(--secondary-color) !important;
+  }
+
+  /* Chat details panel (right rail) */
+  #rail-content,
+  #rail-content .bg-primary,
+  #rail-content .bg-secondary-dark,
+  #rail-content [data-testid="message-item"] {
+    background-color: var(--secondary-color) !important;
+  }
+
+  /* Chat message hover */
+  [data-testid="message-item"]:hover,
+  #rail-content [data-testid="message-item"]:hover {
+    background-color: var(--post-color) !important;
+  }
+
+  /* Chat compose box (rest / hover / focus) */
+  #rail-content [data-testid="tiptap-editor"] {
+    background-color: var(--post-color) !important;
+  }
+  #rail-content [data-testid="tiptap-editor"]:hover {
+    background-color: var(--hover-color) !important;
+    border-color: hsl(from var(--border-color) h s calc(l + 2)) !important;
+  }
+  #rail-content [data-testid="tiptap-editor"]:focus-within {
+    background-color: var(--hover-color) !important;
+    border-color: hsl(from var(--border-color) h s calc(l + 30)) !important;
+  }
+
 
 
 /* ════════════════════════════════════════════════════════════
