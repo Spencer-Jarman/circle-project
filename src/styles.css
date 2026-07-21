@@ -6,28 +6,31 @@
 
 /* ════════════════════════════════════════════════════════════
    SECTION A — COLOUR
-   Everything that sets a colour lives here and nowhere else.
+   Every colour on the site is set here, in three blocks:
 
-   Circle paints its whole UI from CSS variables, so overriding the
-   variable themes every element that reads it — including elements
-   Circle ships in future updates. That is why there are almost no
-   per-element colour rules left.
+     1. SEMANTIC TOKENS   what Circle paints its UI with, grouped into
+                          categories. Everything in a category shares one
+                          colour, so the category is the unit you edit.
+     2. PRIMITIVES        Circle's raw scales. Only the ones something
+                          reads DIRECTLY are listed; the rest are unused
+                          in dark mode or belong to Circle's theme picker,
+                          so setting them would do nothing.
+     3. STATUS COLOURS    error / warning / success / info, left at
+                          Circle's values with the hex inline to tune.
 
    !important is required. Circle declares these on .dark and
-   [data-theme="dark"], specificity (0,1,0), which outranks a plain
-   html selector (0,0,1). Without it these lines silently do nothing.
+   [data-theme="dark"], specificity (0,1,0), which outranks a plain html
+   selector (0,0,1). Without it these lines silently do nothing.
+
+   MAGENTA #ff00ff means "not sorted yet" — a token with no category, or
+   a primitive nothing has themed. Both are to-do markers.
 
    IF A NEW CIRCLE ELEMENT IS THE WRONG COLOUR:
      1. Right-click it -> Inspect.
-     2. In the Styles panel read its background-color / color. It will
-        say var(--some-token).
-     3. Add that token to the list below:
-            --some-token: var(--post-color) !important;
-   If the Styles panel shows a raw hex instead of a var(), Circle
-   hardcoded it and no token exists — that one needs a rule at the
-   bottom of this section, under "colour that no token can express".
-
-   Magenta #ff00ff is an audit marker: it means "colour not chosen yet".
+     2. Read its background-color / color; it will say var(--some-token).
+     3. Add that token to whichever category below it belongs in.
+   If it shows a raw hex instead of a var(), Circle hardcoded it — that
+   one needs a rule at the bottom of this section.
    ════════════════════════════════════════════════════════════ */
 
   :root {
@@ -44,9 +47,207 @@
     --unassigned: #ff00ff;
   }
 
+
+  /* ────────────────────────────────────────────
+     1. SEMANTIC TOKENS
+     ──────────────────────────────────────────── */
   html {
+    /* PAGE — the page / app background */
     --background-body: var(--secondary-color) !important;
     --background-body-fullscreen: var(--secondary-color) !important;
+    --color-background-content-disabled: var(--secondary-color) !important;
+    --color-background-secondary: var(--secondary-color) !important;
+    --color-background-secondary-dark: var(--secondary-color) !important;
+    --comments-wrapper-background: var(--secondary-color) !important;
+    --date-group-background: var(--secondary-color) !important;
+    --trix-body-background: var(--secondary-color) !important;
+
+    /* PANEL — sidebar, header, nav — the chrome around the page */
+    --color-community-sidebar-accent-background: var(--primary-color) !important;
+    --color-community-sidebar-background: var(--primary-color) !important;
+    --color-community-switcher-background: var(--primary-color) !important;
+    --color-community-switcher-new-community-button-bg: var(--primary-color) !important;
+    --community-switcher-bg: var(--primary-color) !important;
+    --community-switcher-icon-bg: var(--primary-color) !important;
+    --mobile-menu-sidebar-bg: var(--primary-color) !important;
+    --multi-step-panel-navigation-panel-bg: var(--primary-color) !important;
+    --sidebar-block-count-bg: var(--primary-color) !important;
+    --sidebar-onboarding-block-bg: var(--primary-color) !important;
+
+    /* RAISED — anything on top of the page: posts, cards, modals,
+       dropdowns, inputs, tooltips, the editor */
+    --background-primary-10: color-mix(in srgb, var(--post-color) 10%, transparent) !important;
+    --background-primary-100: var(--post-color) !important;
+    --background-primary-15: color-mix(in srgb, var(--post-color) 15%, transparent) !important;
+    --background-primary-25: color-mix(in srgb, var(--post-color) 25%, transparent) !important;
+    --background-primary-33: color-mix(in srgb, var(--post-color) 33%, transparent) !important;
+    --background-primary-50: color-mix(in srgb, var(--post-color) 50%, transparent) !important;
+    --background-primary-66: color-mix(in srgb, var(--post-color) 66%, transparent) !important;
+    --background-primary-75: color-mix(in srgb, var(--post-color) 75%, transparent) !important;
+    --button-background: var(--post-color) !important;
+    --color-background-avatar-primary: var(--post-color) !important;
+    --color-background-emoji-picker: 17, 19, 22 !important;   /* RGB triple: Circle wraps this in rgba() */
+    --color-background-primary: var(--post-color) !important;
+    --color-background-text-editor-modifier: var(--post-color) !important;
+    --color-support-widget-background: var(--post-color) !important;
+    --dropdown-background: var(--post-color) !important;
+    --input-background: var(--post-color) !important;
+    --input-gray-background: var(--post-color) !important;
+    --input-gray-darker-background: var(--post-color) !important;
+    --new-notification-bg: var(--post-color) !important;
+    --post-background: var(--post-color) !important;
+    --post-headline-tag-background: var(--post-color) !important;
+    --post-pinned-background: var(--post-color) !important;
+    --post-post-background: var(--post-color) !important;
+    --search-autocomplete-background: var(--post-color) !important;
+    --search-bar-background: var(--post-color) !important;
+    --tooltip-background: var(--post-color) !important;
+    --user-profile-card-bg: var(--post-color) !important;
+
+    /* HOVER — hover / active / selected states, one step above RAISED */
+    --color-background-active: hsl(from var(--post-color) h s calc(l + 2)) !important;
+    --color-background-emoji-picker-hover: 22, 25, 29 !important;   /* RGB triple: Circle wraps this in rgba() */
+    --color-background-highlight: hsl(from var(--post-color) h s calc(l + 2)) !important;
+    --color-background-hover: hsl(from var(--post-color) h s calc(l + 2)) !important;
+    --color-background-secondary-hover: hsl(from var(--post-color) h s calc(l + 2)) !important;
+    --color-background-selector-active: hsl(from var(--post-color) h s calc(l + 2)) !important;
+    --color-background-tertiary: hsl(from var(--post-color) h s calc(l + 2)) !important;
+    --color-background-text-editor-modifier-active: hsl(from var(--post-color) h s calc(l + 2)) !important;
+    --color-background-text-editor-modifier-hover: hsl(from var(--post-color) h s calc(l + 2)) !important;
+    --color-community-header-hover-background: hsl(from var(--post-color) h s calc(l + 2)) !important;
+    --color-message-highlight-background: hsl(from var(--post-color) h s calc(l + 2)) !important;
+    --comment-scroll-highlight-background: hsl(from var(--post-color) h s calc(l + 2)) !important;
+    --new-notification-hover-bg: hsl(from var(--post-color) h s calc(l + 2)) !important;
+    --search-autocomplete-link-hover-background: hsl(from var(--post-color) h s calc(l + 2)) !important;
+
+    /* SELECTED — the currently-selected item — brand coloured on purpose */
+    --color-background-slider-branded: var(--brand-color) !important;
+    --color-background-toggle-active: var(--brand-color) !important;
+    --color-community-sidebar-active-background: var(--brand-color) !important;
+    --color-community-sidebar-hover-background: var(--brand-color) !important;
+    --sidebar-link-active-bg: var(--brand-color) !important;
+
+    /* INVERSE — surfaces that deliberately oppose the theme (light on dark) */
+    --color-background-inverse: var(--text-color) !important;
+    --color-background-inverse-active: var(--text-color) !important;
+    --color-background-inverse-hover: var(--text-color) !important;
+    --color-border-accent: var(--text-color) !important;
+    --color-border-darkest: var(--text-color) !important;
+    --color-icon-inverse: var(--text-color) !important;
+    --color-text-inverse: var(--text-color) !important;
+
+    /* TEXT — primary text and icons */
+    --button-text-color: var(--text-color) !important;
+    --color-community-header-active-text: var(--text-color) !important;
+    --color-community-header-text: var(--text-color) !important;
+    --color-community-sidebar-icon: var(--text-color) !important;
+    --color-community-sidebar-icon-hover: var(--text-color) !important;
+    --color-community-sidebar-text: var(--text-color) !important;
+    --color-icon: var(--text-color) !important;
+    --color-icon-hover: var(--text-color) !important;
+    --color-icon-primary: var(--text-color) !important;
+    --color-text-chip: var(--text-color) !important;
+    --color-text-dark: var(--text-color) !important;
+    --color-text-darkest: var(--text-color) !important;
+    --color-text-feature-dark: var(--text-color) !important;
+    --color-text-icon-text: var(--text-color) !important;
+    --color-text-level-basic: var(--text-color) !important;
+    --color-text-level-mid: var(--text-color) !important;
+    --color-text-level-top: var(--text-color) !important;
+    --color-text-primary: var(--text-color) !important;
+    --color-text-very-dark: var(--text-color) !important;
+    --dropdown-icon: var(--text-color) !important;
+    --dropdown-title: var(--text-color) !important;
+    --header-sticky-nav: var(--text-color) !important;
+    --icon-add: var(--text-color) !important;
+    --icon-comment: var(--text-color) !important;
+    --icon-fill-color: var(--text-color) !important;
+    --icon-fill-color-hover: var(--text-color) !important;
+    --icon-hover: var(--text-color) !important;
+    --icon-like: var(--text-color) !important;
+    --icon-mention: var(--text-color) !important;
+    --icon-message: var(--text-color) !important;
+    --icon-reply: var(--text-color) !important;
+    --icon-stroke-color: var(--text-color) !important;
+    --icon-stroke-color-hover: var(--text-color) !important;
+    --label-description-color: var(--text-color) !important;
+    --label-title-color: var(--text-color) !important;
+    --modal-title: var(--text-color) !important;
+    --post-text: var(--text-color) !important;
+    --search-autocomplete-link-text: var(--text-color) !important;
+    --sidebar-block-header: var(--text-color) !important;
+    --sidebar-block-header-link: var(--text-color) !important;
+    --text-body: var(--text-color) !important;
+    --text-body-10: color-mix(in srgb, var(--text-color) 10%, transparent) !important;
+    --text-body-100: var(--text-color) !important;
+    --text-body-25: color-mix(in srgb, var(--text-color) 25%, transparent) !important;
+    --text-body-33: color-mix(in srgb, var(--text-color) 33%, transparent) !important;
+    --text-body-50: color-mix(in srgb, var(--text-color) 50%, transparent) !important;
+    --text-body-66: color-mix(in srgb, var(--text-color) 66%, transparent) !important;
+    --text-body-75: color-mix(in srgb, var(--text-color) 75%, transparent) !important;
+    --user-text: var(--text-color) !important;
+
+    /* TEXT MUTED — secondary text: timestamps, placeholders, disabled labels */
+    --color-icon-disabled: var(--text-muted-color) !important;
+    --color-icon-secondary: var(--text-muted-color) !important;
+    --color-icon-tertiary: var(--text-muted-color) !important;
+    --color-text-date-blue: var(--text-muted-color) !important;
+    --color-text-default: var(--text-muted-color) !important;
+    --color-text-disabled: var(--text-muted-color) !important;
+    --color-text-feature-light: var(--text-muted-color) !important;
+    --color-text-light: var(--text-muted-color) !important;
+    --color-text-lightest: var(--text-muted-color) !important;
+    --color-text-placeholder: var(--text-muted-color) !important;
+    --color-text-secondary: var(--text-muted-color) !important;
+    --color-text-tertiary: var(--text-muted-color) !important;
+    --color-text-timestamp-light: var(--text-muted-color) !important;
+    --dropdown-descriptor: var(--text-muted-color) !important;
+    --icon-muted: var(--text-muted-color) !important;
+    --input-gray-explainer: var(--text-muted-color) !important;
+    --input-gray-explainer-light: var(--text-muted-color) !important;
+    --input-placeholder: var(--text-muted-color) !important;
+    --placeholder-gray: var(--text-muted-color) !important;
+    --placeholder-light-grey: var(--text-muted-color) !important;
+    --sidebar-block-count: var(--text-muted-color) !important;
+    --t-header-light-grey: var(--text-muted-color) !important;
+    --text-secondary: var(--text-muted-color) !important;
+    --text-secondary-hover: var(--text-muted-color) !important;
+    --text-secondary-light: var(--text-muted-color) !important;
+    --text-secondary-muted: var(--text-muted-color) !important;
+    --user-joined: var(--text-muted-color) !important;
+    --user-tagline: var(--text-muted-color) !important;
+
+    /* BORDER — every border, divider and rule */
+    --border-dark: var(--border-color) !important;
+    --border-light: var(--border-color) !important;
+    --border-light-hover: var(--border-color) !important;
+    --border-lightest: var(--border-color) !important;
+    --border-medium: var(--border-color) !important;
+    --button-border: var(--border-color) !important;
+    --color-background-toggle-inactive: var(--border-color) !important;
+    --color-border-active: var(--border-color) !important;
+    --color-border-dark: var(--border-color) !important;
+    --color-border-disabled: var(--border-color) !important;
+    --color-border-focus: var(--border-color) !important;
+    --color-border-hover: var(--border-color) !important;
+    --color-border-input: var(--border-color) !important;
+    --color-border-primary: var(--border-color) !important;
+    --color-border-secondary: var(--border-color) !important;
+    --color-border-secondary-dark: var(--border-color) !important;
+    --color-border-selector-inactive: var(--border-color) !important;
+    --color-border-tertiary: var(--border-color) !important;
+    --color-community-sidebar-border: var(--border-color) !important;
+    --comment-border-bottom: var(--border-color) !important;
+    --divider-border: var(--border-color) !important;
+    --mobile-menu-sidebar-border: var(--border-color) !important;
+    --post-light-line: var(--border-color) !important;
+    --post-pinned-border: var(--border-color) !important;
+    --sidebar-block-border: var(--border-color) !important;
+    --sidebar-onboarding-block-border: var(--border-color) !important;
+    --trix-border: var(--border-color) !important;
+    --user-profile-card-border: var(--border-color) !important;
+
+    /* BRAND — branded surfaces, icons and accents */
     --background-brand-03: color-mix(in srgb, var(--brand-color) 3%, transparent) !important;
     --background-brand-10: color-mix(in srgb, var(--brand-color) 10%, transparent) !important;
     --background-brand-100: var(--brand-color) !important;
@@ -55,165 +256,18 @@
     --background-brand-50: color-mix(in srgb, var(--brand-color) 50%, transparent) !important;
     --background-brand-66: color-mix(in srgb, var(--brand-color) 66%, transparent) !important;
     --background-brand-75: color-mix(in srgb, var(--brand-color) 75%, transparent) !important;
-    --background-primary-10: color-mix(in srgb, var(--secondary-color) 10%, transparent) !important;
-    --background-primary-100: var(--secondary-color) !important;
-    --background-primary-15: color-mix(in srgb, var(--secondary-color) 15%, transparent) !important;
-    --background-primary-25: color-mix(in srgb, var(--secondary-color) 25%, transparent) !important;
-    --background-primary-33: color-mix(in srgb, var(--secondary-color) 33%, transparent) !important;
-    --background-primary-50: color-mix(in srgb, var(--secondary-color) 50%, transparent) !important;
-    --background-primary-66: color-mix(in srgb, var(--secondary-color) 66%, transparent) !important;
-    --background-primary-75: color-mix(in srgb, var(--secondary-color) 75%, transparent) !important;
-    --border-dark: var(--border-color) !important;
-    --border-light: var(--border-color) !important;
-    --border-light-hover: var(--border-color) !important;
-    --border-lightest: var(--border-color) !important;
-    --border-medium: var(--border-color) !important;
     --brand: var(--brand-color) !important;
-    --brand-button-hover: hsl(from var(--brand-color) h s calc(l + 8)) !important;
-    --brand-button-text: var(--text-color) !important;
-    --brand-dark: hsl(from var(--brand-color) h s calc(l - 8)) !important;
-    --brand-light: hsl(from var(--brand-color) h s calc(l + 12)) !important;
-    --button-background: var(--post-color) !important;
-    --button-border: var(--border-color) !important;
-    --button-text-color: var(--text-color) !important;
+    --brand-button-hover: var(--brand-color) !important;
+    --brand-dark: var(--brand-color) !important;
+    --brand-light: var(--brand-color) !important;
     --circle-primary: var(--brand-color) !important;
     --circle-primary-dark: var(--brand-color) !important;
-    --color-background-active: hsl(from var(--post-color) h s calc(l + 2)) !important;
-    --color-background-avatar-primary: var(--post-color) !important;
     --color-background-badge-branded: var(--brand-color) !important;
     --color-background-brand: var(--brand-color) !important;
     --color-background-button-branded: var(--brand-color) !important;
-    --color-background-content-disabled: var(--secondary-color) !important;
-    --color-background-danger: #f87171 !important;
-    --color-background-danger-active: #ef4444 !important;
-    --color-background-danger-hover: #b91c1c !important;
-    --color-background-danger-light: #483136 !important;
-    --color-background-disabled: var(--post-color) !important;
-    --color-background-emoji-picker: 17, 19, 22 !important;
-    --color-background-emoji-picker-hover: 22, 25, 29 !important;
-    --color-background-highlight: hsl(from var(--post-color) h s calc(l + 2)) !important;
-    --color-background-hover: hsl(from var(--post-color) h s calc(l + 2)) !important;
-    --color-background-idle: #f59e0b !important;
-    --color-background-info: #60a5fa !important;
-    --color-background-info-light: #2d3b50 !important;
-    --color-background-inverse: var(--text-color) !important;
-    --color-background-inverse-active: var(--text-color) !important;
-    --color-background-inverse-hover: var(--text-color) !important;
-    --color-background-level-basic: var(--post-color) !important;
-    --color-background-level-mid: var(--post-color) !important;
-    --color-background-level-top: var(--post-color) !important;
-    --color-background-online: #22c55e !important;
-    --color-background-overlay: rgba(0, 0, 0, 0.6) !important;
-    --color-background-overlay-dark: var(--post-color) !important;
-    --color-background-primary: var(--post-color) !important;
-    --color-background-secondary: var(--secondary-color) !important;
-    --color-background-secondary-dark: var(--secondary-color) !important;
-    --color-background-secondary-hover: hsl(from var(--post-color) h s calc(l + 2)) !important;
-    --color-background-selector-active: hsl(from var(--post-color) h s calc(l + 4)) !important;
-    --color-background-slider-branded: var(--brand-color) !important;
-    --color-background-success: #4ade80 !important;
-    --color-background-success-light: #2a4539 !important;
-    --color-background-tertiary: hsl(from var(--post-color) h s calc(l + 2)) !important;
-    --color-background-text-editor-modifier: var(--post-color) !important;
-    --color-background-text-editor-modifier-active: hsl(from var(--post-color) h s calc(l + 4)) !important;
-    --color-background-text-editor-modifier-hover: hsl(from var(--post-color) h s calc(l + 2)) !important;
-    --color-background-toggle-active: var(--brand-color) !important;
-    --color-background-toggle-inactive: var(--border-color) !important;
-    --color-background-warning: #fcd34d !important;
-    --color-background-warning-light: #493f2d !important;
-    --color-border-accent: var(--border-color) !important;
-    --color-border-active: var(--border-color) !important;
     --color-border-badge-branded: var(--brand-color) !important;
-    --color-border-danger: #fca5a5 !important;
-    --color-border-dark: var(--border-color) !important;
-    --color-border-darkest: var(--border-color) !important;
-    --color-border-disabled: var(--border-color) !important;
-    --color-border-focus: var(--border-color) !important;
-    --color-border-hover: var(--border-color) !important;
-    --color-border-info: #93c5fd !important;
-    --color-border-input: var(--border-color) !important;
-    --color-border-primary: var(--border-color) !important;
-    --color-border-secondary: var(--border-color) !important;
-    --color-border-secondary-dark: var(--border-color) !important;
-    --color-border-selector-inactive: var(--border-color) !important;
-    --color-border-success: #86efac !important;
-    --color-border-tertiary: var(--border-color) !important;
-    --color-border-warning: #fcd34d !important;
-    --color-community-active-item-text-color: var(--text-color) !important;
-    --color-community-header-active-text: var(--text-color) !important;
-    --color-community-header-hover-background: hsl(from var(--post-color) h s calc(l + 2)) !important;
-    --color-community-header-text: var(--text-color) !important;
-    --color-community-sidebar-accent-background: var(--primary-color) !important;
-    --color-community-sidebar-active-background: var(--brand-color) !important;
-    --color-community-sidebar-background: var(--primary-color) !important;
-    --color-community-sidebar-badge-background: var(--alert-color) !important;
-    --color-community-sidebar-badge-text: var(--text-color) !important;
-    --color-community-sidebar-border: var(--border-color) !important;
-    --color-community-sidebar-hover-background: hsl(from var(--brand-color) h s calc(l - 10)) !important;
-    --color-community-sidebar-icon: var(--text-color) !important;
-    --color-community-sidebar-icon-hover: var(--text-color) !important;
-    --color-community-sidebar-text: var(--text-color) !important;
-    --color-community-sidebar-text-on-accent: var(--text-color) !important;
-    --color-community-switcher-background: var(--post-color) !important;
-    --color-community-switcher-new-community-button-bg: var(--primary-color) !important;
-    --color-community-switcher-new-community-button-icon: var(--text-color) !important;
-    --color-event-sidebar-item: var(--text-muted-color) !important;
-    --color-feedback-error: var(--alert-color) !important;
-    --color-grey-0: var(--post-color) !important;
-    --color-icon: var(--text-muted-color) !important;
-    --color-icon-danger: #fca5a5 !important;
-    --color-icon-disabled: var(--text-muted-color) !important;
-    --color-icon-hover: var(--text-muted-color) !important;
-    --color-icon-info: #93c5fd !important;
-    --color-icon-inverse: var(--secondary-color) !important;
-    --color-icon-primary: var(--text-color) !important;
-    --color-icon-secondary: var(--text-muted-color) !important;
-    --color-icon-success: #86efac !important;
-    --color-icon-tertiary: var(--text-muted-color) !important;
-    --color-icon-warning: #fcd34d !important;
-    --color-message-highlight-background: hsl(from var(--post-color) h s calc(l + 4)) !important;
-    --color-messaging-info-blue: 96 165 250 !important;
-    --color-online-background: var(--success-color) !important;
-    --color-ring-primary: var(--post-color) !important;
-    --color-sidebar-footer-live-indicator: var(--border-color) !important;
-    --color-support-widget-background: var(--post-color) !important;
-    --color-text-badge-branded: var(--text-color) !important;
-    --color-text-button-branded: var(--text-color) !important;
-    --color-text-chip: var(--success-color) !important;
-    --color-text-danger: #fca5a5 !important;
-    --color-text-dark: var(--text-color) !important;
-    --color-text-darkest: var(--text-color) !important;
-    --color-text-date-blue: var(--link-color) !important;
-    --color-text-default: var(--text-muted-color) !important;
-    --color-text-disabled: var(--text-muted-color) !important;
-    --color-text-feature-dark: var(--text-color) !important;
-    --color-text-feature-light: var(--text-color) !important;
     --color-text-icon-branded: var(--brand-color) !important;
-    --color-text-icon-text: var(--text-muted-color) !important;
-    --color-text-info: #93c5fd !important;
-    --color-text-inverse: var(--secondary-color) !important;
-    --color-text-level-basic: var(--text-color) !important;
-    --color-text-level-mid: var(--text-color) !important;
-    --color-text-level-top: var(--text-color) !important;
-    --color-text-light: var(--text-muted-color) !important;
-    --color-text-lightest: var(--text-muted-color) !important;
-    --color-text-link: var(--link-color) !important;
     --color-text-link-branded: var(--brand-color) !important;
-    --color-text-link-hover: var(--link-color) !important;
-    --color-text-placeholder: var(--text-muted-color) !important;
-    --color-text-primary: var(--text-color) !important;
-    --color-text-secondary: var(--text-muted-color) !important;
-    --color-text-selector-active: var(--text-color) !important;
-    --color-text-success: #86efac !important;
-    --color-text-tertiary: var(--text-muted-color) !important;
-    --color-text-timestamp-light: var(--text-muted-color) !important;
-    --color-text-very-dark: var(--text-color) !important;
-    --color-text-warning: #fcd34d !important;
-    --comment-border-bottom: var(--border-color) !important;
-    --comment-scroll-highlight-background: hsl(from var(--post-color) h s calc(l + 2)) !important;
-    --comments-wrapper-background: var(--secondary-color) !important;
-    --community-switcher-bg: var(--primary-color) !important;
-    --community-switcher-icon-bg: var(--text-muted-color) !important;
     --compass-branded-badge-bg: var(--brand-color) !important;
     --compass-branded-badge-bg-dark: var(--brand-color) !important;
     --compass-branded-badge-border: var(--brand-color) !important;
@@ -224,215 +278,144 @@
     --compass-branded-icon-dark: var(--brand-color) !important;
     --compass-branded-link-text: var(--brand-color) !important;
     --compass-branded-link-text-dark: var(--brand-color) !important;
-    --date-group-background: var(--secondary-color) !important;
-    --divider-border: var(--border-color) !important;
-    --dropdown-background: var(--post-color) !important;
-    --dropdown-descriptor: var(--text-muted-color) !important;
-    --dropdown-icon: var(--text-muted-color) !important;
+    --icon-brand: var(--brand-color) !important;
+
+    /* ON BRAND — text and icons sitting ON a brand surface, so they stay legible */
+    --brand-button-text: var(--text-color) !important;
+    --color-community-active-item-text-color: var(--text-color) !important;
+    --color-community-sidebar-badge-text: var(--text-color) !important;
+    --color-community-sidebar-text-on-accent: var(--text-color) !important;
+    --color-community-switcher-new-community-button-icon: var(--text-color) !important;
+    --color-text-badge-branded: var(--text-color) !important;
+    --color-text-button-branded: var(--text-color) !important;
+    --color-text-selector-active: var(--text-color) !important;
+    --search-autocomplete-link-hover-text: var(--text-color) !important;
+    --sidebar-link-active: var(--text-color) !important;
+    --user-badge: var(--text-color) !important;
+
+    /* LINK — inline links */
+    --color-text-link: var(--link-color) !important;
+    --color-text-link-hover: var(--link-color) !important;
     --dropdown-link: var(--link-color) !important;
     --dropdown-link-hover: var(--link-color) !important;
-    --dropdown-title: var(--text-color) !important;
-    --header-sticky-nav: var(--text-color) !important;
-    --icon-add: var(--text-muted-color) !important;
-    --icon-brand: var(--brand-color) !important;
-    --icon-comment: var(--text-muted-color) !important;
-    --icon-fill-color: var(--text-muted-color) !important;
-    --icon-fill-color-hover: var(--text-muted-color) !important;
-    --icon-flagged: #f23434 !important;
-    --icon-hover: var(--text-muted-color) !important;
-    --icon-like: var(--text-muted-color) !important;
-    --icon-mention: var(--text-muted-color) !important;
-    --icon-message: var(--text-muted-color) !important;
-    --icon-muted: var(--text-muted-color) !important;
-    --icon-reply: var(--text-muted-color) !important;
-    --icon-stroke-color: var(--text-muted-color) !important;
-    --icon-stroke-color-hover: var(--text-muted-color) !important;
-    --input-background: var(--post-color) !important;
-    --input-focus: var(--post-color) !important;
-    --input-gray-background: var(--post-color) !important;
-    --input-gray-darker-background: var(--post-color) !important;
-    --input-gray-explainer: var(--text-muted-color) !important;
-    --input-gray-explainer-light: var(--text-muted-color) !important;
-    --input-placeholder: var(--text-muted-color) !important;
-    --label-description-color: var(--text-color) !important;
-    --label-title-color: var(--text-color) !important;
-    --list-item-hover: var(--post-color) !important;
-    --mobile-menu-overlay: rgba(0, 0, 0, 0.6) !important;
-    --mobile-menu-sidebar-bg: var(--primary-color) !important;
-    --mobile-menu-sidebar-border: var(--border-color) !important;
-    --modal-bg: rgba(0, 0, 0, 0.6) !important;
-    --modal-title: var(--text-color) !important;
-    --multi-step-panel-navigation-panel-bg: var(--primary-color) !important;
-    --neutral-highlight: var(--post-color) !important;
-    --neutral-highlight-hover: var(--post-color) !important;
-    --new-notification-bg: var(--post-color) !important;
-    --new-notification-hover-bg: hsl(from var(--post-color) h s calc(l + 2)) !important;
-    --placeholder-gray: var(--text-muted-color) !important;
-    --placeholder-light-grey: var(--text-muted-color) !important;
-    --post-background: var(--post-color) !important;
-    --post-headline-tag-background: var(--post-color) !important;
-    --post-light-line: var(--border-color) !important;
-    --post-pinned-background: var(--post-color) !important;
-    --post-pinned-border: var(--border-color) !important;
-    --post-post-background: var(--post-color) !important;
-    --post-text: var(--text-color) !important;
-    --search-autocomplete-background: var(--post-color) !important;
-    --search-autocomplete-link-hover-background: hsl(from var(--post-color) h s calc(l + 2)) !important;
-    --search-autocomplete-link-hover-text: var(--text-color) !important;
-    --search-autocomplete-link-text: var(--text-color) !important;
-    --search-bar-background: var(--post-color) !important;
-    --shadow-dark-color: rgba(0, 0, 0, 0.2) !important;
-    --sidebar-block-border: var(--border-color) !important;
-    --sidebar-block-count: var(--text-muted-color) !important;
-    --sidebar-block-count-bg: var(--primary-color) !important;
-    --sidebar-block-header: var(--text-color) !important;
-    --sidebar-block-header-link: var(--text-color) !important;
-    --sidebar-link: var(--text-color) !important;
-    --sidebar-link-active: var(--text-color) !important;
-    --sidebar-link-active-bg: hsl(from var(--post-color) h s calc(l + 2)) !important;
-    --sidebar-link-highlight: var(--text-color) !important;
-    --sidebar-link-hover: var(--text-color) !important;
-    --sidebar-onboarding-block-bg: var(--primary-color) !important;
-    --sidebar-onboarding-block-border: var(--border-color) !important;
-    --some-token: var(--post-color) !important;
-    --success: #6ec87c !important;
-    --success-dark: #469b52 !important;
-    --t-header-light-grey: var(--text-muted-color) !important;
-    --text-body: var(--text-color) !important;
-    --text-body-10: color-mix(in srgb, var(--text-color) 10%, transparent) !important;
-    --text-body-100: var(--text-color) !important;
-    --text-body-25: color-mix(in srgb, var(--text-color) 25%, transparent) !important;
-    --text-body-33: color-mix(in srgb, var(--text-color) 33%, transparent) !important;
-    --text-body-50: color-mix(in srgb, var(--text-color) 50%, transparent) !important;
-    --text-body-66: color-mix(in srgb, var(--text-color) 66%, transparent) !important;
-    --text-body-75: color-mix(in srgb, var(--text-color) 75%, transparent) !important;
-    --text-secondary: var(--text-muted-color) !important;
-    --text-secondary-hover: var(--text-muted-color) !important;
-    --text-secondary-light: var(--text-muted-color) !important;
-    --text-secondary-muted: var(--text-muted-color) !important;
-    --tooltip-active: var(--post-color) !important;
-    --tooltip-background: var(--post-color) !important;
-    --trix-body-background: var(--secondary-color) !important;
-    --trix-border: var(--border-color) !important;
-    --trix-editor-color: var(--post-color) !important;
-    --trix-shadow: rgba(0, 0, 0, 0.2) !important;
-    --trix-toolbar-background: var(--post-color) !important;
-    --tw-ring-color: var(--post-color) !important;
-    --tw-ring-offset-color: var(--post-color) !important;
-    --user-badge: var(--text-color) !important;
-    --user-badge-bg: var(--post-color) !important;
-    --user-joined: var(--text-muted-color) !important;
-    --user-joined-bg: var(--post-color) !important;
     --user-location-links: var(--link-color) !important;
-    --user-profile-card-bg: var(--post-color) !important;
-    --user-profile-card-border: var(--border-color) !important;
-    --user-tagline: var(--text-muted-color) !important;
-    --user-text: var(--text-color) !important;
+
+    /* OVERLAY — scrims behind modals */
+    --color-background-overlay: rgba(0, 0, 0, 0.6) !important;
+    --color-background-overlay-dark: rgba(0, 0, 0, 0.6) !important;
+    --mobile-menu-overlay: rgba(0, 0, 0, 0.6) !important;
+    --modal-bg: rgba(0, 0, 0, 0.6) !important;
+    --shadow-dark-color: rgba(0, 0, 0, 0.6) !important;
+    --trix-shadow: rgba(0, 0, 0, 0.6) !important;
+
+    /* UNCATEGORISED — MAGENTA — not sorted yet. Move these into a category above as
+       you work out what they paint, or start a new category. */
+    --color-community-sidebar-badge-background: var(--unassigned) !important;
+    --color-background-disabled: var(--unassigned) !important;
+    --color-background-level-basic: var(--unassigned) !important;
+    --color-background-level-mid: var(--unassigned) !important;
+    --color-background-level-top: var(--unassigned) !important;
+    --color-event-sidebar-item: var(--unassigned) !important;
+    --color-grey-0: var(--unassigned) !important;
+    --color-ring-primary: var(--unassigned) !important;
+    --color-sidebar-footer-live-indicator: var(--unassigned) !important;
+    --input-focus: var(--unassigned) !important;
+    --list-item-hover: var(--unassigned) !important;
+    --neutral-highlight: var(--unassigned) !important;
+    --neutral-highlight-hover: var(--unassigned) !important;
+    --sidebar-link: var(--unassigned) !important;
+    --sidebar-link-highlight: var(--unassigned) !important;
+    --sidebar-link-hover: var(--unassigned) !important;
+    --some-token: var(--unassigned) !important;
+    --tooltip-active: var(--unassigned) !important;
+    --trix-editor-color: var(--unassigned) !important;
+    --trix-toolbar-background: var(--unassigned) !important;
+    --tw-ring-color: var(--unassigned) !important;
+    --tw-ring-offset-color: var(--unassigned) !important;
+    --user-badge-bg: var(--unassigned) !important;
+    --user-joined-bg: var(--unassigned) !important;
   }
 
+
+  /* ────────────────────────────────────────────
+     2. PRIMITIVES
+     Circle's raw scales. The semantic tokens above no longer read these,
+     so they only matter where something reads a primitive DIRECTLY —
+     skeleton loaders and pulse states are the main case.
+
+     --color-gray-* take bare R, G, B triples because Circle wraps them in
+     rgba(). --color-grey-* (the UK-spelled twin) take hex. Keep each in
+     its own format or the declaration is invalid.
+
+     Circle's other scales — almond, salmon, sea, sunglow, haiti, indigo,
+     burnt-sienna, carolina-blue, royal-blue — are deliberately absent.
+     Nothing in dark mode reads them; they exist for Circle's theme
+     picker, so listing them would be noise.
+     ──────────────────────────────────────────── */
   html {
-    --color-almond-100: #90ee90 !important;
-    --color-almond-200: #90ee90 !important;
-    --color-almond-300: #90ee90 !important;
-    --color-almond-400: #90ee90 !important;
-    --color-amber-100: #90ee90 !important;
-    --color-amber-200: #90ee90 !important;
-    --color-amber-300: #90ee90 !important;
-    --color-amber-400: #90ee90 !important;
-    --color-amber-50: #90ee90 !important;
-    --color-amber-500: #90ee90 !important;
-    --color-amber-600: #90ee90 !important;
-    --color-amber-700: #90ee90 !important;
-    --color-amber-800: #90ee90 !important;
-    --color-amber-900: #90ee90 !important;
-    --color-blue-100: #90ee90 !important;
-    --color-blue-200: #90ee90 !important;
-    --color-blue-300: #90ee90 !important;
-    --color-blue-400: #90ee90 !important;
-    --color-blue-50: #90ee90 !important;
-    --color-blue-500: #90ee90 !important;
-    --color-blue-600: #90ee90 !important;
-    --color-blue-700: #90ee90 !important;
-    --color-blue-800: #90ee90 !important;
-    --color-blue-900: #90ee90 !important;
-    --color-burnt-sienna-100: #90ee90 !important;
-    --color-burnt-sienna-200: #90ee90 !important;
-    --color-burnt-sienna-300: #90ee90 !important;
-    --color-burnt-sienna-400: #90ee90 !important;
-    --color-carolina-blue-100: #90ee90 !important;
-    --color-carolina-blue-200: #90ee90 !important;
-    --color-carolina-blue-300: #90ee90 !important;
-    --color-carolina-blue-400: #90ee90 !important;
+    /* tuned — skeleton loaders and pulse states read these directly */
+    --color-gray-50:  17, 19, 22 !important;
     --color-gray-100: 26, 28, 32 !important;
     --color-gray-200: 34, 36, 40 !important;
     --color-gray-300: 52, 53, 54 !important;
-    --color-gray-400: 144, 238, 144 !important;
-    --color-gray-50: 17, 19, 22 !important;
-    --color-gray-500: 144, 238, 144 !important;
-    --color-gray-600: 144, 238, 144 !important;
-    --color-gray-700: 144, 238, 144 !important;
     --color-gray-800: 17, 19, 22 !important;
     --color-gray-900: 9, 11, 14 !important;
-    --color-green-100: #90ee90 !important;
-    --color-green-200: #90ee90 !important;
-    --color-green-300: #90ee90 !important;
-    --color-green-400: #90ee90 !important;
-    --color-green-50: #90ee90 !important;
-    --color-green-500: #90ee90 !important;
-    --color-green-600: #90ee90 !important;
-    --color-green-700: #90ee90 !important;
-    --color-green-800: #90ee90 !important;
-    --color-green-900: #90ee90 !important;
-    --color-grey-100: #90ee90 !important;
-    --color-grey-200: #90ee90 !important;
-    --color-grey-300: #90ee90 !important;
-    --color-grey-400: #90ee90 !important;
-    --color-grey-50: #90ee90 !important;
-    --color-grey-500: #90ee90 !important;
-    --color-grey-600: #90ee90 !important;
-    --color-grey-700: #90ee90 !important;
-    --color-grey-800: #90ee90 !important;
-    --color-grey-850: #90ee90 !important;
-    --color-grey-900: #90ee90 !important;
-    --color-haiti-100: #90ee90 !important;
-    --color-haiti-200: #90ee90 !important;
-    --color-haiti-300: #90ee90 !important;
-    --color-haiti-400: #90ee90 !important;
-    --color-indigo-100: #90ee90 !important;
-    --color-indigo-200: #90ee90 !important;
-    --color-indigo-300: #90ee90 !important;
-    --color-indigo-400: #90ee90 !important;
-    --color-red-100: #90ee90 !important;
-    --color-red-200: #90ee90 !important;
-    --color-red-300: #90ee90 !important;
-    --color-red-400: #90ee90 !important;
-    --color-red-50: #90ee90 !important;
-    --color-red-500: #90ee90 !important;
-    --color-red-600: #90ee90 !important;
-    --color-red-700: #90ee90 !important;
-    --color-red-800: #90ee90 !important;
-    --color-red-900: #90ee90 !important;
-    --color-royal-blue-100: #90ee90 !important;
-    --color-royal-blue-200: #90ee90 !important;
-    --color-royal-blue-300: #90ee90 !important;
-    --color-royal-blue-400: #90ee90 !important;
-    --color-royal-blue-500: #90ee90 !important;
-    --color-royal-blue-600: #90ee90 !important;
-    --color-royal-blue-700: #90ee90 !important;
-    --color-salmon-100: #90ee90 !important;
-    --color-salmon-200: #90ee90 !important;
-    --color-salmon-300: #90ee90 !important;
-    --color-salmon-400: #90ee90 !important;
-    --color-sea-100: #90ee90 !important;
-    --color-sea-200: #90ee90 !important;
-    --color-sea-300: #90ee90 !important;
-    --color-sea-400: #90ee90 !important;
-    --color-sunglow-100: #90ee90 !important;
-    --color-sunglow-200: #90ee90 !important;
-    --color-sunglow-300: #90ee90 !important;
-    --color-sunglow-400: #90ee90 !important;
+
+    /* MAGENTA — read somewhere, never themed. Give each a real value once
+       you spot what it paints. */
+    --color-gray-400: 255, 0, 255 !important;
+    --color-gray-500: 255, 0, 255 !important;
+    --color-gray-600: 255, 0, 255 !important;
+    --color-gray-700: 255, 0, 255 !important;
+    --color-grey-0:   #ff00ff !important;
+    --color-grey-50:  #ff00ff !important;
+    --color-grey-100: #ff00ff !important;
+    --color-grey-200: #ff00ff !important;
+    --color-grey-300: #ff00ff !important;
+    --color-grey-400: #ff00ff !important;
+    --color-grey-500: #ff00ff !important;
+    --color-grey-700: #ff00ff !important;
+    --color-grey-900: #ff00ff !important;
   }
 
+
+  /* ────────────────────────────────────────────
+     3. STATUS COLOURS
+     Deliberately NOT themed. Red means error, green means success —
+     recolouring them to the palette would strip that meaning. Circle's
+     own values are written out so you can tune them directly: a lighter
+     green or a darker yellow is a one-line edit here.
+     ──────────────────────────────────────────── */
+  html {
+    --color-background-danger: #f87171 !important;
+    --color-background-danger-active: #ef4444 !important;
+    --color-background-danger-hover: #b91c1c !important;
+    --color-background-danger-light: #483136 !important;
+    --color-background-idle: #f59e0b !important;
+    --color-background-info: #60a5fa !important;
+    --color-background-info-light: #2d3b50 !important;
+    --color-background-online: #22c55e !important;
+    --color-background-success: #4ade80 !important;
+    --color-background-success-light: #2a4539 !important;
+    --color-background-warning: #fcd34d !important;
+    --color-background-warning-light: #493f2d !important;
+    --color-border-danger: #fca5a5 !important;
+    --color-border-info: #93c5fd !important;
+    --color-border-success: #86efac !important;
+    --color-border-warning: #fcd34d !important;
+    --color-icon-danger: #fca5a5 !important;
+    --color-icon-info: #93c5fd !important;
+    --color-icon-success: #86efac !important;
+    --color-icon-warning: #fcd34d !important;
+    --color-messaging-info-blue: 96 165 250 !important;
+    --color-text-danger: #fca5a5 !important;
+    --color-text-info: #93c5fd !important;
+    --color-text-success: #86efac !important;
+    --color-text-warning: #fcd34d !important;
+    --icon-flagged: #f23434 !important;
+    --success: #6ec87c !important;
+    --success-dark: #469b52 !important;
+  }
 
 
   /* ---- colour that no token can express ----
@@ -447,6 +430,7 @@
   [data-testid="standard-layout-v2-sidebar"] {
     border-right: 1px solid var(--border-color) !important;
   }
+
 
 
 /* ════════════════════════════════════════════════════════════
