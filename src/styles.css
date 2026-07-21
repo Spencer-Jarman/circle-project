@@ -358,21 +358,10 @@
 
 
   /* ────────────────────────────────────────────
-     SPECIFIC FIXES
-     Things no variable can reach, so they need their own rule.
+     LOADING & FLICKER
+     Anything that shows for a moment while a section loads: the flashes,
+     the skeleton placeholders and the spinners.
      ──────────────────────────────────────────── */
-
-  /* Circle has no variable for either of these. This is the background
-     on page load and making the sidebar border border-color */
-  html, body {
-    background-color: var(--secondary-color);
-  }
-
-  [data-testid="standard-layout-v2-sidebar"] {
-    border-right: 1px solid var(--border-color) !important;
-  }
-
-  /* Tooltips. Changing the color of the tooltips and tooltip arrow */
 
   /* Loading flashes. These all render the page colour for a moment while
      a section loads, which reads as a flicker against the post-coloured
@@ -392,14 +381,81 @@
     background-color: var(--post-color) !important;
   }
 
-
-
   /* Settings content panel. It carries .bg-secondary and shows the page
      colour while a section swaps in, which is the flicker on the profile
      and privacy pages. */
   html [class*="ease-out"] > div.bg-secondary {
     background-color: var(--post-color) !important;
   }
+
+  /* Settings forms. The form element itself renders the page colour for a
+     moment while a section loads, then goes transparent — that is the
+     flash on the profile and privacy pages. Pinning it to the card colour
+     removes the flash and changes nothing once loaded, since the panel
+     behind it is the same colour. */
+  html .react-form > form {
+    background-color: var(--post-color) !important;
+  }
+
+  /* ---- Loading Skeletons Removed ---- */
+
+  /* Top bar load placeholders */
+  [data-testid="navigation-bar-wrapper"] .bg-tertiary,
+  [data-testid="navigation-bar-wrapper"] .bg-secondary-dark,
+  [data-testid="navigation-bar-wrapper"] .bg-primary {
+    background-color: var(--primary-color) !important;
+  }
+
+  /* Feed skeleton loader */
+  div[class*="skeleton-loader"],
+  div[class*="skeleton-loader"] div {
+    background-color: var(--secondary-color) !important;
+    border-color: var(--secondary-color) !important;
+  }
+
+  /* Spinners — hidden outright, no swirling loaders anywhere */
+  .react-loader,
+  .default-loader,
+  [class*="spinner"],
+  .animate-spin {
+    display: none !important;
+  }
+
+  /* Events skeleton placeholders */
+  .react-page-space-show .bg-tertiary,
+  .react-page-space-show .animate-pulse {
+    background-color: var(--secondary-color) !important;
+  }
+
+  /* Expanded post skeleton */
+  [data-testid="modal"] .bg-tertiary,
+  [data-testid="modal"] .bg-primary {
+    background-color: var(--post-color) !important;
+  }
+
+  /* Chat loading flash */
+  .main__wrapper.bg-primary,
+  .main__wrapper.bg-primary .bg-primary.w-full.overflow-auto {
+    background-color: var(--secondary-color) !important;
+  }
+
+  /* Chat loading pane (full-size spinner flex) */
+  html .bg-primary.flex.size-full.items-center.justify-center {
+    background-color: var(--secondary-color) !important;
+  }
+
+  /* Spinner / loader backgrounds */
+  .react-loader,
+  .default-loader,
+  :has(> .react-loader) {
+    background-color: var(--secondary-color) !important;
+  }
+
+  /* ────────────────────────────────────────────
+     ONE TOKEN, TWO ROLES
+     Circle paints different things with the same variable, so these
+     cannot be fixed by changing a colour — each needs its own rule.
+     ──────────────────────────────────────────── */
 
   /* Dividers between notifications. They are 1px bars painted with a
      background, not borders, so they read as page colour instead of a line. */
@@ -419,31 +475,67 @@
     background-color: var(--post-color) !important;
   }
 
+  /* Making the settings area match my same theme */
+  [class*="--color-background-primary:#34373D"] {
+    --color-background-primary: var(--post-color) !important;
+  }
+  [class*="--color-background-secondary:#2B2E33"] {
+    --color-background-secondary: var(--secondary-color) !important;
+  }
+  [class*="--color-background-tertiary:#4A4E55"] {
+    --color-background-tertiary: var(--hover-color) !important;
+  }
+  [class*="--color-border-primary:#5E636B"] {
+    --color-border-primary: var(--border-color) !important;
+  }
 
-  /* Settings forms. The form element itself renders the page colour for a
-     moment while a section loads, then goes transparent — that is the
-     flash on the profile and privacy pages. Pinning it to the card colour
-     removes the flash and changes nothing once loaded, since the panel
-     behind it is the same colour. */
-  html .react-form > form {
+  /* ---- where one token serves two roles ----
+     Circle paints 127 different things from --color-background-primary,
+     including both post cards and the chat room. That token is set to
+     --post-color so cards look right, which means anywhere that needs the
+     page colour instead has to say so explicitly.
+
+     These are NOT redundant overrides. They encode distinctions the token
+     system cannot express, because a token can only say "everything using
+     me is colour X". Deleting them is what put the chat background back to
+     #111316. ---- */
+
+  /* Chat space background */
+  [data-testid="chat-room-wrapper"],
+  [data-testid="chat-room-wrapper"] .bg-primary {
+    background-color: var(--secondary-color) !important;
+  }
+
+  /* Chat details panel (right rail) */
+  #rail-content,
+  #rail-content .bg-primary,
+  #rail-content .bg-secondary-dark,
+  #rail-content [data-testid="message-item"] {
+    background-color: var(--secondary-color) !important;
+  }
+
+  /* Chat message hover */
+  [data-testid="message-item"]:hover,
+  #rail-content [data-testid="message-item"]:hover {
     background-color: var(--post-color) !important;
   }
 
-
-  /* Checkboxes use Circle's own accent rather than the palette. A checked
-     box fills with currentColor, which comes from .text-light, so it was
-     picking up --text-muted-color. Same idea as leaving the toggles on
-     Circle's defaults.
-     (#506cf0 is Circle's stock accent, #545861 its default border.) */
-  html input[type="checkbox"] {
-    color: #506cf0 !important;
-    border-color: #545861 !important;
+  /* Chat compose box (rest / hover / focus) */
+  #rail-content [data-testid="tiptap-editor"] {
+    background-color: var(--post-color) !important;
   }
-  html input[type="checkbox"]:checked {
-    background-color: #506cf0 !important;
-    border-color: #506cf0 !important;
+  #rail-content [data-testid="tiptap-editor"]:hover {
+    background-color: var(--hover-color) !important;
+    border-color: hsl(from var(--border-color) h s calc(l + 2)) !important;
+  }
+  #rail-content [data-testid="tiptap-editor"]:focus-within {
+    background-color: var(--hover-color) !important;
+    border-color: hsl(from var(--border-color) h s calc(l + 30)) !important;
   }
 
+  /* ────────────────────────────────────────────
+     DIRECT MESSAGES
+     ──────────────────────────────────────────── */
 
   /* ════════════════════════════════════════════
      EXPANDED DIRECT MESSAGES — everything page colour
@@ -517,19 +609,22 @@
     background-color: var(--post-color) !important;
   }
 
-  /* Dividers between conversations read as a line, not a block */
-  html body:has([data-testid="new-message"]) .bg-secondary-dark[class*="h-[1px]"] {
-    background-color: var(--border-color) !important;
-  }
+  /* ────────────────────────────────────────────
+     HOVER, ACTIVE AND SELECTED STATES
+     ──────────────────────────────────────────── */
 
-  [role="tooltip"],
-  .tippy-box {
-    background-color: var(--hover-color) !important;
-    color: var(--text-color) !important;
+  /* Checkboxes use Circle's own accent rather than the palette. A checked
+     box fills with currentColor, which comes from .text-light, so it was
+     picking up --text-muted-color. Same idea as leaving the toggles on
+     Circle's defaults.
+     (#506cf0 is Circle's stock accent, #545861 its default border.) */
+  html input[type="checkbox"] {
+    color: #506cf0 !important;
+    border-color: #545861 !important;
   }
-
-  .tippy-arrow {
-    color: var(--hover-color) !important;
+  html input[type="checkbox"]:checked {
+    background-color: #506cf0 !important;
+    border-color: #506cf0 !important;
   }
 
   /* Top bar buttons hover hover-color then become brand color when active */
@@ -554,117 +649,36 @@
     background-color: var(--hover-color) !important;
   }
 
-  /* Making the settings area match my same theme */
-  [class*="--color-background-primary:#34373D"] {
-    --color-background-primary: var(--post-color) !important;
-  }
-  [class*="--color-background-secondary:#2B2E33"] {
-    --color-background-secondary: var(--secondary-color) !important;
-  }
-  [class*="--color-background-tertiary:#4A4E55"] {
-    --color-background-tertiary: var(--hover-color) !important;
-  }
-  [class*="--color-border-primary:#5E636B"] {
-    --color-border-primary: var(--border-color) !important;
+  /* ────────────────────────────────────────────
+     NO VARIABLE EXISTS
+     Circle has no colour variable for these at all.
+     ──────────────────────────────────────────── */
+
+  /* Circle has no variable for either of these. This is the background
+     on page load and making the sidebar border border-color */
+  html, body {
+    background-color: var(--secondary-color);
   }
 
-  /* ---- Loading Skeletons Removed ---- */
-
-  /* Top bar load placeholders */
-  [data-testid="navigation-bar-wrapper"] .bg-tertiary,
-  [data-testid="navigation-bar-wrapper"] .bg-secondary-dark,
-  [data-testid="navigation-bar-wrapper"] .bg-primary {
-    background-color: var(--primary-color) !important;
+  [data-testid="standard-layout-v2-sidebar"] {
+    border-right: 1px solid var(--border-color) !important;
   }
 
-  /* Feed skeleton loader */
-  div[class*="skeleton-loader"],
-  div[class*="skeleton-loader"] div {
-    background-color: var(--secondary-color) !important;
-    border-color: var(--secondary-color) !important;
+  /* Tooltips. Changing the color of the tooltips and tooltip arrow */
+
+  /* Dividers between conversations read as a line, not a block */
+  html body:has([data-testid="new-message"]) .bg-secondary-dark[class*="h-[1px]"] {
+    background-color: var(--border-color) !important;
   }
 
-  /* Spinners — hidden outright, no swirling loaders anywhere */
-  .react-loader,
-  .default-loader,
-  [class*="spinner"],
-  .animate-spin {
-    display: none !important;
-  }
-
-  /* Events skeleton placeholders */
-  .react-page-space-show .bg-tertiary,
-  .react-page-space-show .animate-pulse {
-    background-color: var(--secondary-color) !important;
-  }
-
-  /* Expanded post skeleton */
-  [data-testid="modal"] .bg-tertiary,
-  [data-testid="modal"] .bg-primary {
-    background-color: var(--post-color) !important;
-  }
-
-
-  /* ---- where one token serves two roles ----
-     Circle paints 127 different things from --color-background-primary,
-     including both post cards and the chat room. That token is set to
-     --post-color so cards look right, which means anywhere that needs the
-     page colour instead has to say so explicitly.
-
-     These are NOT redundant overrides. They encode distinctions the token
-     system cannot express, because a token can only say "everything using
-     me is colour X". Deleting them is what put the chat background back to
-     #111316. ---- */
-
-  /* Chat space background */
-  [data-testid="chat-room-wrapper"],
-  [data-testid="chat-room-wrapper"] .bg-primary {
-    background-color: var(--secondary-color) !important;
-  }
-
-  /* Chat loading flash */
-  .main__wrapper.bg-primary,
-  .main__wrapper.bg-primary .bg-primary.w-full.overflow-auto {
-    background-color: var(--secondary-color) !important;
-  }
-
-  /* Chat loading pane (full-size spinner flex) */
-  html .bg-primary.flex.size-full.items-center.justify-center {
-    background-color: var(--secondary-color) !important;
-  }
-
-  /* Spinner / loader backgrounds */
-  .react-loader,
-  .default-loader,
-  :has(> .react-loader) {
-    background-color: var(--secondary-color) !important;
-  }
-
-  /* Chat details panel (right rail) */
-  #rail-content,
-  #rail-content .bg-primary,
-  #rail-content .bg-secondary-dark,
-  #rail-content [data-testid="message-item"] {
-    background-color: var(--secondary-color) !important;
-  }
-
-  /* Chat message hover */
-  [data-testid="message-item"]:hover,
-  #rail-content [data-testid="message-item"]:hover {
-    background-color: var(--post-color) !important;
-  }
-
-  /* Chat compose box (rest / hover / focus) */
-  #rail-content [data-testid="tiptap-editor"] {
-    background-color: var(--post-color) !important;
-  }
-  #rail-content [data-testid="tiptap-editor"]:hover {
+  [role="tooltip"],
+  .tippy-box {
     background-color: var(--hover-color) !important;
-    border-color: hsl(from var(--border-color) h s calc(l + 2)) !important;
+    color: var(--text-color) !important;
   }
-  #rail-content [data-testid="tiptap-editor"]:focus-within {
-    background-color: var(--hover-color) !important;
-    border-color: hsl(from var(--border-color) h s calc(l + 30)) !important;
+
+  .tippy-arrow {
+    color: var(--hover-color) !important;
   }
 
 
