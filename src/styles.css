@@ -420,6 +420,28 @@
   }
 
   /* Tooltips. Changing the color of the tooltips and tooltip arrow */
+
+  /* ---- expanded direct messages ----
+     The DM view reuses the same testids as a chat space
+     (chat-room-wrapper, message-item), so the chat-space rules above
+     paint it the page colour. Scoping on body:has(chat-room-dm-list)
+     targets the DM view only, since that list exists nowhere else. ---- */
+  html body:has([data-testid="chat-room-dm-list"]) [data-testid="chat-room-wrapper"],
+  html body:has([data-testid="chat-room-dm-list"]) [data-testid="chat-room-wrapper"] .bg-primary,
+  html body:has([data-testid="chat-room-dm-list"]) [data-testid="message-item"],
+  html body:has([data-testid="chat-room-dm-list"]) .bg-primary,
+  html body:has([data-testid="chat-room-dm-list"]) .bg-secondary,
+  html body:has([data-testid="chat-room-dm-list"]) .bg-secondary-dark {
+    background-color: var(--post-color) !important;
+  }
+
+  /* Selected conversation in the DM list */
+  html body:has([data-testid="chat-room-dm-list"]) [data-testid="chat-room-dm-list"] [aria-selected="true"],
+  html body:has([data-testid="chat-room-dm-list"]) [data-testid="chat-room-dm-list"] [data-selected],
+  html body:has([data-testid="chat-room-dm-list"]) [data-testid="chat-room-dm-list"] li[aria-current] {
+    background-color: var(--hover-color) !important;
+  }
+
   [role="tooltip"],
   .tippy-box {
     background-color: var(--hover-color) !important;
