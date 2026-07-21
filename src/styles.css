@@ -593,11 +593,38 @@
     background-color: var(--primary-color) !important;
   }
 
-  /* Feed skeleton loader */
+  /* Feed skeleton loader. This one is deliberately unscoped so every
+     loading placeholder matches the page behind it — but anything sitting
+     on a card needs it undone, see the bookmarks drawer below. */
   div[class*="skeleton-loader"],
   div[class*="skeleton-loader"] div {
     background-color: var(--secondary-color) !important;
     border-color: var(--secondary-color) !important;
+  }
+
+
+  /* ── Bookmarks drawer ──────────────────────────────────────────────
+     The drawer sits on the card colour, but the feed skeleton rule above
+     paints every loading placeholder the page colour — so switching tabs
+     flashed a page-coloured block against the card. Put those back.
+     (Scoped to the drawer, so the feed keeps its own behaviour. The
+     selector carries #compass-portal-container to outrank the unscoped
+     div[class*="skeleton-loader"] rule, which classes alone would tie
+     with and lose to on document order.) */
+  html #compass-portal-container [data-testid="bookmarks-drawer"] div[class*="skeleton-loader"],
+  html #compass-portal-container [data-testid="bookmarks-drawer"] div[class*="skeleton-loader"] div,
+  html #compass-portal-container [data-testid="bookmarks-drawer"] .animate-pulse,
+  html #compass-portal-container [data-testid="bookmarks-drawer"] [class*="skeleton"] {
+    background-color: var(--post-color) !important;
+  }
+
+  /* Dividers between bookmarks. They are 1px bars painted with a panel
+     class, so on the card they came out the same colour as the card and
+     disappeared. */
+  html #compass-portal-container [data-testid="bookmarks-drawer"] .bg-secondary-dark[class*="h-[1px]"],
+  html #compass-portal-container [data-testid="bookmarks-drawer"] .bg-secondary[class*="h-[1px]"],
+  html #compass-portal-container [data-testid="bookmarks-drawer"] .bg-primary[class*="h-[1px]"] {
+    background-color: var(--border-color) !important;
   }
 
   /* Spinners — hidden outright, no swirling loaders anywhere */
