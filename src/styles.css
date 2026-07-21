@@ -41,7 +41,6 @@
     --secondary-color: #090b0e;
     --post-color: #111316;
     --hover-color: #15181c;
-    --post-color-selected: #1b1f25;
     --border-color: #343536;
     --brand-color: #70180d;
     --text-color: #F0F3F5;
@@ -501,16 +500,21 @@
     background-color: var(--secondary-color) !important;
   }
 
-  /* Conversation rows: hover, then the selected one. These come after the
-     block above so they win the tie. */
+  /* Conversation rows. The selected rule repeats every selector with
+     :hover so it keeps winning while the pointer is over it — otherwise
+     the hover rule ties on specificity and takes over. */
   html body:has([data-testid="new-message"]) button[data-testid="chat-room-dm-list"]:hover,
   html body:has([data-testid="new-message"]) button[data-testid="chat-room-dm-list"]:focus-visible {
     background-color: var(--hover-color) !important;
   }
   html body:has([data-testid="new-message"]) button[data-testid="chat-room-dm-list"].bg-secondary-dark,
+  html body:has([data-testid="new-message"]) button[data-testid="chat-room-dm-list"].bg-secondary-dark:hover,
+  html body:has([data-testid="new-message"]) button[data-testid="chat-room-dm-list"].bg-secondary-dark:focus-visible,
   html body:has([data-testid="new-message"]) button[data-testid="chat-room-dm-list"][aria-selected="true"],
-  html body:has([data-testid="new-message"]) button[data-testid="chat-room-dm-list"][data-selected] {
-    background-color: var(--post-color-selected) !important;
+  html body:has([data-testid="new-message"]) button[data-testid="chat-room-dm-list"][aria-selected="true"]:hover,
+  html body:has([data-testid="new-message"]) button[data-testid="chat-room-dm-list"][data-selected],
+  html body:has([data-testid="new-message"]) button[data-testid="chat-room-dm-list"][data-selected]:hover {
+    background-color: var(--post-color) !important;
   }
 
   /* Dividers between conversations read as a line, not a block */
