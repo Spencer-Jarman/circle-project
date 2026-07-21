@@ -386,6 +386,22 @@
     background-color: var(--post-color) !important;
   }
 
+
+  /* Chat threads list container */
+  html #chat-threads-header {
+    background-color: var(--post-color) !important;
+  }
+
+  /* Connections panel tab bar: the strip behind the tabs, then the tabs
+     themselves. (The selected tab carries !bg-white dark:!bg-black
+     hardcoded, so it has to be overridden rather than themed.) */
+  html nav[data-testid="tab-list"]:has([data-testid^="connect-panel-tab-"]) {
+    background-color: var(--hover-color) !important;
+  }
+  html nav[data-testid="tab-list"] button[data-testid^="connect-panel-tab-"] {
+    background-color: var(--brand-color) !important;
+  }
+
   [role="tooltip"],
   .tippy-box {
     background-color: var(--hover-color) !important;
