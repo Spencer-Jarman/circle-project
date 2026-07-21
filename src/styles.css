@@ -63,13 +63,16 @@
     --color-background-content-disabled: var(--secondary-color) !important;
     --color-background-secondary: var(--secondary-color) !important;
     --color-background-secondary-dark: var(--secondary-color) !important;
+    --color-icon-inverse: var(--secondary-color) !important;
+    --color-text-inverse: var(--secondary-color) !important;
     --comments-wrapper-background: var(--secondary-color) !important;
     --date-group-background: var(--secondary-color) !important;
     --trix-body-background: var(--secondary-color) !important;
+    --tw-ring-offset-color: var(--secondary-color) !important;
 
     /* PANEL — sidebar, header, nav — the chrome around the page */
-    --color-community-sidebar-accent-background: var(--primary-color) !important;
     --color-community-header-background: var(--primary-color) !important;
+    --color-community-sidebar-accent-background: var(--primary-color) !important;
     --color-community-sidebar-background: var(--primary-color) !important;
     --color-community-switcher-background: var(--primary-color) !important;
     --color-community-switcher-new-community-button-bg: var(--primary-color) !important;
@@ -82,27 +85,21 @@
 
     /* RAISED — anything on top of the page: posts, cards, modals,
        dropdowns, inputs, tooltips, the editor */
+    --background-primary-100: var(--post-color) !important;
+    --button-background: var(--post-color) !important;
+    --color-background-avatar-primary: var(--post-color) !important;
     --color-background-avatar-secondary: var(--post-color) !important;
     --color-background-badge: var(--post-color) !important;
     --color-background-banner: var(--post-color) !important;
     --color-background-dark: var(--post-color) !important;
     --color-background-dark-button: var(--post-color) !important;
+    --color-background-disabled: var(--post-color) !important;
+    --color-background-light-blue: var(--post-color) !important;
     --color-background-plus-banner: var(--post-color) !important;
-    --color-chip-background: var(--post-color) !important;
-    --color-circle-button-background: var(--post-color) !important;
-    --background-primary-10: color-mix(in srgb, var(--post-color) 10%, transparent) !important;
-    --background-primary-100: var(--post-color) !important;
-    --background-primary-15: color-mix(in srgb, var(--post-color) 15%, transparent) !important;
-    --background-primary-25: color-mix(in srgb, var(--post-color) 25%, transparent) !important;
-    --background-primary-33: color-mix(in srgb, var(--post-color) 33%, transparent) !important;
-    --background-primary-50: color-mix(in srgb, var(--post-color) 50%, transparent) !important;
-    --background-primary-66: color-mix(in srgb, var(--post-color) 66%, transparent) !important;
-    --background-primary-75: color-mix(in srgb, var(--post-color) 75%, transparent) !important;
-    --button-background: var(--post-color) !important;
-    --color-background-avatar-primary: var(--post-color) !important;
-    --color-background-emoji-picker: 17, 19, 22 !important;   /* RGB triple: Circle wraps this in rgba() */
     --color-background-primary: var(--post-color) !important;
     --color-background-text-editor-modifier: var(--post-color) !important;
+    --color-chip-background: var(--post-color) !important;
+    --color-circle-button-background: var(--post-color) !important;
     --color-support-widget-background: var(--post-color) !important;
     --dropdown-background: var(--post-color) !important;
     --input-background: var(--post-color) !important;
@@ -116,12 +113,12 @@
     --search-autocomplete-background: var(--post-color) !important;
     --search-bar-background: var(--post-color) !important;
     --tooltip-background: var(--post-color) !important;
+    --trix-toolbar-background: var(--post-color) !important;
+    --user-joined-bg: var(--post-color) !important;
     --user-profile-card-bg: var(--post-color) !important;
 
     /* HOVER — hover / active / selected states, one step above RAISED */
-    --color-circle-button-background-hover: var(--hover-color) !important;
     --color-background-active: var(--hover-color) !important;
-    --color-background-emoji-picker-hover: 22, 25, 29 !important;   /* RGB triple: Circle wraps this in rgba() */
     --color-background-highlight: var(--hover-color) !important;
     --color-background-hover: var(--hover-color) !important;
     --color-background-secondary-hover: var(--hover-color) !important;
@@ -129,48 +126,83 @@
     --color-background-tertiary: var(--hover-color) !important;
     --color-background-text-editor-modifier-active: var(--hover-color) !important;
     --color-background-text-editor-modifier-hover: var(--hover-color) !important;
+    --color-circle-button-background-hover: var(--hover-color) !important;
     --color-community-header-hover-background: var(--hover-color) !important;
     --color-message-highlight-background: var(--hover-color) !important;
+    --color-stroke-background: var(--hover-color) !important;
     --comment-scroll-highlight-background: var(--hover-color) !important;
+    --list-item-hover: var(--hover-color) !important;
+    --neutral-highlight: var(--hover-color) !important;
+    --neutral-highlight-hover: var(--hover-color) !important;
     --new-notification-hover-bg: var(--hover-color) !important;
     --search-autocomplete-link-hover-background: var(--hover-color) !important;
+    --sidebar-link-highlight: var(--hover-color) !important;
+    --tooltip-active: var(--hover-color) !important;
 
-    /* SELECTED — the currently-selected item — brand coloured on purpose */
-    --color-community-header-active-background: var(--brand-color) !important;
+    /* BRAND — branded surfaces, selected items, accents, focus rings */
+    --accent-color: var(--brand-color) !important;
+    --background-brand-100: var(--brand-color) !important;
+    --brand: var(--brand-color) !important;
+    --brand-button-hover: var(--brand-color) !important;
+    --brand-dark: var(--brand-color) !important;
+    --brand-light: var(--brand-color) !important;
+    --circle-primary: var(--brand-color) !important;
+    --circle-primary-dark: var(--brand-color) !important;
+    --color-background-badge-branded: var(--brand-color) !important;
+    --color-background-brand: var(--brand-color) !important;
+    --color-background-button-branded: var(--brand-color) !important;
     --color-background-slider-branded: var(--brand-color) !important;
     --color-background-toggle-active: var(--brand-color) !important;
+    --color-border-badge-branded: var(--brand-color) !important;
+    --color-community-header-active-background: var(--brand-color) !important;
     --color-community-sidebar-active-background: var(--brand-color) !important;
     --color-community-sidebar-hover-background: var(--brand-color) !important;
+    --color-ring-primary: var(--brand-color) !important;
+    --color-text-icon-branded: var(--brand-color) !important;
+    --color-text-link-branded: var(--brand-color) !important;
+    --color-toggle-checked: var(--brand-color) !important;
+    --color-toggle-circle-checked: var(--brand-color) !important;
+    --compass-branded-badge-bg: var(--brand-color) !important;
+    --compass-branded-badge-bg-dark: var(--brand-color) !important;
+    --compass-branded-badge-border: var(--brand-color) !important;
+    --compass-branded-badge-border-dark: var(--brand-color) !important;
+    --compass-branded-button-bg: var(--brand-color) !important;
+    --compass-branded-button-bg-dark: var(--brand-color) !important;
+    --compass-branded-icon: var(--brand-color) !important;
+    --compass-branded-icon-dark: var(--brand-color) !important;
+    --compass-branded-link-text: var(--brand-color) !important;
+    --compass-branded-link-text-dark: var(--brand-color) !important;
+    --icon-brand: var(--brand-color) !important;
+    --input-focus: var(--brand-color) !important;
     --sidebar-link-active-bg: var(--brand-color) !important;
+    --tw-ring-color: var(--brand-color) !important;
+    --user-badge-bg: var(--brand-color) !important;
 
-    /* INVERSE SURFACE — surfaces that deliberately oppose the theme,
-       i.e. a light panel on a dark site */
+    /* TEXT — primary text, icons, and anything sitting on a brand surface */
+    --brand-button-text: var(--text-color) !important;
+    --button-text-color: var(--text-color) !important;
     --color-background-inverse: var(--text-color) !important;
     --color-background-inverse-active: var(--text-color) !important;
     --color-background-inverse-hover: var(--text-color) !important;
     --color-border-accent: var(--text-color) !important;
     --color-border-darkest: var(--text-color) !important;
-
-    /* INVERSE TEXT — text and icons that sit ON an inverse surface, so
-       they have to be dark or they vanish into it */
-    --color-icon-inverse: var(--secondary-color) !important;
-    --color-text-inverse: var(--secondary-color) !important;
-
-    /* TEXT — primary text and icons */
     --color-circle-button-text: var(--text-color) !important;
-    --color-stroke-foreground: var(--text-color) !important;
-    --color-text-badge: var(--text-color) !important;
-    --text-dark: var(--text-color) !important;
-    --text-primary: var(--text-color) !important;
-    --button-text-color: var(--text-color) !important;
+    --color-community-active-item-text-color: var(--text-color) !important;
     --color-community-header-active-text: var(--text-color) !important;
     --color-community-header-text: var(--text-color) !important;
+    --color-community-sidebar-badge-text: var(--text-color) !important;
     --color-community-sidebar-icon: var(--text-color) !important;
     --color-community-sidebar-icon-hover: var(--text-color) !important;
     --color-community-sidebar-text: var(--text-color) !important;
+    --color-community-sidebar-text-on-accent: var(--text-color) !important;
+    --color-community-switcher-new-community-button-icon: var(--text-color) !important;
     --color-icon: var(--text-color) !important;
     --color-icon-hover: var(--text-color) !important;
     --color-icon-primary: var(--text-color) !important;
+    --color-stroke-foreground: var(--text-color) !important;
+    --color-text-badge: var(--text-color) !important;
+    --color-text-badge-branded: var(--text-color) !important;
+    --color-text-button-branded: var(--text-color) !important;
     --color-text-chip: var(--text-color) !important;
     --color-text-dark: var(--text-color) !important;
     --color-text-darkest: var(--text-color) !important;
@@ -180,7 +212,9 @@
     --color-text-level-mid: var(--text-color) !important;
     --color-text-level-top: var(--text-color) !important;
     --color-text-primary: var(--text-color) !important;
+    --color-text-selector-active: var(--text-color) !important;
     --color-text-very-dark: var(--text-color) !important;
+    --color-toggle-circle-unchecked: var(--text-color) !important;
     --dropdown-icon: var(--text-color) !important;
     --dropdown-title: var(--text-color) !important;
     --header-sticky-nav: var(--text-color) !important;
@@ -199,22 +233,23 @@
     --label-title-color: var(--text-color) !important;
     --modal-title: var(--text-color) !important;
     --post-text: var(--text-color) !important;
+    --search-autocomplete-link-hover-text: var(--text-color) !important;
     --search-autocomplete-link-text: var(--text-color) !important;
     --sidebar-block-header: var(--text-color) !important;
     --sidebar-block-header-link: var(--text-color) !important;
+    --sidebar-link: var(--text-color) !important;
+    --sidebar-link-active: var(--text-color) !important;
+    --sidebar-link-hover: var(--text-color) !important;
     --text-body: var(--text-color) !important;
-    --text-body-10: color-mix(in srgb, var(--text-color) 10%, transparent) !important;
     --text-body-100: var(--text-color) !important;
-    --text-body-25: color-mix(in srgb, var(--text-color) 25%, transparent) !important;
-    --text-body-33: color-mix(in srgb, var(--text-color) 33%, transparent) !important;
-    --text-body-50: color-mix(in srgb, var(--text-color) 50%, transparent) !important;
-    --text-body-66: color-mix(in srgb, var(--text-color) 66%, transparent) !important;
-    --text-body-75: color-mix(in srgb, var(--text-color) 75%, transparent) !important;
+    --text-dark: var(--text-color) !important;
+    --text-primary: var(--text-color) !important;
+    --trix-editor-color: var(--text-color) !important;
+    --user-badge: var(--text-color) !important;
     --user-text: var(--text-color) !important;
 
     /* TEXT MUTED — secondary text: timestamps, placeholders, disabled labels */
-    --label-description-text: var(--text-muted-color) !important;
-    --text-body-90: var(--text-muted-color) !important;
+    --color-event-sidebar-item: var(--text-muted-color) !important;
     --color-icon-disabled: var(--text-muted-color) !important;
     --color-icon-secondary: var(--text-muted-color) !important;
     --color-icon-tertiary: var(--text-muted-color) !important;
@@ -233,10 +268,12 @@
     --input-gray-explainer: var(--text-muted-color) !important;
     --input-gray-explainer-light: var(--text-muted-color) !important;
     --input-placeholder: var(--text-muted-color) !important;
+    --label-description-text: var(--text-muted-color) !important;
     --placeholder-gray: var(--text-muted-color) !important;
     --placeholder-light-grey: var(--text-muted-color) !important;
     --sidebar-block-count: var(--text-muted-color) !important;
     --t-header-light-grey: var(--text-muted-color) !important;
+    --text-body-90: var(--text-muted-color) !important;
     --text-secondary: var(--text-muted-color) !important;
     --text-secondary-hover: var(--text-muted-color) !important;
     --text-secondary-light: var(--text-muted-color) !important;
@@ -245,12 +282,6 @@
     --user-tagline: var(--text-muted-color) !important;
 
     /* BORDER — every border, divider and rule */
-    --color-border-circle-button: var(--border-color) !important;
-    --color-border-circle-button-hover: var(--border-color) !important;
-    --color-border-default: var(--border-color) !important;
-    --color-border-light: var(--border-color) !important;
-    --color-border-very-dark: var(--border-color) !important;
-    --color-ring-secondary: var(--border-color) !important;
     --border-dark: var(--border-color) !important;
     --border-light: var(--border-color) !important;
     --border-light-hover: var(--border-color) !important;
@@ -259,17 +290,24 @@
     --button-border: var(--border-color) !important;
     --color-background-toggle-inactive: var(--border-color) !important;
     --color-border-active: var(--border-color) !important;
+    --color-border-circle-button: var(--border-color) !important;
+    --color-border-circle-button-hover: var(--border-color) !important;
     --color-border-dark: var(--border-color) !important;
+    --color-border-default: var(--border-color) !important;
     --color-border-disabled: var(--border-color) !important;
     --color-border-focus: var(--border-color) !important;
     --color-border-hover: var(--border-color) !important;
     --color-border-input: var(--border-color) !important;
+    --color-border-light: var(--border-color) !important;
     --color-border-primary: var(--border-color) !important;
     --color-border-secondary: var(--border-color) !important;
     --color-border-secondary-dark: var(--border-color) !important;
     --color-border-selector-inactive: var(--border-color) !important;
     --color-border-tertiary: var(--border-color) !important;
+    --color-border-very-dark: var(--border-color) !important;
     --color-community-sidebar-border: var(--border-color) !important;
+    --color-ring-secondary: var(--border-color) !important;
+    --color-toggle-unchecked: var(--border-color) !important;
     --comment-border-bottom: var(--border-color) !important;
     --divider-border: var(--border-color) !important;
     --mobile-menu-sidebar-border: var(--border-color) !important;
@@ -280,102 +318,65 @@
     --trix-border: var(--border-color) !important;
     --user-profile-card-border: var(--border-color) !important;
 
-    /* BRAND — branded surfaces, icons and accents */
-    --accent-color: var(--brand-color) !important;
-    --color-toggle-checked: var(--brand-color) !important;
-    --color-toggle-circle-checked: var(--brand-color) !important;
-    --background-brand-03: color-mix(in srgb, var(--brand-color) 3%, transparent) !important;
-    --background-brand-10: color-mix(in srgb, var(--brand-color) 10%, transparent) !important;
-    --background-brand-100: var(--brand-color) !important;
-    --background-brand-25: color-mix(in srgb, var(--brand-color) 25%, transparent) !important;
-    --background-brand-33: color-mix(in srgb, var(--brand-color) 33%, transparent) !important;
-    --background-brand-50: color-mix(in srgb, var(--brand-color) 50%, transparent) !important;
-    --background-brand-66: color-mix(in srgb, var(--brand-color) 66%, transparent) !important;
-    --background-brand-75: color-mix(in srgb, var(--brand-color) 75%, transparent) !important;
-    --brand: var(--brand-color) !important;
-    --brand-button-hover: var(--brand-color) !important;
-    --brand-dark: var(--brand-color) !important;
-    --brand-light: var(--brand-color) !important;
-    --circle-primary: var(--brand-color) !important;
-    --circle-primary-dark: var(--brand-color) !important;
-    --color-background-badge-branded: var(--brand-color) !important;
-    --color-background-brand: var(--brand-color) !important;
-    --color-background-button-branded: var(--brand-color) !important;
-    --color-border-badge-branded: var(--brand-color) !important;
-    --color-text-icon-branded: var(--brand-color) !important;
-    --color-text-link-branded: var(--brand-color) !important;
-    --compass-branded-badge-bg: var(--brand-color) !important;
-    --compass-branded-badge-bg-dark: var(--brand-color) !important;
-    --compass-branded-badge-border: var(--brand-color) !important;
-    --compass-branded-badge-border-dark: var(--brand-color) !important;
-    --compass-branded-button-bg: var(--brand-color) !important;
-    --compass-branded-button-bg-dark: var(--brand-color) !important;
-    --compass-branded-icon: var(--brand-color) !important;
-    --compass-branded-icon-dark: var(--brand-color) !important;
-    --compass-branded-link-text: var(--brand-color) !important;
-    --compass-branded-link-text-dark: var(--brand-color) !important;
-    --icon-brand: var(--brand-color) !important;
-
-    /* ON BRAND — text and icons sitting ON a brand surface, so they stay legible */
-    --brand-button-text: var(--text-color) !important;
-    --color-community-active-item-text-color: var(--text-color) !important;
-    --color-community-sidebar-badge-text: var(--text-color) !important;
-    --color-community-sidebar-text-on-accent: var(--text-color) !important;
-    --color-community-switcher-new-community-button-icon: var(--text-color) !important;
-    --color-text-badge-branded: var(--text-color) !important;
-    --color-text-button-branded: var(--text-color) !important;
-    --color-text-selector-active: var(--text-color) !important;
-    --search-autocomplete-link-hover-text: var(--text-color) !important;
-    --sidebar-link-active: var(--text-color) !important;
-    --user-badge: var(--text-color) !important;
-
     /* LINK — inline links */
+    --color-text-blue-highlight: var(--link-color) !important;
     --color-text-link: var(--link-color) !important;
     --color-text-link-hover: var(--link-color) !important;
     --dropdown-link: var(--link-color) !important;
     --dropdown-link-hover: var(--link-color) !important;
     --user-location-links: var(--link-color) !important;
 
-    /* OVERLAY — the dim layer covering the screen when a modal is active */
+    /* BADGE — unread / notification badges */
+    --color-community-sidebar-badge-background: var(--badge-color) !important;
+
+    /* LIVE — "live now" indicators */
+    --color-sidebar-footer-live-indicator: var(--live-color) !important;
+
+    /* TIER — BASIC — gamification tier, distinct hue on purpose */
+    --color-background-level-basic: var(--tier-basic-color) !important;
+
+    /* TIER — MID — gamification tier, distinct hue on purpose */
+    --color-background-level-mid: var(--tier-mid-color) !important;
+
+    /* TIER — TOP — gamification tier, distinct hue on purpose */
+    --color-background-level-top: var(--tier-top-color) !important;
+
+    /* OVERLAY — the dim layer behind a modal or slide-out menu */
     --color-background-modal-overlay: rgba(0, 0, 0, 0.6) !important;
     --color-background-overlay: rgba(0, 0, 0, 0.6) !important;
     --color-background-overlay-dark: rgba(0, 0, 0, 0.6) !important;
     --mobile-menu-overlay: rgba(0, 0, 0, 0.6) !important;
     --modal-bg: rgba(0, 0, 0, 0.6) !important;
 
-    /* SHADOW — drop shadows. Much lighter than an overlay */
+    /* SHADOW — drop shadows — far lighter than an overlay */
     --shadow-dark-color: rgba(0, 0, 0, 0.2) !important;
     --trix-shadow: rgba(0, 0, 0, 0.2) !important;
 
-    /* UNCATEGORISED — MAGENTA — not sorted yet. Move these into a category above as
-       you work out what they paint, or start a new category. */
-    --color-background-light-blue: var(--post-color) !important;
-    --color-stroke-background: var(--hover-color) !important;
-    --color-text-blue-highlight: var(--link-color) !important;
-    --color-toggle-circle-unchecked: var(--text-color) !important;
-    --color-toggle-unchecked: var(--border-color) !important;
-    --color-community-sidebar-badge-background: var(--badge-color) !important;
-    --color-background-disabled: var(--post-color) !important;
-    --color-background-level-basic: var(--tier-basic-color) !important;
-    --color-background-level-mid: var(--tier-mid-color) !important;
-    --color-background-level-top: var(--tier-top-color) !important;
-    --color-event-sidebar-item: var(--text-muted-color) !important;
-    --color-ring-primary: var(--brand-color) !important;
-    --color-sidebar-footer-live-indicator: var(--live-color) !important;
-    --input-focus: var(--brand-color) !important;
-    --list-item-hover: var(--hover-color) !important;
-    --neutral-highlight: var(--hover-color) !important;
-    --neutral-highlight-hover: var(--hover-color) !important;
-    --sidebar-link: var(--text-color) !important;
-    --sidebar-link-highlight: var(--hover-color) !important;
-    --sidebar-link-hover: var(--text-color) !important;
-    --tooltip-active: var(--hover-color) !important;
-    --trix-editor-color: var(--text-color) !important;
-    --trix-toolbar-background: var(--post-color) !important;
-    --tw-ring-color: var(--brand-color) !important;
-    --tw-ring-offset-color: var(--secondary-color) !important;
-    --user-badge-bg: var(--brand-color) !important;
-    --user-joined-bg: var(--post-color) !important;
+    /* DERIVED — same colours as the groups above, but the token needs a
+       different form: translucent variants, or an RGB triple because
+       Circle wraps it in rgba(). Edit the palette, not these. */
+    --background-brand-03: color-mix(in srgb, var(--brand-color) 3%, transparent) !important;
+    --background-brand-10: color-mix(in srgb, var(--brand-color) 10%, transparent) !important;
+    --background-brand-25: color-mix(in srgb, var(--brand-color) 25%, transparent) !important;
+    --background-brand-33: color-mix(in srgb, var(--brand-color) 33%, transparent) !important;
+    --background-brand-50: color-mix(in srgb, var(--brand-color) 50%, transparent) !important;
+    --background-brand-66: color-mix(in srgb, var(--brand-color) 66%, transparent) !important;
+    --background-brand-75: color-mix(in srgb, var(--brand-color) 75%, transparent) !important;
+    --background-primary-10: color-mix(in srgb, var(--post-color) 10%, transparent) !important;
+    --background-primary-15: color-mix(in srgb, var(--post-color) 15%, transparent) !important;
+    --background-primary-25: color-mix(in srgb, var(--post-color) 25%, transparent) !important;
+    --background-primary-33: color-mix(in srgb, var(--post-color) 33%, transparent) !important;
+    --background-primary-50: color-mix(in srgb, var(--post-color) 50%, transparent) !important;
+    --background-primary-66: color-mix(in srgb, var(--post-color) 66%, transparent) !important;
+    --background-primary-75: color-mix(in srgb, var(--post-color) 75%, transparent) !important;
+    --color-background-emoji-picker: 17, 19, 22 !important;   /* RGB triple: Circle wraps this in rgba() */
+    --color-background-emoji-picker-hover: 22, 25, 29 !important;   /* RGB triple: Circle wraps this in rgba() */
+    --text-body-10: color-mix(in srgb, var(--text-color) 10%, transparent) !important;
+    --text-body-25: color-mix(in srgb, var(--text-color) 25%, transparent) !important;
+    --text-body-33: color-mix(in srgb, var(--text-color) 33%, transparent) !important;
+    --text-body-50: color-mix(in srgb, var(--text-color) 50%, transparent) !important;
+    --text-body-66: color-mix(in srgb, var(--text-color) 66%, transparent) !important;
+    --text-body-75: color-mix(in srgb, var(--text-color) 75%, transparent) !important;
   }
 
 
