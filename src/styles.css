@@ -42,6 +42,13 @@
     --text-color: #F0F3F5;
     --text-muted-color: #A5A9AD;
     --link-color: #60A5FA;
+
+    /* groups found during the site sweep */
+    --badge-color: #e02f2f;        /* unread / notification badges */
+    --live-color: #22c55e;         /* "live now" indicator */
+    --tier-basic-color: #443e32;   /* gamification tiers keep distinct hues */
+    --tier-mid-color: #31374e;
+    --tier-top-color: #3e354d;
     --unassigned: #ff00ff;
   }
 
@@ -342,34 +349,33 @@
 
     /* UNCATEGORISED — MAGENTA — not sorted yet. Move these into a category above as
        you work out what they paint, or start a new category. */
-    --color-background-light-blue: var(--unassigned) !important;
-    --color-stroke-background: var(--unassigned) !important;
-    --color-text-blue-highlight: var(--unassigned) !important;
-    --color-toggle-circle-unchecked: var(--unassigned) !important;
-    --color-toggle-unchecked: var(--unassigned) !important;
-    --color-community-sidebar-badge-background: var(--unassigned) !important;
-    --color-background-disabled: var(--unassigned) !important;
-    --color-background-level-basic: var(--unassigned) !important;
-    --color-background-level-mid: var(--unassigned) !important;
-    --color-background-level-top: var(--unassigned) !important;
-    --color-event-sidebar-item: var(--unassigned) !important;
-    --color-ring-primary: var(--unassigned) !important;
-    --color-sidebar-footer-live-indicator: var(--unassigned) !important;
-    --input-focus: var(--unassigned) !important;
-    --list-item-hover: var(--unassigned) !important;
-    --neutral-highlight: var(--unassigned) !important;
-    --neutral-highlight-hover: var(--unassigned) !important;
-    --sidebar-link: var(--unassigned) !important;
-    --sidebar-link-highlight: var(--unassigned) !important;
-    --sidebar-link-hover: var(--unassigned) !important;
-    --some-token: var(--unassigned) !important;
-    --tooltip-active: var(--unassigned) !important;
-    --trix-editor-color: var(--unassigned) !important;
-    --trix-toolbar-background: var(--unassigned) !important;
-    --tw-ring-color: var(--unassigned) !important;
-    --tw-ring-offset-color: var(--unassigned) !important;
-    --user-badge-bg: var(--unassigned) !important;
-    --user-joined-bg: var(--unassigned) !important;
+    --color-background-light-blue: var(--post-color) !important;
+    --color-stroke-background: var(--hover-color) !important;
+    --color-text-blue-highlight: var(--link-color) !important;
+    --color-toggle-circle-unchecked: var(--text-color) !important;
+    --color-toggle-unchecked: var(--border-color) !important;
+    --color-community-sidebar-badge-background: var(--badge-color) !important;
+    --color-background-disabled: var(--post-color) !important;
+    --color-background-level-basic: var(--tier-basic-color) !important;
+    --color-background-level-mid: var(--tier-mid-color) !important;
+    --color-background-level-top: var(--tier-top-color) !important;
+    --color-event-sidebar-item: var(--text-muted-color) !important;
+    --color-ring-primary: var(--brand-color) !important;
+    --color-sidebar-footer-live-indicator: var(--live-color) !important;
+    --input-focus: var(--brand-color) !important;
+    --list-item-hover: var(--hover-color) !important;
+    --neutral-highlight: var(--hover-color) !important;
+    --neutral-highlight-hover: var(--hover-color) !important;
+    --sidebar-link: var(--text-color) !important;
+    --sidebar-link-highlight: var(--hover-color) !important;
+    --sidebar-link-hover: var(--text-color) !important;
+    --tooltip-active: var(--hover-color) !important;
+    --trix-editor-color: var(--text-color) !important;
+    --trix-toolbar-background: var(--post-color) !important;
+    --tw-ring-color: var(--brand-color) !important;
+    --tw-ring-offset-color: var(--secondary-color) !important;
+    --user-badge-bg: var(--brand-color) !important;
+    --user-joined-bg: var(--post-color) !important;
   }
 
 
@@ -402,19 +408,19 @@
 
     /* MAGENTA — read somewhere, never themed. Give each a real value once
        you spot what it paints. */
-    --color-gray-400: 255, 0, 255 !important;
-    --color-gray-500: 255, 0, 255 !important;
-    --color-gray-600: 255, 0, 255 !important;
-    --color-gray-700: 255, 0, 255 !important;
-    --color-grey-0:   #ff00ff !important;
-    --color-grey-50:  #ff00ff !important;
-    --color-grey-100: #ff00ff !important;
-    --color-grey-200: #ff00ff !important;
-    --color-grey-300: #ff00ff !important;
-    --color-grey-400: #ff00ff !important;
-    --color-grey-500: #ff00ff !important;
-    --color-grey-700: #ff00ff !important;
-    --color-grey-900: #ff00ff !important;
+    --color-gray-400: 165, 169, 173 !important;
+    --color-gray-500: 165, 169, 173 !important;
+    --color-gray-600: 52, 53, 54 !important;
+    --color-gray-700: 52, 53, 54 !important;
+    --color-grey-0:   var(--text-color) !important;
+    --color-grey-50:  var(--text-color) !important;
+    --color-grey-100: var(--text-color) !important;
+    --color-grey-200: var(--text-muted-color) !important;
+    --color-grey-300: var(--text-muted-color) !important;
+    --color-grey-400: var(--border-color) !important;
+    --color-grey-500: var(--border-color) !important;
+    --color-grey-700: var(--hover-color) !important;
+    --color-grey-900: var(--secondary-color) !important;
   }
 
   /* ---- colour that no token can express ----
