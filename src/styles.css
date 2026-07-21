@@ -7,15 +7,11 @@
 /* ════════════════════════════════════════════════════════════
    ██  SECTION 1 — COLOUR
    ════════════════════════════════════════════════════════════
-   Every colour on the site is set here, in two blocks:
-
-     1. SEMANTIC TOKENS   what Circle paints its UI with, grouped into
-                          categories. Everything in a category shares one
-                          colour, so the category is the unit you edit.
-     2. PRIMITIVES        Circle's raw scales. Only the ones something
-                          reads DIRECTLY are listed; the rest are unused
-                          in dark mode or belong to Circle's theme picker,
-                          so setting them would do nothing.
+   Every colour on the site is set here. Semantic tokens are grouped into
+   categories; everything in a category shares one colour, so the category
+   is the unit you edit. Circle's raw primitive scales are deliberately
+   not touched — the loading-state rules below cover what used to need
+   them.
 
    !important is required. Circle declares these on .dark and
    [data-theme="dark"], specificity (0,1,0), which outranks a plain html
@@ -54,7 +50,7 @@
 
 
   /* ────────────────────────────────────────────
-     1. SEMANTIC TOKENS
+     SEMANTIC TOKENS
      ──────────────────────────────────────────── */
   html {
     /* PAGE — the page / app background */
@@ -374,50 +370,6 @@
   }
 
 
-  /* ────────────────────────────────────────────
-     2. PRIMITIVES
-     Circle's raw scales. The semantic tokens above no longer read these,
-     so they only matter where something reads a primitive DIRECTLY —
-     skeleton loaders and pulse states are the main case.
-
-     --color-gray-* take bare R, G, B triples because Circle wraps them in
-     rgba(). --color-grey-* (the UK-spelled twin) take hex. Keep each in
-     its own format or the declaration is invalid.
-
-     Circle's other scales — almond, salmon, sea, sunglow, haiti, indigo,
-     burnt-sienna, carolina-blue, royal-blue — are deliberately absent.
-     Nothing in dark mode reads them; they exist for Circle's theme
-     picker, so listing them would be noise.
-     ──────────────────────────────────────────── */
-  html {
-    /* tuned — skeleton loaders and pulse states read these directly.
-       gray-100 and gray-200 are the two the skeletons fill with, set to
-       --secondary-color so the placeholder blocks vanish into the page.
-       gray-300 is the date picker's borders, not a skeleton — leave it. */
-    --color-gray-50:  17, 19, 22 !important;
-    --color-gray-100: 9, 11, 14 !important;
-    --color-gray-200: 9, 11, 14 !important;
-    --color-gray-300: 52, 53, 54 !important;
-    --color-gray-800: 17, 19, 22 !important;
-    --color-gray-900: 9, 11, 14 !important;
-
-    /* MAGENTA — read somewhere, never themed. Give each a real value once
-       you spot what it paints. */
-    --color-gray-400: 165, 169, 173 !important;
-    --color-gray-500: 165, 169, 173 !important;
-    --color-gray-600: 52, 53, 54 !important;
-    --color-gray-700: 52, 53, 54 !important;
-    --color-grey-0:   var(--text-color) !important;
-    --color-grey-50:  var(--text-color) !important;
-    --color-grey-100: var(--text-color) !important;
-    --color-grey-200: var(--text-muted-color) !important;
-    --color-grey-300: var(--text-muted-color) !important;
-    --color-grey-400: var(--border-color) !important;
-    --color-grey-500: var(--border-color) !important;
-    --color-grey-700: var(--hover-color) !important;
-    --color-grey-900: var(--secondary-color) !important;
-  }
-
   /* ---- colour that no token can express ----
      Circle has no variable for either of these. The sidebar divider is a
      border Circle never draws (without this rule the computed style is
@@ -507,17 +459,39 @@
     background-color: var(--brand-color) !important;
   }
 
-  /* ---- skeleton loaders ----
-     The rows read --color-gray-* but the card wrapper reads
-     --color-background-primary, which is --post-color and therefore
-     visible against the page. Painting the whole placeholder the page
-     colour is what actually makes it disappear. ---- */
-  [class*="skeleton-loader"],
-  [class*="skeleton-loader"] *,
-  .animate-pulse,
-  .animate-pulse * {
+  /* ---- Loading states (restored from the original stylesheet) ---- */
+
+  /* Top bar load placeholders */
+  [data-testid="navigation-bar-wrapper"] .bg-tertiary,
+  [data-testid="navigation-bar-wrapper"] .bg-secondary-dark,
+  [data-testid="navigation-bar-wrapper"] .bg-primary {
+    background-color: var(--primary-color) !important;
+  }
+
+  /* Feed skeleton loader */
+  div[class*="skeleton-loader"],
+  div[class*="skeleton-loader"] div {
     background-color: var(--secondary-color) !important;
     border-color: var(--secondary-color) !important;
+  }
+
+  /* Events skeleton placeholders */
+  .react-page-space-show .bg-tertiary,
+  .react-page-space-show .animate-pulse {
+    background-color: var(--secondary-color) !important;
+  }
+
+  /* Expanded post skeleton */
+  [data-testid="modal"] .bg-tertiary,
+  [data-testid="modal"] .bg-primary {
+    background-color: var(--post-color) !important;
+  }
+
+  /* Spinner loading background */
+  .react-loader,
+  .default-loader,
+  :has(> .react-loader) {
+    background-color: var(--secondary-color) !important;
   }
 
   /* ---- members directory background ----
@@ -614,7 +588,6 @@
     background-color: var(--hover-color) !important;
     border-color: hsl(from var(--border-color) h s calc(l + 30)) !important;
   }
-
 
 
 /* ════════════════════════════════════════════════════════════
