@@ -466,9 +466,10 @@
   }
 
   /* Tooltip arrow. tippy.js hardcodes color:#333 on .tippy-arrow and the
-     ::before inherits it through currentColor, so no token reaches it. */
+     ::before inherits it through currentColor, so no token reaches it.
+     Matches the bubble above so there is no seam between the two. */
   .tippy-arrow {
-    color: var(--post-color) !important;
+    color: var(--hover-color) !important;
   }
 
   /* ---- variable shadowing (admin / settings area) ----
