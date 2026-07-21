@@ -462,6 +462,22 @@
     background-color: var(--post-color) !important;
   }
 
+
+  /* Profile drawer, every container level. The bottom sliver was the
+     outer scroll wrapper showing through below the content, which is why
+     targeting the drawer alone left a strip behind. */
+  html div:has(> .profile-drawer),
+  html .profile-drawer,
+  html [data-testid="tab-group"],
+  html [data-testid="tab-panels"],
+  html [data-testid="tab-panel"],
+  html .profile-drawer__empty,
+  html #profile-spaces-scrollable-target,
+  html .profile-drawer .infinite-scroll-component__outerdiv,
+  html .profile-drawer .infinite-scroll-component {
+    background-color: var(--post-color) !important;
+  }
+
   [role="tooltip"],
   .tippy-box {
     background-color: var(--hover-color) !important;
