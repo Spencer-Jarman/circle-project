@@ -5,8 +5,9 @@
    ════════════════════════════════════════════════════════════ */
 
 /* ════════════════════════════════════════════════════════════
-   SECTION A — COLOUR
-   Every colour on the site is set here, in three blocks:
+   ██  SECTION 1 — COLOUR
+   ════════════════════════════════════════════════════════════
+   Every colour on the site is set here, in two blocks:
 
      1. SEMANTIC TOKENS   what Circle paints its UI with, grouped into
                           categories. Everything in a category shares one
@@ -15,8 +16,6 @@
                           reads DIRECTLY are listed; the rest are unused
                           in dark mode or belong to Circle's theme picker,
                           so setting them would do nothing.
-     3. STATUS COLOURS    error / warning / success / info, left at
-                          Circle's values with the hex inline to tune.
 
    !important is required. Circle declares these on .dark and
    [data-theme="dark"], specificity (0,1,0), which outranks a plain html
@@ -37,12 +36,11 @@
     --primary-color: #0a0b0d;
     --secondary-color: #090b0e;
     --post-color: #111316;
+    --hover-color: #15181c;
     --border-color: #343536;
     --brand-color: #70180d;
     --text-color: #F0F3F5;
     --text-muted-color: #A5A9AD;
-    --alert-color: #ff00ff;
-    --success-color: #ff00ff;
     --link-color: #ff00ff;
     --unassigned: #ff00ff;
   }
@@ -105,20 +103,20 @@
     --user-profile-card-bg: var(--post-color) !important;
 
     /* HOVER — hover / active / selected states, one step above RAISED */
-    --color-background-active: hsl(from var(--post-color) h s calc(l + 2)) !important;
+    --color-background-active: var(--hover-color) !important;
     --color-background-emoji-picker-hover: 22, 25, 29 !important;   /* RGB triple: Circle wraps this in rgba() */
-    --color-background-highlight: hsl(from var(--post-color) h s calc(l + 2)) !important;
-    --color-background-hover: hsl(from var(--post-color) h s calc(l + 2)) !important;
-    --color-background-secondary-hover: hsl(from var(--post-color) h s calc(l + 2)) !important;
-    --color-background-selector-active: hsl(from var(--post-color) h s calc(l + 2)) !important;
-    --color-background-tertiary: hsl(from var(--post-color) h s calc(l + 2)) !important;
-    --color-background-text-editor-modifier-active: hsl(from var(--post-color) h s calc(l + 2)) !important;
-    --color-background-text-editor-modifier-hover: hsl(from var(--post-color) h s calc(l + 2)) !important;
-    --color-community-header-hover-background: hsl(from var(--post-color) h s calc(l + 2)) !important;
-    --color-message-highlight-background: hsl(from var(--post-color) h s calc(l + 2)) !important;
-    --comment-scroll-highlight-background: hsl(from var(--post-color) h s calc(l + 2)) !important;
-    --new-notification-hover-bg: hsl(from var(--post-color) h s calc(l + 2)) !important;
-    --search-autocomplete-link-hover-background: hsl(from var(--post-color) h s calc(l + 2)) !important;
+    --color-background-highlight: var(--hover-color) !important;
+    --color-background-hover: var(--hover-color) !important;
+    --color-background-secondary-hover: var(--hover-color) !important;
+    --color-background-selector-active: var(--hover-color) !important;
+    --color-background-tertiary: var(--hover-color) !important;
+    --color-background-text-editor-modifier-active: var(--hover-color) !important;
+    --color-background-text-editor-modifier-hover: var(--hover-color) !important;
+    --color-community-header-hover-background: var(--hover-color) !important;
+    --color-message-highlight-background: var(--hover-color) !important;
+    --comment-scroll-highlight-background: var(--hover-color) !important;
+    --new-notification-hover-bg: var(--hover-color) !important;
+    --search-autocomplete-link-hover-background: var(--hover-color) !important;
 
     /* SELECTED — the currently-selected item — brand coloured on purpose */
     --color-background-slider-branded: var(--brand-color) !important;
@@ -127,14 +125,18 @@
     --color-community-sidebar-hover-background: var(--brand-color) !important;
     --sidebar-link-active-bg: var(--brand-color) !important;
 
-    /* INVERSE — surfaces that deliberately oppose the theme (light on dark) */
+    /* INVERSE SURFACE — surfaces that deliberately oppose the theme,
+       i.e. a light panel on a dark site */
     --color-background-inverse: var(--text-color) !important;
     --color-background-inverse-active: var(--text-color) !important;
     --color-background-inverse-hover: var(--text-color) !important;
     --color-border-accent: var(--text-color) !important;
     --color-border-darkest: var(--text-color) !important;
-    --color-icon-inverse: var(--text-color) !important;
-    --color-text-inverse: var(--text-color) !important;
+
+    /* INVERSE TEXT — text and icons that sit ON an inverse surface, so
+       they have to be dark or they vanish into it */
+    --color-icon-inverse: var(--secondary-color) !important;
+    --color-text-inverse: var(--secondary-color) !important;
 
     /* TEXT — primary text and icons */
     --button-text-color: var(--text-color) !important;
@@ -300,13 +302,16 @@
     --dropdown-link-hover: var(--link-color) !important;
     --user-location-links: var(--link-color) !important;
 
-    /* OVERLAY — scrims behind modals */
+    /* OVERLAY — the dim layer behind a modal or slide-out menu */
     --color-background-overlay: rgba(0, 0, 0, 0.6) !important;
     --color-background-overlay-dark: rgba(0, 0, 0, 0.6) !important;
     --mobile-menu-overlay: rgba(0, 0, 0, 0.6) !important;
     --modal-bg: rgba(0, 0, 0, 0.6) !important;
-    --shadow-dark-color: rgba(0, 0, 0, 0.6) !important;
-    --trix-shadow: rgba(0, 0, 0, 0.6) !important;
+
+    /* SHADOW — drop shadows. Much lighter than an overlay: at 0.6 every
+       card would look like it was floating in a hole */
+    --shadow-dark-color: rgba(0, 0, 0, 0.2) !important;
+    --trix-shadow: rgba(0, 0, 0, 0.2) !important;
 
     /* UNCATEGORISED — MAGENTA — not sorted yet. Move these into a category above as
        you work out what they paint, or start a new category. */
@@ -379,43 +384,6 @@
   }
 
 
-  /* ────────────────────────────────────────────
-     3. STATUS COLOURS
-     Deliberately NOT themed. Red means error, green means success —
-     recolouring them to the palette would strip that meaning. Circle's
-     own values are written out so you can tune them directly: a lighter
-     green or a darker yellow is a one-line edit here.
-     ──────────────────────────────────────────── */
-  html {
-    --color-background-danger: #f87171 !important;
-    --color-background-danger-active: #ef4444 !important;
-    --color-background-danger-hover: #b91c1c !important;
-    --color-background-danger-light: #483136 !important;
-    --color-background-idle: #f59e0b !important;
-    --color-background-info: #60a5fa !important;
-    --color-background-info-light: #2d3b50 !important;
-    --color-background-online: #22c55e !important;
-    --color-background-success: #4ade80 !important;
-    --color-background-success-light: #2a4539 !important;
-    --color-background-warning: #fcd34d !important;
-    --color-background-warning-light: #493f2d !important;
-    --color-border-danger: #fca5a5 !important;
-    --color-border-info: #93c5fd !important;
-    --color-border-success: #86efac !important;
-    --color-border-warning: #fcd34d !important;
-    --color-icon-danger: #fca5a5 !important;
-    --color-icon-info: #93c5fd !important;
-    --color-icon-success: #86efac !important;
-    --color-icon-warning: #fcd34d !important;
-    --color-messaging-info-blue: 96 165 250 !important;
-    --color-text-danger: #fca5a5 !important;
-    --color-text-info: #93c5fd !important;
-    --color-text-success: #86efac !important;
-    --color-text-warning: #fcd34d !important;
-    --icon-flagged: #f23434 !important;
-    --success: #6ec87c !important;
-    --success-dark: #469b52 !important;
-  }
 
 
   /* ---- colour that no token can express ----
@@ -434,12 +402,12 @@
 
 
 /* ════════════════════════════════════════════════════════════
-   SECTION B — STRUCTURE
-   Layout, spacing, typography, visibility, and our own components
-   (Shorts player, Twitch panel, mini games). No colour theming here.
+   ██  SECTION 2 — FONTS
+   ════════════════════════════════════════════════════════════
+   Cinzel for sidebar group headings, Rubik for sidebar links. Both are
+   pulled in by the @import on line 1.
    ════════════════════════════════════════════════════════════ */
 
-  /* ---- Fonts (Cinzel = sidebar group headings, Rubik = sidebar links) ---- */
   [data-testid="standard-layout-v2-sidebar"] h3 {
     font-family: 'Cinzel', serif !important;
     font-weight: 600 !important;
@@ -453,6 +421,15 @@
     font-weight: 400 !important;
   }
 
+
+/* ════════════════════════════════════════════════════════════
+   ██  SECTION 3 — STRUCTURE
+   ════════════════════════════════════════════════════════════
+   Layout, spacing, sizing, visibility, and our own components — the
+   Shorts player, the Twitch panel and the mini games. Colour lives in
+   SECTION 1, apart from the handful of rules there that no token can
+   express.
+   ════════════════════════════════════════════════════════════ */
 
   /* ---- Scrollbars ----
      Narrow, secondary-colour track, post-colour thumb. Browser
@@ -502,9 +479,6 @@
     display: block;
   }
 
-  /* ════════════════════════════════════════════
-     STRUCTURE (non-color)
-     ════════════════════════════════════════════ */
 
 /* Kill elastic overscroll bounce at page level + main scroll containers
      (left sidebar keeps its native bounce) */
@@ -637,7 +611,7 @@
     background: transparent;
   }
   .cc-nav-btn:hover::before {
-    background: hsl(from var(--post-color) h s calc(l + 2));
+    background: var(--hover-color);
   }
   /* Nav tab active (brand icon + underline, 3px inset each side) */
   .cc-nav-btn.cc-active {
@@ -806,7 +780,7 @@
   #games-menu { width: 220px; flex-shrink: 0; border-right: 1px solid var(--border-color); padding: 16px 10px; display: flex; flex-direction: column; gap: 6px; }
   .games-menu-title { color: #A5A9AD; font-size: 12px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; padding: 0 10px 8px; }
   .games-menu-btn { display: flex; align-items: center; gap: 10px; padding: 10px 12px; border: none; border-radius: 8px; background: transparent; color: #E4E7EB; font-size: 14px; cursor: pointer; text-align: left; }
-  .games-menu-btn:hover { background: hsl(from var(--post-color) h s calc(l + 2)); }
+  .games-menu-btn:hover { background: var(--hover-color); }
   .games-menu-btn.games-active { background: var(--brand-color); color: #fff; }
   /* Game stage */
   #games-stage { flex: 1; display: flex; align-items: center; justify-content: center; position: relative; overflow: hidden; }
