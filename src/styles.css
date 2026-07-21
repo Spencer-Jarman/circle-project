@@ -75,6 +75,14 @@
 
     /* RAISED — anything on top of the page: posts, cards, modals,
        dropdowns, inputs, tooltips, the editor */
+    --color-background-avatar-secondary: var(--post-color) !important;
+    --color-background-badge: var(--post-color) !important;
+    --color-background-banner: var(--post-color) !important;
+    --color-background-dark: var(--post-color) !important;
+    --color-background-dark-button: var(--post-color) !important;
+    --color-background-plus-banner: var(--post-color) !important;
+    --color-chip-background: var(--post-color) !important;
+    --color-circle-button-background: var(--post-color) !important;
     --background-primary-10: color-mix(in srgb, var(--post-color) 10%, transparent) !important;
     --background-primary-100: var(--post-color) !important;
     --background-primary-15: color-mix(in srgb, var(--post-color) 15%, transparent) !important;
@@ -104,6 +112,7 @@
     --user-profile-card-bg: var(--post-color) !important;
 
     /* HOVER — hover / active / selected states, one step above RAISED */
+    --color-circle-button-background-hover: var(--hover-color) !important;
     --color-background-active: var(--hover-color) !important;
     --color-background-emoji-picker-hover: 22, 25, 29 !important;   /* RGB triple: Circle wraps this in rgba() */
     --color-background-highlight: var(--hover-color) !important;
@@ -120,6 +129,7 @@
     --search-autocomplete-link-hover-background: var(--hover-color) !important;
 
     /* SELECTED — the currently-selected item — brand coloured on purpose */
+    --color-community-header-active-background: var(--brand-color) !important;
     --color-background-slider-branded: var(--brand-color) !important;
     --color-background-toggle-active: var(--brand-color) !important;
     --color-community-sidebar-active-background: var(--brand-color) !important;
@@ -140,6 +150,11 @@
     --color-text-inverse: var(--secondary-color) !important;
 
     /* TEXT — primary text and icons */
+    --color-circle-button-text: var(--text-color) !important;
+    --color-stroke-foreground: var(--text-color) !important;
+    --color-text-badge: var(--text-color) !important;
+    --text-dark: var(--text-color) !important;
+    --text-primary: var(--text-color) !important;
     --button-text-color: var(--text-color) !important;
     --color-community-header-active-text: var(--text-color) !important;
     --color-community-header-text: var(--text-color) !important;
@@ -191,6 +206,8 @@
     --user-text: var(--text-color) !important;
 
     /* TEXT MUTED — secondary text: timestamps, placeholders, disabled labels */
+    --label-description-text: var(--text-muted-color) !important;
+    --text-body-90: var(--text-muted-color) !important;
     --color-icon-disabled: var(--text-muted-color) !important;
     --color-icon-secondary: var(--text-muted-color) !important;
     --color-icon-tertiary: var(--text-muted-color) !important;
@@ -221,6 +238,12 @@
     --user-tagline: var(--text-muted-color) !important;
 
     /* BORDER — every border, divider and rule */
+    --color-border-circle-button: var(--border-color) !important;
+    --color-border-circle-button-hover: var(--border-color) !important;
+    --color-border-default: var(--border-color) !important;
+    --color-border-light: var(--border-color) !important;
+    --color-border-very-dark: var(--border-color) !important;
+    --color-ring-secondary: var(--border-color) !important;
     --border-dark: var(--border-color) !important;
     --border-light: var(--border-color) !important;
     --border-light-hover: var(--border-color) !important;
@@ -251,6 +274,9 @@
     --user-profile-card-border: var(--border-color) !important;
 
     /* BRAND — branded surfaces, icons and accents */
+    --accent-color: var(--brand-color) !important;
+    --color-toggle-checked: var(--brand-color) !important;
+    --color-toggle-circle-checked: var(--brand-color) !important;
     --background-brand-03: color-mix(in srgb, var(--brand-color) 3%, transparent) !important;
     --background-brand-10: color-mix(in srgb, var(--brand-color) 10%, transparent) !important;
     --background-brand-100: var(--brand-color) !important;
@@ -304,6 +330,7 @@
     --user-location-links: var(--link-color) !important;
 
     /* OVERLAY — the dim layer covering the screen when a modal is active */
+    --color-background-modal-overlay: rgba(0, 0, 0, 0.6) !important;
     --color-background-overlay: rgba(0, 0, 0, 0.6) !important;
     --color-background-overlay-dark: rgba(0, 0, 0, 0.6) !important;
     --mobile-menu-overlay: rgba(0, 0, 0, 0.6) !important;
@@ -315,6 +342,11 @@
 
     /* UNCATEGORISED — MAGENTA — not sorted yet. Move these into a category above as
        you work out what they paint, or start a new category. */
+    --color-background-light-blue: var(--unassigned) !important;
+    --color-stroke-background: var(--unassigned) !important;
+    --color-text-blue-highlight: var(--unassigned) !important;
+    --color-toggle-circle-unchecked: var(--unassigned) !important;
+    --color-toggle-unchecked: var(--unassigned) !important;
     --color-community-sidebar-badge-background: var(--unassigned) !important;
     --color-background-disabled: var(--unassigned) !important;
     --color-background-level-basic: var(--unassigned) !important;
@@ -396,6 +428,14 @@
 
   [data-testid="standard-layout-v2-sidebar"] {
     border-right: 1px solid var(--border-color) !important;
+  }
+
+  /* Tooltips. tippy.js paints the bubble from its own stylesheet with no
+     Circle variable behind it, so this has to be a rule. */
+  [role="tooltip"],
+  .tippy-box {
+    background-color: var(--hover-color) !important;
+    color: var(--text-color) !important;
   }
 
 
