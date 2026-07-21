@@ -419,6 +419,16 @@
     background-color: var(--post-color) !important;
   }
 
+
+  /* Settings forms. The form element itself renders the page colour for a
+     moment while a section loads, then goes transparent — that is the
+     flash on the profile and privacy pages. Pinning it to the card colour
+     removes the flash and changes nothing once loaded, since the panel
+     behind it is the same colour. */
+  html .react-form > form {
+    background-color: var(--post-color) !important;
+  }
+
   [role="tooltip"],
   .tippy-box {
     background-color: var(--hover-color) !important;
