@@ -444,6 +444,65 @@
     border-color: #506cf0 !important;
   }
 
+
+  /* ────────────────────────────────────────────
+     DIRECT MESSAGES — the whole section, panel colour
+     ────────────────────────────────────────────
+     Everything from the sidebar to the chat area: the conversation list,
+     the search bar, the Inbox/Unread tabs, the messages, the composer and
+     the loading skeletons.
+
+     (body:has([data-testid="new-message"]) scopes all of this to the DM
+     view. That button is the "New message" plus in the DM sidebar and it
+     exists nowhere else in Circle, so it identifies the view on both the
+     Inbox and Unread tabs. Chat spaces reuse the same testids, which is
+     why the scope is needed at all — without it these rules would repaint
+     every chat space too.) */
+
+  html body:has([data-testid="new-message"]) [data-testid="chat-room-wrapper"],
+  html body:has([data-testid="new-message"]) [data-testid="message-item"],
+  html body:has([data-testid="new-message"]) [data-testid="tiptap-editor"],
+  html body:has([data-testid="new-message"]) [data-testid="tab-group"],
+  html body:has([data-testid="new-message"]) [data-testid="tab-panels"],
+  html body:has([data-testid="new-message"]) [data-testid="tab-panel"],
+  html body:has([data-testid="new-message"]) nav[data-testid="tab-list"],
+  html body:has([data-testid="new-message"]) #scrollable-dms-div,
+  html body:has([data-testid="new-message"]) .bg-primary,
+  html body:has([data-testid="new-message"]) .bg-secondary,
+  html body:has([data-testid="new-message"]) .bg-secondary-dark,
+  html body:has([data-testid="new-message"]) [class*="skeleton-loader"],
+  html body:has([data-testid="new-message"]) [class*="skeleton-loader"] div,
+  html body:has([data-testid="new-message"]) .animate-pulse {
+    background-color: var(--secondary-color) !important;
+  }
+
+  /* Conversation rows.
+
+     Circle gives these hover:bg-secondary-dark and marks the open one with
+     a plain bg-secondary-dark class, so both states resolve to the same
+     colour and neither is visible. Split them apart here.
+
+     The selected rule repeats each selector with :hover appended. Without
+     that the two rules tie on specificity and the hover rule, being later,
+     would take over the moment the pointer touched the open conversation. */
+  html body:has([data-testid="new-message"]) button[data-testid="chat-room-dm-list"]:hover,
+  html body:has([data-testid="new-message"]) button[data-testid="chat-room-dm-list"]:focus-visible {
+    background-color: var(--post-color) !important;
+  }
+  html body:has([data-testid="new-message"]) button[data-testid="chat-room-dm-list"].bg-secondary-dark,
+  html body:has([data-testid="new-message"]) button[data-testid="chat-room-dm-list"].bg-secondary-dark:hover,
+  html body:has([data-testid="new-message"]) button[data-testid="chat-room-dm-list"].bg-secondary-dark:focus-visible,
+  html body:has([data-testid="new-message"]) button[data-testid="chat-room-dm-list"][aria-selected="true"],
+  html body:has([data-testid="new-message"]) button[data-testid="chat-room-dm-list"][aria-selected="true"]:hover {
+    background-color: var(--hover-color) !important;
+  }
+
+  /* The 1px bars between conversations are painted with the same class as
+     the panels above, so they need the border colour put back. */
+  html body:has([data-testid="new-message"]) .bg-secondary-dark[class*="h-[1px]"] {
+    background-color: var(--border-color) !important;
+  }
+
   [role="tooltip"],
   .tippy-box {
     background-color: var(--hover-color) !important;
