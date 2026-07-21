@@ -410,14 +410,24 @@
   html [data-testid="space-header"] {
     background-color: var(--secondary-color) !important;
   }
-
-  /* Expanded post modal stays the card colour
-     (its header and the reply box both carry .bg-primary, and the rules
-     above must not reach into it) */
-  html [data-testid="modal-header"],
-  html .post__reply.bg-primary,
-  html [data-testid="modal"] .bg-primary {
+  /* Expanded post modal — the only modal that stays the card colour.
+     (Scoped with :has() to the post body, so profile, settings and the
+     dropdown panels below are not caught by it.) */
+  html [data-testid="modal"]:has([data-testid="post-body"]) .bg-primary,
+  html [data-testid="modal"]:has([data-testid="post-body"]) [data-testid="modal-header"],
+  html .post__reply.bg-primary {
     background-color: var(--post-color) !important;
+  }
+
+  /* Every other panel — profile, settings, and the dropdown menus behind
+     the bookmark and notification buttons — takes the page colour. */
+  html [data-testid="modal"]:not(:has([data-testid="post-body"])) .bg-primary,
+  html [data-testid="dropdown"] .bg-primary,
+  html [role="menu"].bg-primary,
+  html [role="menu"] .bg-primary,
+  html [data-testid="popover"] .bg-primary,
+  html [data-headlessui-state~="open"] > .bg-primary {
+    background-color: var(--secondary-color) !important;
   }
 
   [role="tooltip"],
