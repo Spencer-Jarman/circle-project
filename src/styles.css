@@ -17,9 +17,6 @@
    [data-theme="dark"], specificity (0,1,0), which outranks a plain html
    selector (0,0,1). Without it these lines silently do nothing.
 
-   MAGENTA #ff00ff means "not sorted yet" — a token with no category, or
-   a primitive nothing has themed. Both are to-do markers.
-
    IF A NEW CIRCLE ELEMENT IS THE WRONG COLOUR:
      1. Right-click it -> Inspect.
      2. Read its background-color / color; it will say var(--some-token).
@@ -38,14 +35,8 @@
     --text-color: #F0F3F5;
     --text-muted-color: #A5A9AD;
     --link-color: #60A5FA;
-
-    /* groups found during the site sweep */
     --badge-color: #e02f2f;        /* unread / notification badges */
     --live-color: #22c55e;         /* "live now" indicator */
-    --tier-basic-color: #443e32;   /* gamification tiers keep distinct hues */
-    --tier-mid-color: #31374e;
-    --tier-top-color: #3e354d;
-    --unassigned: #ff00ff;
   }
 
 
@@ -322,23 +313,15 @@
     /* LIVE — "live now" indicators */
     --color-sidebar-footer-live-indicator: var(--live-color) !important;
 
-    /* TIER — BASIC — gamification tier, distinct hue on purpose */
-    --color-background-level-basic: var(--tier-basic-color) !important;
-
-    /* TIER — MID — gamification tier, distinct hue on purpose */
-    --color-background-level-mid: var(--tier-mid-color) !important;
-
-    /* TIER — TOP — gamification tier, distinct hue on purpose */
-    --color-background-level-top: var(--tier-top-color) !important;
-
-    /* OVERLAY — the dim layer behind a modal or slide-out menu */
+    /* OVERLAY — when you open a modal (creating a post, etc)
+       This is what dims the background around that featured modal */
     --color-background-modal-overlay: rgba(0, 0, 0, 0.6) !important;
     --color-background-overlay: rgba(0, 0, 0, 0.6) !important;
     --color-background-overlay-dark: rgba(0, 0, 0, 0.6) !important;
     --mobile-menu-overlay: rgba(0, 0, 0, 0.6) !important;
     --modal-bg: rgba(0, 0, 0, 0.6) !important;
 
-    /* SHADOW — drop shadows — far lighter than an overlay */
+    /* SHADOW — drop shadows — slightly lighter overlays for different sections */
     --shadow-dark-color: rgba(0, 0, 0, 0.2) !important;
     --trix-shadow: rgba(0, 0, 0, 0.2) !important;
 
@@ -370,11 +353,12 @@
   }
 
 
-  /* ---- colour that no token can express ----
-     Circle has no variable for either of these. The sidebar divider is a
-     border Circle never draws (without this rule the computed style is
-     0px none), so no colour token can create it; --color-community-sidebar-border
-     only tints borders that already exist. Both read the palette. */
+  /* ────────────────────────────────────────────
+     SPECIFIC COLOR CHANGES
+     ──────────────────────────────────────────── */
+
+  /* Circle has no variable for either of these. This is the background
+     on page load and making the sidebar border border-color */
   html, body {
     background-color: var(--secondary-color);
   }
@@ -383,12 +367,15 @@
     border-right: 1px solid var(--border-color) !important;
   }
 
-  /* Tooltips. tippy.js paints the bubble from its own stylesheet with no
-     Circle variable behind it, so this has to be a rule. */
+  /* Tooltips. Changing the color of the tooltips and tooltip arrow */
   [role="tooltip"],
   .tippy-box {
     background-color: var(--hover-color) !important;
     color: var(--text-color) !important;
+  }
+
+  .tippy-arrow {
+    color: var(--hover-color) !important;
   }
 
   /* ---- top bar buttons: split hover from active ----
@@ -411,46 +398,20 @@
     background-color: var(--brand-color) !important;
   }
 
-  /* Tooltip arrow. tippy.js hardcodes color:#333 on .tippy-arrow and the
-     ::before inherits it through currentColor, so no token reaches it.
-     Matches the bubble above so there is no seam between the two. */
-  .tippy-arrow {
-    color: var(--hover-color) !important;
-  }
-
-  /* Composer fields. These carry .bg-primary, so they pick up
-     --post-color and sit as a lighter box inside the composer. They read
-     better transparent, taking whatever surface they are dropped on. */
+  /* Composer fields. Making title elements have transparent backgrounds
+     so they don't put a weird color box on top of the background color */
   textarea[data-testid="post_name"],
   textarea.bg-primary.border-none,
   [data-testid="tiptap-editor"] textarea.bg-primary {
     background-color: transparent !important;
   }
 
-  /* Buttons whose hover class resolves to the page colour — tab pills,
-     cancel buttons, profile actions. hover:bg-secondary would leave them
-     the same colour as the surface behind them, so hover reads as dead. */
+  /* Making the buttons on the profile page hover on hover-color */
   button.hover\:bg-secondary:hover {
     background-color: var(--hover-color) !important;
   }
 
-  /* ---- .bg-primary surfaces that should be the page colour ----
-     .bg-primary paints both page-level surfaces and raised cards. The
-     token is set to --post-color for cards, so these have to opt out
-     explicitly. Each selector carries a class the cards do not have. ---- */
-  [data-testid="space-header"],
-  nav.bg-primary,
-  .bg-primary.col-span-12,
-  .bg-primary.col-span-full,
-  .bg-primary.border-r,
-  .bg-primary.absolute.bottom-0 {
-    background-color: var(--secondary-color) !important;
-  }
-
-  /* ---- top bar: open popover = brand ----
-     Circle marks the open button with aria-expanded / headlessui state,
-     not a background class, so the hover colour would otherwise stick
-     while the popover is open. ---- */
+  /* Making the top right buttons hover and be active on the right colors */
   header button[aria-expanded="true"],
   header button[data-headlessui-state~="open"],
   header [data-popup-open] > button,
@@ -494,25 +455,8 @@
     background-color: var(--secondary-color) !important;
   }
 
-  /* ---- members directory background ----
-     .bg-primary paints both the page wrapper and the member cards. The
-     wrapper is the only one with h-full, so that is what separates them:
-     wrapper takes the page colour, cards keep --post-color. ---- */
-  .bg-primary.h-full {
-    background-color: var(--secondary-color) !important;
-  }
 
-  /* ---- variable shadowing (admin / settings area) ----
-     Circle's admin screens use Tailwind arbitrary-property classes that
-     bake a hex straight into the class name, e.g.
-
-         class="dark:[--color-background-primary:#34373D]"
-
-     That redefines the token ON THAT ELEMENT, for its whole subtree. Our
-     html{...!important} sets the token at the ROOT, and !important does
-     not help here — this is not a specificity fight, it is a descendant
-     shadowing an inherited variable. The only way to reach it is to match
-     the class itself and redefine the variable again. ---- */
+  /* Making the settings area match my same theme */
 
   [class*="--color-background-primary:#34373D"] {
     --color-background-primary: var(--post-color) !important;
@@ -587,6 +531,21 @@
   #rail-content [data-testid="tiptap-editor"]:focus-within {
     background-color: var(--hover-color) !important;
     border-color: hsl(from var(--border-color) h s calc(l + 30)) !important;
+  }
+
+  /* member area backgrounds */
+  [data-testid="space-header"],
+  nav.bg-primary,
+  .bg-primary.col-span-12,
+  .bg-primary.col-span-full,
+  .bg-primary.border-r,
+  .bg-primary.absolute.bottom-0 {
+    background-color: var(--secondary-color) !important;
+  }
+
+  /* profile page backgrounds */
+  .bg-primary.h-full {
+    background-color: var(--secondary-color) !important;
   }
 
 
