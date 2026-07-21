@@ -81,6 +81,64 @@ export const handler = async (event) => {
       return reply(await res.text(), res.status);
     }
 
+    if (path === "/youtube/comments") {
+      const videoId = query.videoId || "";
+      if (!videoId) return reply({ error: "missing videoId" }, 400);
+
+      /* textFormat=plainText matters for safety as well as looks: the
+         html variant returns author-controlled markup, and the panel
+         would then have to sanitise it. Plain text goes straight into
+         textContent with nothing to escape. */
+      const params = new URLSearchParams({
+        part: "snippet",
+        videoId,
+        maxResults: "20",
+        order: query.order === "time" ? "time" : "relevance",
+        textFormat: "plainText",
+        key: process.env.YT_DATA_API_KEY,
+      });
+      if (query.pageToken) params.set("pageToken", query.pageToken);
+
+      const res = await fetch(
+        "https://www.googleapis.com/youtube/v3/commentThreads?" + params
+      );
+      const data = await res.json();
+
+      /* A video with comments turned off answers 403 commentsDisabled.
+         That is a normal state for a video, not a failure, so it comes
+         back as 200 with a flag — otherwise the panel cannot tell it
+         apart from a broken key or a quota stop. */
+      if (!res.ok) {
+        const reason = data?.error?.errors?.[0]?.reason || "";
+        if (reason === "commentsDisabled") {
+          return reply({ disabled: true, items: [], nextPageToken: null });
+        }
+        return reply({ error: reason || "upstream failure" }, res.status);
+      }
+
+      /* Trimmed to the fields the panel draws. The raw thread payload is
+         roughly ten times this size and the rest is never read. */
+      const items = (data.items || []).map((thread) => {
+        const c = thread.snippet.topLevelComment.snippet;
+        return {
+          id: thread.id,
+          author: c.authorDisplayName,
+          avatar: c.authorProfileImageUrl,
+          channel: c.authorChannelUrl,
+          text: c.textDisplay,
+          likes: Number(c.likeCount) || 0,
+          published: c.publishedAt,
+          replies: Number(thread.snippet.totalReplyCount) || 0,
+        };
+      });
+
+      return reply({
+        disabled: false,
+        items,
+        nextPageToken: data.nextPageToken || null,
+      });
+    }
+
     if (path === "/twitch/streams") {
       const gameId = query.game_id || "";
       if (!gameId) return reply({ error: "missing game_id" }, 400);

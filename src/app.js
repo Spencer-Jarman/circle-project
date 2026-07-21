@@ -717,9 +717,12 @@
       dbId: short.id || null,
       videoId,
       title: short.title || "YouTube Short",
-      likes:    short.likes_count    ?? short.like_count    ?? short.likes    ?? short.likeCount    ?? null,
-      comments: short.comments_count ?? short.comment_count ?? short.comments ?? short.commentCount ?? null,
-      shares:   short.shares_count   ?? short.share_count   ?? short.shares   ?? short.shareCount   ?? null,
+      channel: short.channel_title || "",
+      /* The shorts API carries no engagement fields at all, so these stay
+         null until the YouTube stats call fills them in. There is no
+         `shares` any more: the Data API has no share count to read. */
+      likes: null,
+      comments: null,
     };
   }
 
@@ -751,11 +754,17 @@
       if (!res.ok) return {};
       const data = await res.json();
       const map = {};
+      /* `parseInt(x) || null` used to sit here, which turned a genuine zero
+         into null and drew it as an em dash — a video with no comments read
+         as a video whose count failed to load. Only a non-number is unknown. */
+      const toCount = (raw) => {
+        const n = parseInt(raw ?? "", 10);
+        return Number.isFinite(n) ? n : null;
+      };
       for (const item of data.items || []) {
         map[item.id] = {
-          likes:    parseInt(item.statistics.likeCount    ?? "0", 10) || null,
-          comments: parseInt(item.statistics.commentCount ?? "0", 10) || null,
-          shares:   null,
+          likes:    toCount(item.statistics.likeCount),
+          comments: toCount(item.statistics.commentCount),
         };
       }
       return map;
@@ -768,10 +777,223 @@
     const short = shorts[index];
     const likesEl    = document.getElementById("reels-likes-count");
     const commentsEl = document.getElementById("reels-comments-count");
-    const sharesEl   = document.getElementById("reels-shares-count");
     if (likesEl)    likesEl.textContent    = short ? formatCount(short.likes)    : "—";
     if (commentsEl) commentsEl.textContent = short ? formatCount(short.comments) : "—";
-    if (sharesEl)   sharesEl.textContent   = short ? formatCount(short.shares)   : "—";
+    syncCommentsPanel();
+  }
+
+  /* ---------- share ---------- */
+
+  function showToast(text) {
+    const player = document.getElementById("reels-player");
+    if (!player) return;
+    let toast = document.getElementById("reels-toast");
+    if (!toast) {
+      toast = document.createElement("div");
+      toast.id = "reels-toast";
+      toast.className = "reels-toast";
+      player.appendChild(toast);
+    }
+    toast.textContent = text;
+    requestAnimationFrame(() => toast.classList.add("show"));
+    clearTimeout(toast._hideTimer);
+    toast._hideTimer = setTimeout(() => toast.classList.remove("show"), 1900);
+  }
+
+  async function shareCurrent() {
+    const short = shorts[currentIndex];
+    if (!short) return;
+    const url = `https://www.youtube.com/shorts/${short.videoId}`;
+
+    /* navigator.share exists on mobile and almost nowhere on desktop, so the
+       clipboard branch is the one most viewers here will actually hit.
+       A cancelled share sheet throws AbortError — that is the user declining,
+       not a failure, so it must not fall through to copying. */
+    if (navigator.share) {
+      try {
+        await navigator.share({ title: short.title, url });
+        return;
+      } catch (err) {
+        if (err && err.name === "AbortError") return;
+      }
+    }
+    try {
+      await navigator.clipboard.writeText(url);
+      showToast("Link copied");
+    } catch (_) {
+      showToast("Couldn't copy the link");
+    }
+  }
+
+  /* ---------- comments panel ---------- */
+
+  let commentsOpen = false;
+  let commentsVideoId = null;
+  let commentsToken = null;
+  /* Every fetch takes a ticket. Scrolling to the next short while a request
+     is in flight bumps the counter, so the stale response lands and is
+     dropped instead of painting the previous video's comments. */
+  let commentsRequestId = 0;
+
+  function setCommentsOpen(open) {
+    const panel = document.getElementById("reels-comments-panel");
+    const btn = document.getElementById("reels-comments-btn");
+    if (!panel) return;
+    commentsOpen = open;
+    panel.classList.toggle("open", open);
+    panel.setAttribute("aria-hidden", open ? "false" : "true");
+    if (btn) btn.setAttribute("aria-expanded", open ? "true" : "false");
+    if (open) syncCommentsPanel();
+  }
+
+  function syncCommentsPanel() {
+    if (!commentsOpen) return;
+    const short = shorts[currentIndex];
+    if (!short) return;
+    const total = document.getElementById("reels-comments-total");
+    if (total) {
+      total.textContent = short.comments === null ? "" : formatCount(short.comments);
+    }
+    if (short.videoId !== commentsVideoId) loadComments(short.videoId, false);
+  }
+
+  function setCommentsState(text) {
+    const body = document.getElementById("reels-comments-body");
+    if (!body) return;
+    body.textContent = "";
+    const div = document.createElement("div");
+    div.className = "reels-comments-state";
+    div.textContent = text;
+    body.appendChild(div);
+  }
+
+  function relativeTime(iso) {
+    const then = Date.parse(iso);
+    if (!Number.isFinite(then)) return "";
+    const secs = Math.max(0, (Date.now() - then) / 1000);
+    const units = [
+      ["y", 31536000], ["mo", 2592000], ["w", 604800],
+      ["d", 86400], ["h", 3600], ["m", 60],
+    ];
+    for (const [label, size] of units) {
+      if (secs >= size) return Math.floor(secs / size) + label + " ago";
+    }
+    return "just now";
+  }
+
+  function buildComment(c) {
+    const row = document.createElement("div");
+    row.className = "reels-comment";
+
+    const avatar = document.createElement("img");
+    avatar.className = "reels-comment-avatar";
+    avatar.src = c.avatar || "";
+    avatar.alt = "";
+    avatar.loading = "lazy";
+    /* A dead avatar URL would otherwise draw a broken-image glyph. */
+    avatar.addEventListener("error", () => { avatar.removeAttribute("src"); });
+    row.appendChild(avatar);
+
+    const main = document.createElement("div");
+    main.className = "reels-comment-main";
+
+    const head = document.createElement("div");
+    const author = document.createElement("span");
+    author.className = "reels-comment-author";
+    author.textContent = c.author || "Unknown";
+    const when = document.createElement("span");
+    when.className = "reels-comment-when";
+    when.textContent = relativeTime(c.published);
+    head.appendChild(author);
+    head.appendChild(when);
+
+    const text = document.createElement("div");
+    text.className = "reels-comment-text";
+    /* textContent, not innerHTML: this is arbitrary text from strangers and
+       the proxy already asked YouTube for the plain-text variant. */
+    text.textContent = c.text || "";
+
+    const meta = document.createElement("div");
+    meta.className = "reels-comment-meta";
+    const likes = document.createElement("span");
+    likes.textContent = formatCount(c.likes || 0) + (c.likes === 1 ? " like" : " likes");
+    meta.appendChild(likes);
+    if (c.replies > 0) {
+      const replies = document.createElement("span");
+      replies.textContent = c.replies + (c.replies === 1 ? " reply" : " replies");
+      meta.appendChild(replies);
+    }
+
+    main.appendChild(head);
+    main.appendChild(text);
+    main.appendChild(meta);
+    row.appendChild(main);
+    return row;
+  }
+
+  async function loadComments(videoId, append) {
+    const body = document.getElementById("reels-comments-body");
+    if (!body) return;
+
+    const ticket = ++commentsRequestId;
+    if (!append) {
+      commentsVideoId = videoId;
+      commentsToken = null;
+      setCommentsState("Loading comments…");
+    }
+
+    try {
+      const token = append && commentsToken
+        ? `&pageToken=${encodeURIComponent(commentsToken)}`
+        : "";
+      const res = await fetch(
+        `${PROXY_BASE}/youtube/comments?videoId=${encodeURIComponent(videoId)}${token}`
+      );
+      if (ticket !== commentsRequestId) return;
+
+      if (!res.ok) {
+        if (!append) setCommentsState("Couldn't load comments.");
+        return;
+      }
+      const data = await res.json();
+      if (ticket !== commentsRequestId) return;
+
+      if (data.disabled) {
+        setCommentsState("Comments are turned off for this video.");
+        return;
+      }
+
+      const items = data.items || [];
+      if (!append) {
+        body.textContent = "";
+        if (items.length === 0) {
+          setCommentsState("No comments on this video yet.");
+          return;
+        }
+      }
+      const oldMore = body.querySelector(".reels-comments-more");
+      if (oldMore) oldMore.remove();
+
+      items.forEach((c) => body.appendChild(buildComment(c)));
+      commentsToken = data.nextPageToken || null;
+
+      if (commentsToken) {
+        const more = document.createElement("button");
+        more.type = "button";
+        more.className = "reels-comments-more";
+        more.textContent = "Load more comments";
+        more.addEventListener("click", () => {
+          more.disabled = true;
+          more.textContent = "Loading…";
+          loadComments(videoId, true);
+        });
+        body.appendChild(more);
+      }
+    } catch (_) {
+      if (ticket === commentsRequestId && !append) {
+        setCommentsState("Couldn't load comments.");
+      }
+    }
   }
 
   function updateVolumeIcon() {
@@ -817,11 +1039,13 @@
         .filter((short) => short && !existingIds.has(short.videoId));
       if (incoming.length > 0) {
         const statsMap = await fetchYouTubeStats(incoming.map((s) => s.videoId));
+        /* YouTube is authoritative for these — the counts are meant to be
+           the ones a viewer would see on YouTube itself. */
         incoming.forEach((s) => {
           const yt = statsMap[s.videoId];
           if (yt) {
-            if (s.likes    === null) s.likes    = yt.likes;
-            if (s.comments === null) s.comments = yt.comments;
+            s.likes = yt.likes;
+            s.comments = yt.comments;
           }
         });
       }
@@ -978,6 +1202,18 @@
     navUp.addEventListener("click", () => navigateVideo("up"));
     navDown.addEventListener("click", () => navigateVideo("down"));
 
+    document.getElementById("reels-share-btn")
+      ?.addEventListener("click", shareCurrent);
+    document.getElementById("reels-comments-btn")
+      ?.addEventListener("click", () => setCommentsOpen(!commentsOpen));
+    document.getElementById("reels-comments-close")
+      ?.addEventListener("click", () => setCommentsOpen(false));
+
+    /* The panel scrolls its own list; without this the wheel handler further
+       down would read it as a swipe and jump to the next video. */
+    document.getElementById("reels-comments-panel")
+      ?.addEventListener("wheel", (e) => e.stopPropagation());
+
     const playBtn = document.getElementById("reels-play-btn");
     let isPlaying = true;
     playBtn.addEventListener("click", () => {
@@ -1030,6 +1266,9 @@
 
     let touchStart = null;
     wrapper.addEventListener("touchstart", (e) => {
+      /* A swipe that begins inside the comments list is the viewer scrolling
+         it, not asking for the next video. */
+      if (e.target.closest?.("#reels-comments-panel")) { touchStart = null; return; }
       const t = e.touches[0];
       touchStart = { x: t.clientX, y: t.clientY };
     }, { passive: true });
@@ -1049,6 +1288,7 @@
       switch (e.key) {
         case "ArrowUp": e.preventDefault(); navigateVideo("up"); break;
         case "ArrowDown": e.preventDefault(); navigateVideo("down"); break;
+        case "Escape": if (commentsOpen) { e.preventDefault(); setCommentsOpen(false); } break;
       }
     });
   }

@@ -30,15 +30,27 @@
         <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 9V5a3 3 0 0 0-3-3l-4 9v11h11.28a2 2 0 0 0 2-1.7l1.38-9a2 2 0 0 0-2-2.3H14z"/><path d="M7 22H4a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2h3"/></svg>
         <span class="reels-engagement-count" id="reels-likes-count">—</span>
       </div>
-      <div class="reels-engagement-item">
+      <button class="reels-engagement-item" id="reels-comments-btn" type="button" aria-label="Show comments" aria-expanded="false" aria-controls="reels-comments-panel">
         <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
         <span class="reels-engagement-count" id="reels-comments-count">—</span>
-      </div>
-      <div class="reels-engagement-item">
+      </button>
+      <button class="reels-engagement-item" id="reels-share-btn" type="button" aria-label="Share this video">
         <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
-        <span class="reels-engagement-count" id="reels-shares-count">—</span>
-      </div>
+        <span class="reels-engagement-count" id="reels-share-label">Share</span>
+      </button>
     </div>
+    <!-- Height comes from the flex row, so it tracks the player at every
+         viewport size without JavaScript measuring anything. -->
+    <aside class="reels-comments" id="reels-comments-panel" aria-hidden="true" aria-label="Comments">
+      <div class="reels-comments-head">
+        <span class="reels-comments-title">Comments</span>
+        <span class="reels-comments-total" id="reels-comments-total"></span>
+        <button class="reels-comments-close" id="reels-comments-close" type="button" aria-label="Close comments">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </button>
+      </div>
+      <div class="reels-comments-body" id="reels-comments-body"></div>
+    </aside>
   </div>
   <div class="reels-nav-arrows">
     <div class="reels-nav-arrow" id="reels-nav-up" title="Previous video (↑)" role="button" tabindex="0" aria-label="Previous video"><svg viewBox="0 0 24 24"><polyline points="18 15 12 9 6 15"/></svg></div>

@@ -1019,7 +1019,11 @@
      SHORTS PLAYER (button 3 overlay content)
      ════════════════════════════════════════════ */
   .reels-wrapper { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; background: #000; overflow: hidden; box-sizing: border-box; }
-  .reels-main { display: flex; flex-direction: row; align-items: stretch; height: calc(100% - 30px); width: 100%; justify-content: center; gap: 0; margin: 15px 0; transform: translateX(30px); }
+  /* The 30px nudge offsets the 60px sidebar so the video reads as centred.
+     Opening the panel widens the row, and justify-content re-centres it —
+     the transition is what makes the video glide left instead of jumping. */
+  .reels-main { display: flex; flex-direction: row; align-items: stretch; height: calc(100% - 30px); width: 100%; justify-content: center; gap: 0; margin: 15px 0; transform: translateX(30px); transition: transform 0.32s ease; }
+  .reels-main:has(.reels-comments.open) { transform: translateX(0); }
   .reels-player { position: relative; aspect-ratio: 9 / 16; height: 100%; width: auto; border-radius: 16px; overflow: hidden; background: #111; flex-shrink: 0; }
   .reels-scroll-track { position: absolute; top: 0; left: 0; width: 100%; height: 100%; transition: transform 0.42s cubic-bezier(0.4, 0, 0.2, 1); }
   .reels-player iframe { position: absolute; left: 0; width: 100%; height: 100%; border: none; }
@@ -1039,9 +1043,48 @@
   .reels-volume-pill-slider::-webkit-slider-thumb { -webkit-appearance: none; width: 14px; height: 14px; border-radius: 50%; background: #fff; cursor: pointer; box-shadow: 0 1px 4px rgba(0,0,0,0.4); }
   .reels-volume-pill-slider::-moz-range-thumb { width: 14px; height: 14px; border-radius: 50%; background: #fff; cursor: pointer; border: none; box-shadow: 0 1px 4px rgba(0,0,0,0.4); }
   .reels-sidebar { display: flex; flex-direction: column; align-items: center; justify-content: flex-end; padding-bottom: 80px; padding-left: 16px; gap: 20px; flex-shrink: 0; width: 60px; }
-  .reels-engagement-item { display: flex; flex-direction: column; align-items: center; gap: 4px; cursor: pointer; }
+  /* Two of these are <button> now, so the UA button styling has to go or
+     they render boxed and mis-aligned next to the plain div. */
+  .reels-engagement-item { display: flex; flex-direction: column; align-items: center; gap: 4px; cursor: pointer; background: none; border: 0; padding: 0; font: inherit; }
   .reels-engagement-item svg { color: #fff; display: block; }
   .reels-engagement-count { font-size: 12px; color: #fff; font-weight: 500; text-align: center; }
+  button.reels-engagement-item { transition: transform 0.12s ease; }
+  button.reels-engagement-item:hover { transform: scale(1.08); }
+  button.reels-engagement-item:active { transform: scale(0.94); }
+  button.reels-engagement-item[aria-expanded="true"] svg { color: var(--brand-color); }
+
+  /* ── Comments panel ──
+     A third flex child of .reels-main, so height: 100% resolves against the
+     same row box the player fills. That is what keeps it exactly as tall as
+     the video at every viewport size with no JS measuring involved.
+     It animates width rather than transform: a transform would slide it over
+     the sidebar instead of pushing the row, and the row has to re-centre. */
+  .reels-comments { height: 100%; width: 0; flex-shrink: 0; overflow: hidden; border-radius: 16px; margin-left: 0; background: var(--post-color); border: 0 solid var(--border-color); display: flex; flex-direction: column; transition: width 0.32s ease, margin-left 0.32s ease, border-width 0.32s ease; }
+  .reels-comments.open { width: 360px; margin-left: 16px; border-width: 1px; }
+  .reels-comments-head { display: flex; align-items: center; gap: 8px; padding: 14px 14px 12px; border-bottom: 1px solid var(--border-color); flex-shrink: 0; }
+  .reels-comments-title { font-weight: 600; color: var(--text-color); font-size: 15px; }
+  .reels-comments-total { color: var(--text-muted-color); font-size: 13px; }
+  .reels-comments-close { margin-left: auto; background: none; border: 0; padding: 4px; cursor: pointer; color: var(--text-muted-color); display: flex; border-radius: 6px; }
+  .reels-comments-close:hover { color: var(--text-color); background: var(--hover-color); }
+  .reels-comments-body { overflow-y: auto; overflow-x: hidden; padding: 6px 14px 14px; flex: 1; min-width: 360px; }
+  .reels-comment { display: flex; gap: 10px; padding: 12px 0; border-bottom: 1px solid var(--border-color); }
+  .reels-comment:last-child { border-bottom: 0; }
+  .reels-comment-avatar { width: 32px; height: 32px; border-radius: 50%; flex-shrink: 0; background: var(--hover-color); }
+  .reels-comment-main { min-width: 0; flex: 1; }
+  .reels-comment-author { font-size: 13px; font-weight: 600; color: var(--text-color); }
+  .reels-comment-when { font-size: 12px; color: var(--text-muted-color); margin-left: 6px; }
+  /* Comment bodies are arbitrary user text — let long links wrap rather than
+     stretch the panel. */
+  .reels-comment-text { font-size: 14px; color: var(--text-color); margin-top: 3px; line-height: 1.45; white-space: pre-wrap; overflow-wrap: anywhere; }
+  .reels-comment-meta { font-size: 12px; color: var(--text-muted-color); margin-top: 6px; display: flex; gap: 14px; }
+  .reels-comments-state { color: var(--text-muted-color); font-size: 14px; text-align: center; padding: 32px 12px; line-height: 1.5; }
+  .reels-comments-more { width: 100%; margin-top: 12px; padding: 9px; background: var(--hover-color); border: 1px solid var(--border-color); border-radius: 8px; color: var(--text-color); font: inherit; font-size: 13px; cursor: pointer; }
+  .reels-comments-more:hover { border-color: var(--text-muted-color); }
+  .reels-comments-more[disabled] { opacity: 0.6; cursor: default; }
+
+  /* Toast for the share button's clipboard fallback. */
+  .reels-toast { position: absolute; bottom: 34px; left: 50%; transform: translateX(-50%) translateY(8px); background: var(--post-color); border: 1px solid var(--border-color); color: var(--text-color); font-size: 13px; padding: 9px 16px; border-radius: 999px; opacity: 0; pointer-events: none; transition: opacity 0.2s ease, transform 0.2s ease; z-index: 40; }
+  .reels-toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
   .reels-nav-arrows { position: absolute; right: 16px; top: 50%; transform: translateY(-50%); display: flex; flex-direction: column; gap: 14px; align-items: center; z-index: 20; }
   .reels-nav-arrow { width: 44px; height: 44px; border-radius: 50%; background: transparent; border: 2px solid rgba(255,255,255,0.55); display: flex; align-items: center; justify-content: center; cursor: pointer; color: rgba(255,255,255,0.85); transition: all 0.15s; user-select: none; flex-shrink: 0; }
   .reels-nav-arrow:hover { border-color: rgba(255,255,255,0.9); color: #fff; background: rgba(255,255,255,0.08); }
