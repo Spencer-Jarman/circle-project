@@ -1,14 +1,25 @@
 /* ════════════════════════════════════════════════════════════
-   endmid.gg — application code.
-   Loaded by the Circle snippet only AFTER markup.html is in the
-   DOM, so every section finds the nodes it queries.
+   endmid.gg — everything the custom features DO
+
+   Four features, in order:
+     1. TOP BAR NAV      the custom tabs across the top
+     2. SHORTS PLAYER    the vertical video feed
+     3. TWITCH PLAYER    the live stream panel
+     4. MINI GAMES       the games overlay
+
+   (The Circle snippet loads this only AFTER markup.html is in the
+   page, so every section finds the elements it looks for. Do not
+   reorder those two steps.)
    ════════════════════════════════════════════════════════════ */
 
 /* ════════════════════════════════════════════════════════════
-   SECTION 1 — CUSTOM TOP BAR NAV
-   Regions: config · overlay · buttons · navigation memory ·
-   publish redirect · centering · header controls · escapes ·
-   observers · init
+   1. TOP BAR NAV
+   ════════════════════════════════════════════════════════════
+   Builds the custom tabs in the top bar and swaps between them.
+   Remembers which tab you were on, and closes the overlay on Escape.
+
+   (Ordered: config, overlay, buttons, navigation memory, publish
+   redirect, centering, header controls, escapes, observers, init.)
    ════════════════════════════════════════════════════════════ */
 (function () {
   /* ---------- config ---------- */
@@ -595,9 +606,15 @@
   }
 })();
 
-/* ════════════════════════════════════════════
-   SHORTS PLAYER — button 3 content
-   ════════════════════════════════════════════ */
+/* ════════════════════════════════════════════════════════════
+   2. SHORTS PLAYER
+   ════════════════════════════════════════════════════════════
+   The vertical video feed behind the Shorts tab. Handles scrolling
+   between clips, play/pause, volume, and the like/comment counts.
+
+   (Counts come from the YouTube API through the Lambda proxy, never
+   direct — the API key must stay server side.)
+   ════════════════════════════════════════════════════════════ */
 (function () {
   const API_BASE = "https://api.nichebeast.gg/api/v1";
   const FETCH_PER_PAGE = 7;
@@ -1058,11 +1075,14 @@ async function setupReelsPlayer() {
 })();
 
 /* ════════════════════════════════════════════════════════════
-   SECTION 3 — TWITCH PLAYER
-   Top stream preloads muted from page load (instant first open);
-   streams keep playing across tab switches, muted while away,
-   volume restored on return; remaining players created on first
-   real visit.
+   3. TWITCH PLAYER
+   ════════════════════════════════════════════════════════════
+   The live stream panel. The top stream preloads muted so the first
+   open is instant. Streams keep playing when you switch tabs, muted
+   while you are away, and come back at your volume.
+
+   (Stream list comes from the Twitch API through the Lambda proxy.
+   Remaining players are only created on the first real visit.)
    ════════════════════════════════════════════════════════════ */
 (function () {
   const PROXY_BASE = "https://xgwl4tg7hl7f3ndodrw2yxp6ji0dtqlh.lambda-url.us-east-1.on.aws";
@@ -1487,7 +1507,13 @@ async function setupReelsPlayer() {
 })();
 
 /* ════════════════════════════════════════════════════════════
-   SECTION 4 — MINI GAMES (in head box: JS field character limit)
+   4. MINI GAMES
+   ════════════════════════════════════════════════════════════
+   The games overlay: the spinner wheel and the Slark runner.
+
+   (This used to live in Circle's head box to dodge the JS field
+   character limit. Loading from GitHub removed that limit, so it is
+   back with the rest of the code.)
    ════════════════════════════════════════════════════════════ */
 (function () {
   /* ---------- Shared: menu switching ---------- */

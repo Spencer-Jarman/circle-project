@@ -1,7 +1,15 @@
 <!-- ════════════════════════════════════════════════════════════
-     endmid.gg — markup, injected into <body> by app.js on load.
+     endmid.gg — the empty containers our features live in
+
+     Three of them: the Shorts player, the Twitch panel, and the games
+     overlay. They start hidden and are filled in by app.js when you
+     open the matching tab.
+
+     (The Circle snippet injects this into <body> BEFORE loading
+     app.js, so every section finds the elements it looks for. Styling
+     is in styles.css — there is none in here.)
      ════════════════════════════════════════════════════════════ -->
-<!-- Shorts player HTML (hidden until Shorts tab is pressed) -->
+<!-- SHORTS PLAYER — hidden until the Shorts tab is pressed -->
 <div id="reels-wrapper" class="reels-wrapper" style="display: none;">
   <div class="reels-main">
     <div class="reels-player" id="reels-player">

@@ -1,30 +1,48 @@
 @import url("https://fonts.googleapis.com/css2?family=Cinzel:wght@600&family=Rubik:wght@400&display=swap");
 /* ════════════════════════════════════════════════════════════
-   endmid.gg — stylesheet
-   @import must stay on line 1; browsers ignore it otherwise.
+   endmid.gg — all styling for the community
+
+   Three sections:
+     1. COLOUR      every colour on the site
+     2. FONTS       the two custom fonts
+     3. STRUCTURE   layout, spacing, and our own features
+
+   (The @import above has to stay on line 1 — browsers ignore an
+   @import that appears after any other rule.)
    ════════════════════════════════════════════════════════════ */
 
 /* ════════════════════════════════════════════════════════════
    ██  SECTION 1 — COLOUR
    ════════════════════════════════════════════════════════════
-   Every colour on the site is set here. Semantic tokens are grouped into
-   categories; everything in a category shares one colour, so the category
-   is the unit you edit. Circle's raw primitive scales are deliberately
-   not touched — the loading-state rules below cover what used to need
-   them.
+   Every colour on the site comes from here.
 
-   !important is required. Circle declares these on .dark and
-   [data-theme="dark"], specificity (0,1,0), which outranks a plain html
-   selector (0,0,1). Without it these lines silently do nothing.
+   First the palette: the handful of actual colours. Change one of
+   these and everything using it follows.
 
-   IF A NEW CIRCLE ELEMENT IS THE WRONG COLOUR:
+   Then the token list: Circle's own colour variables, pointed at the
+   palette. They are grouped, and every token in a group is the same
+   colour — so the group is what you edit, not the individual line.
+
+   Last, a short list of specific fixes for things no variable can
+   reach.
+
+   SOMETHING IS THE WRONG COLOUR?
      1. Right-click it -> Inspect.
-     2. Read its background-color / color; it will say var(--some-token).
-     3. Add that token to whichever category below it belongs in.
-   If it shows a raw hex instead of a var(), Circle hardcoded it — that
-   one needs a rule at the bottom of this section.
+     2. Look at its background-color or color in the Styles panel.
+     3. If it says var(--something), add that name to the matching
+        group below. If it shows a plain hex code instead, Circle
+        hardcoded it — it needs its own rule at the end of this
+        section.
+
+   (Every line needs !important. Circle declares these on .dark and
+   [data-theme="dark"], specificity (0,1,0), which beats a plain html
+   selector (0,0,1) — without !important the lines do nothing at all.
+   Circle's raw primitive scales are deliberately left alone; the
+   loading-state rules cover what used to need them.)
    ════════════════════════════════════════════════════════════ */
 
+  /* THE PALETTE — the only place real colours are written.
+     Change one of these and everything using it follows. */
   :root {
     --primary-color: #0a0b0d;
     --secondary-color: #090b0e;
@@ -41,10 +59,11 @@
 
 
   /* ────────────────────────────────────────────
-     SEMANTIC TOKENS
+     CIRCLE'S COLOUR VARIABLES, BY GROUP
+     Everything in a group shares one colour.
      ──────────────────────────────────────────── */
   html {
-    /* PAGE — the page / app background */
+    /* PAGE — the background behind everything */
     --background-body: var(--secondary-color) !important;
     --background-body-fullscreen: var(--secondary-color) !important;
     --color-background-content-disabled: var(--secondary-color) !important;
@@ -57,7 +76,7 @@
     --trix-body-background: var(--secondary-color) !important;
     --tw-ring-offset-color: var(--secondary-color) !important;
 
-    /* PANEL — sidebar, header, nav — the chrome around the page */
+    /* PANEL — the sidebar and top bar around the page */
     --color-community-header-background: var(--primary-color) !important;
     --color-community-sidebar-accent-background: var(--primary-color) !important;
     --color-community-sidebar-background: var(--primary-color) !important;
@@ -70,8 +89,8 @@
     --sidebar-block-count-bg: var(--primary-color) !important;
     --sidebar-onboarding-block-bg: var(--primary-color) !important;
 
-    /* RAISED — anything on top of the page: posts, cards, modals,
-       dropdowns, inputs, tooltips, the editor */
+    /* RAISED — things sitting on top of the page: posts, cards,
+       modals, dropdowns, inputs, tooltips, the editor */
     --background-primary-100: var(--post-color) !important;
     --button-background: var(--post-color) !important;
     --color-background-avatar-primary: var(--post-color) !important;
@@ -104,7 +123,8 @@
     --user-joined-bg: var(--post-color) !important;
     --user-profile-card-bg: var(--post-color) !important;
 
-    /* HOVER — hover / active / selected states, one step above RAISED */
+    /* HOVER — what things turn when you hover or select them
+       (one step lighter than RAISED) */
     --color-background-active: var(--hover-color) !important;
     --color-background-highlight: var(--hover-color) !important;
     --color-background-hover: var(--hover-color) !important;
@@ -126,7 +146,7 @@
     --sidebar-link-highlight: var(--hover-color) !important;
     --tooltip-active: var(--hover-color) !important;
 
-    /* BRAND — branded surfaces, selected items, accents, focus rings */
+    /* BRAND — your red: branded buttons, the selected item, accents */
     --accent-color: var(--brand-color) !important;
     --background-brand-100: var(--brand-color) !important;
     --brand: var(--brand-color) !important;
@@ -162,7 +182,7 @@
     --tw-ring-color: var(--brand-color) !important;
     --user-badge-bg: var(--brand-color) !important;
 
-    /* TEXT — primary text, icons, and anything sitting on a brand surface */
+    /* TEXT — normal text and icons */
     --brand-button-text: var(--text-color) !important;
     --button-text-color: var(--text-color) !important;
     --color-background-inverse: var(--text-color) !important;
@@ -231,7 +251,8 @@
     --user-badge: var(--text-color) !important;
     --user-text: var(--text-color) !important;
 
-    /* TEXT MUTED — secondary text: timestamps, placeholders, disabled labels */
+    /* TEXT MUTED — quieter text: timestamps, placeholders,
+       disabled labels */
     --color-event-sidebar-item: var(--text-muted-color) !important;
     --color-icon-disabled: var(--text-muted-color) !important;
     --color-icon-secondary: var(--text-muted-color) !important;
@@ -264,7 +285,7 @@
     --user-joined: var(--text-muted-color) !important;
     --user-tagline: var(--text-muted-color) !important;
 
-    /* BORDER — every border, divider and rule */
+    /* BORDER — every border, divider and dividing line */
     --border-dark: var(--border-color) !important;
     --border-light: var(--border-color) !important;
     --border-light-hover: var(--border-color) !important;
@@ -299,7 +320,7 @@
     --trix-border: var(--border-color) !important;
     --user-profile-card-border: var(--border-color) !important;
 
-    /* LINK — inline links */
+    /* LINK — clickable text links */
     --color-text-blue-highlight: var(--link-color) !important;
     --color-text-link: var(--link-color) !important;
     --color-text-link-hover: var(--link-color) !important;
@@ -307,27 +328,28 @@
     --dropdown-link-hover: var(--link-color) !important;
     --user-location-links: var(--link-color) !important;
 
-    /* BADGE — unread / notification badges */
+    /* BADGE — the little unread-count bubbles */
     --color-community-sidebar-badge-background: var(--badge-color) !important;
 
-    /* LIVE — "live now" indicators */
+    /* LIVE — the "live now" dot */
     --color-sidebar-footer-live-indicator: var(--live-color) !important;
 
-    /* OVERLAY — when you open a modal (creating a post, etc)
-       This is what dims the background around that featured modal */
+    /* OVERLAY — the dark layer that dims the page behind a modal */
     --color-background-modal-overlay: rgba(0, 0, 0, 0.6) !important;
     --color-background-overlay: rgba(0, 0, 0, 0.6) !important;
     --color-background-overlay-dark: rgba(0, 0, 0, 0.6) !important;
     --mobile-menu-overlay: rgba(0, 0, 0, 0.6) !important;
     --modal-bg: rgba(0, 0, 0, 0.6) !important;
 
-    /* SHADOW — drop shadows — slightly lighter overlays for different sections */
+    /* SHADOW — the soft shade under cards and popovers
+       (much lighter than OVERLAY, which is meant to obscure) */
     --shadow-dark-color: rgba(0, 0, 0, 0.2) !important;
     --trix-shadow: rgba(0, 0, 0, 0.2) !important;
 
-    /* DERIVED — same colours as the groups above, but the token needs a
-       different form: translucent variants, or an RGB triple because
-       Circle wraps it in rgba(). Edit the palette, not these. */
+    /* DERIVED — same colours as the groups above, written differently
+       because the token needs it
+       (see-through variants, and RGB triples Circle wraps in rgba()
+       — edit the palette, not these lines) */
     --background-brand-03: color-mix(in srgb, var(--brand-color) 3%, transparent) !important;
     --background-brand-10: color-mix(in srgb, var(--brand-color) 10%, transparent) !important;
     --background-brand-25: color-mix(in srgb, var(--brand-color) 25%, transparent) !important;
@@ -354,7 +376,8 @@
 
 
   /* ────────────────────────────────────────────
-     SPECIFIC COLOR CHANGES
+     SPECIFIC FIXES
+     Things no variable can reach, so they need their own rule.
      ──────────────────────────────────────────── */
 
   /* Circle has no variable for either of these. This is the background
@@ -552,8 +575,9 @@
 /* ════════════════════════════════════════════════════════════
    ██  SECTION 2 — FONTS
    ════════════════════════════════════════════════════════════
-   Cinzel for sidebar group headings, Rubik for sidebar links. Both are
-   pulled in by the @import on line 1.
+   Cinzel for the sidebar group headings, Rubik for the sidebar links.
+
+   (Both are pulled in by the @import on line 1.)
    ════════════════════════════════════════════════════════════ */
 
   [data-testid="standard-layout-v2-sidebar"] h3 {
@@ -573,10 +597,13 @@
 /* ════════════════════════════════════════════════════════════
    ██  SECTION 3 — STRUCTURE
    ════════════════════════════════════════════════════════════
-   Layout, spacing, sizing, visibility, and our own components — the
-   Shorts player, the Twitch panel and the mini games. Colour lives in
-   SECTION 1, apart from the handful of rules there that no token can
-   express.
+   Layout, spacing, sizing, and hiding things we do not want. Also the
+   styling for our own features — the Shorts player, the Twitch panel
+   and the mini games.
+
+   (No colour theming here. The only colour in this section belongs to
+   our own components, where it is part of the component rather than an
+   override of Circle.)
    ════════════════════════════════════════════════════════════ */
 
   /* ---- Scrollbars ----
