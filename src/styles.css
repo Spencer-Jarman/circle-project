@@ -426,19 +426,19 @@
      (chat-room-wrapper, message-item), so the chat-space rules above
      paint it the page colour. Scoping on body:has(chat-room-dm-list)
      targets the DM view only, since that list exists nowhere else. ---- */
-  html body:has([data-testid="chat-room-dm-list"]) [data-testid="chat-room-wrapper"],
-  html body:has([data-testid="chat-room-dm-list"]) [data-testid="chat-room-wrapper"] .bg-primary,
-  html body:has([data-testid="chat-room-dm-list"]) [data-testid="message-item"],
-  html body:has([data-testid="chat-room-dm-list"]) .bg-primary,
-  html body:has([data-testid="chat-room-dm-list"]) .bg-secondary,
-  html body:has([data-testid="chat-room-dm-list"]) .bg-secondary-dark {
+  html body:has([data-testid="new-message"]) [data-testid="chat-room-wrapper"],
+  html body:has([data-testid="new-message"]) [data-testid="chat-room-wrapper"] .bg-primary,
+  html body:has([data-testid="new-message"]) [data-testid="message-item"],
+  html body:has([data-testid="new-message"]) .bg-primary,
+  html body:has([data-testid="new-message"]) .bg-secondary,
+  html body:has([data-testid="new-message"]) .bg-secondary-dark {
     background-color: var(--post-color) !important;
   }
 
   /* Selected conversation in the DM list */
-  html body:has([data-testid="chat-room-dm-list"]) [data-testid="chat-room-dm-list"] [aria-selected="true"],
-  html body:has([data-testid="chat-room-dm-list"]) [data-testid="chat-room-dm-list"] [data-selected],
-  html body:has([data-testid="chat-room-dm-list"]) [data-testid="chat-room-dm-list"] li[aria-current] {
+  html body:has([data-testid="new-message"]) [data-testid="chat-room-dm-list"] [aria-selected="true"],
+  html body:has([data-testid="new-message"]) [data-testid="chat-room-dm-list"] [data-selected],
+  html body:has([data-testid="new-message"]) [data-testid="chat-room-dm-list"] li[aria-current] {
     background-color: var(--hover-color) !important;
   }
 
