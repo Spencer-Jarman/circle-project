@@ -358,6 +358,58 @@
   /* ────────────────────────────────────────────
      SPECIFIC FIXES
      Things no variable can reach, so they need their own rule.
+
+     ── Why a token change is not always enough ──
+     Four distinct causes force per-element rules here. Identifying which
+     one is in play decides the shape of the fix:
+
+     1. SHARED TOKENS. Circle paints unrelated things with one variable,
+        so changing the variable fixes one and breaks another.
+     2. GHOST TOKENS. Tailwind arbitrary-property classes bake the hex
+        into the class name itself, e.g.
+        dark:[--color-background-primary:#34373D]. That shadows the
+        variable on every descendant and cannot be reached by editing
+        :root — it needs an attribute selector on the class.
+     3. LAZY-LOADED CSS. Some panels ship stylesheets that arrive after
+        ours, so document order favours them.
+     4. LOADING STATES. A container renders one colour for a few frames
+        and settles transparent. Invisible to any after-the-fact
+        inspection; only frame-by-frame sampling finds it.
+
+     ── Verified facts about this codebase ──
+     Each cost a debugging round; none is guessable from reading the CSS:
+
+     • #panel.community__content is laid out from x=0 across the full
+       window width, underneath the sidebar. Both are position:static, so
+       pointer hit-testing falls to paint order. See the sidebar rule in
+       SECTION 3.
+     • Circle's default-loader containers cause most "flicker" reports.
+       One rule keyed on the loader replaces per-page selectors.
+     • Rules keyed on post-hydration DOM do not fire on a direct URL
+       load. A fix that works when switching tabs but not on a cold load
+       is this, every time.
+     • [data-testid="new-message"] is REMOVED from the DOM while the DM
+       search box has text. Never use it as a scope anchor.
+     • #scrollable-dms-div exists twice — once in the fullscreen DM view,
+       once in the top-bar dropdown. A duplicate id, so a body-level
+       :has() cannot tell them apart; scope by ancestor instead.
+     • border-top-color will not move on bookmark rows even with
+       !important on an id-plus-child selector, while border-top-width
+       from the same declaration applies. Cause unidentified. Use
+       box-shadow: inset for lines there.
+     • [class*="h-[1px]"] and similar nested-bracket selectors are VALID
+       CSS. Brackets inside a quoted attribute value are legal. If one
+       matches nothing, the class genuinely is not on the page — do not
+       rewrite the selector looking for a syntax bug.
+
+     ── How to diagnose a new one ──
+     Sample with requestAnimationFrame and diff against the settled
+     state; transient elements are invisible to a console run after load.
+     For anything on a cold load, record from a DevTools snippet before
+     navigating, or throttle the network so the frame persists.
+     Verify against real elements in the live DOM — never against
+     synthetic nodes built from guessed class names, which only test
+     whether the CSS parses.
      ──────────────────────────────────────────── */
 
   /* Circle has no variable for either of these. This is the background
