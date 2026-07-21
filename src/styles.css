@@ -62,6 +62,7 @@
 
     /* PANEL — sidebar, header, nav — the chrome around the page */
     --color-community-sidebar-accent-background: var(--primary-color) !important;
+    --color-community-header-background: var(--primary-color) !important;
     --color-community-sidebar-background: var(--primary-color) !important;
     --color-community-switcher-background: var(--primary-color) !important;
     --color-community-switcher-new-community-button-bg: var(--primary-color) !important;
@@ -320,7 +321,6 @@
     --color-background-level-mid: var(--unassigned) !important;
     --color-background-level-top: var(--unassigned) !important;
     --color-event-sidebar-item: var(--unassigned) !important;
-    --color-grey-0: var(--unassigned) !important;
     --color-ring-primary: var(--unassigned) !important;
     --color-sidebar-footer-live-indicator: var(--unassigned) !important;
     --input-focus: var(--unassigned) !important;
@@ -357,10 +357,13 @@
      picker, so listing them would be noise.
      ──────────────────────────────────────────── */
   html {
-    /* tuned — skeleton loaders and pulse states read these directly */
+    /* tuned — skeleton loaders and pulse states read these directly.
+       gray-100 and gray-200 are the two the skeletons fill with, set to
+       --secondary-color so the placeholder blocks vanish into the page.
+       gray-300 is the date picker's borders, not a skeleton — leave it. */
     --color-gray-50:  17, 19, 22 !important;
-    --color-gray-100: 26, 28, 32 !important;
-    --color-gray-200: 34, 36, 40 !important;
+    --color-gray-100: 9, 11, 14 !important;
+    --color-gray-200: 9, 11, 14 !important;
     --color-gray-300: 52, 53, 54 !important;
     --color-gray-800: 17, 19, 22 !important;
     --color-gray-900: 9, 11, 14 !important;
