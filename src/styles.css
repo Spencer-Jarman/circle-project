@@ -41,7 +41,7 @@
     --brand-color: #70180d;
     --text-color: #F0F3F5;
     --text-muted-color: #A5A9AD;
-    --link-color: #ff00ff;
+    --link-color: #60A5FA;
     --unassigned: #ff00ff;
   }
 
@@ -302,14 +302,13 @@
     --dropdown-link-hover: var(--link-color) !important;
     --user-location-links: var(--link-color) !important;
 
-    /* OVERLAY — the dim layer behind a modal or slide-out menu */
+    /* OVERLAY — the dim layer covering the screen when a modal is active */
     --color-background-overlay: rgba(0, 0, 0, 0.6) !important;
     --color-background-overlay-dark: rgba(0, 0, 0, 0.6) !important;
     --mobile-menu-overlay: rgba(0, 0, 0, 0.6) !important;
     --modal-bg: rgba(0, 0, 0, 0.6) !important;
 
-    /* SHADOW — drop shadows. Much lighter than an overlay: at 0.6 every
-       card would look like it was floating in a hole */
+    /* SHADOW — drop shadows. Much lighter than an overlay */
     --shadow-dark-color: rgba(0, 0, 0, 0.2) !important;
     --trix-shadow: rgba(0, 0, 0, 0.2) !important;
 
@@ -382,9 +381,6 @@
     --color-grey-700: #ff00ff !important;
     --color-grey-900: #ff00ff !important;
   }
-
-
-
 
   /* ---- colour that no token can express ----
      Circle has no variable for either of these. The sidebar divider is a
@@ -462,23 +458,20 @@
     background: var(--secondary-color) !important;
   }
 
-
-  /* ---- Cover image: strip the horizontal padding ----
+  /* Cover image: strip the horizontal padding 
      The wrapper eats 72px in the guest layout. */
   div:has(> [data-testid="cover-image-container"]) {
     padding-left: 0 !important;
     padding-right: 0 !important;
   }
 
-
-  /* ---- Centre embeds (X posts etc.) inside post bodies ---- */
+  /* Centre embeds (X posts etc.) inside post bodies */
   .node-embed .overflow-auto > div,
   .node-embed iframe {
     margin-left: auto !important;
     margin-right: auto !important;
     display: block;
   }
-
 
 /* Kill elastic overscroll bounce at page level + main scroll containers
      (left sidebar keeps its native bounce) */
