@@ -24,8 +24,8 @@
      3. Add that token to the list below:
             --some-token: var(--post-color) !important;
    If the Styles panel shows a raw hex instead of a var(), Circle
-   hardcoded it and no token exists — that one needs a rule in
-   SECTION B instead.
+   hardcoded it and no token exists — that one needs a rule at the
+   bottom of this section, under "colour that no token can express".
 
    Magenta #ff00ff is an audit marker: it means "colour not chosen yet".
    ════════════════════════════════════════════════════════════ */
@@ -434,30 +434,26 @@
   }
 
 
+
+  /* ---- colour that no token can express ----
+     Circle has no variable for either of these. The sidebar divider is a
+     border Circle never draws (without this rule the computed style is
+     0px none), so no colour token can create it; --color-community-sidebar-border
+     only tints borders that already exist. Both read the palette. */
+  html, body {
+    background-color: var(--secondary-color);
+  }
+
+  [data-testid="standard-layout-v2-sidebar"] {
+    border-right: 1px solid var(--border-color) !important;
+  }
+
+
 /* ════════════════════════════════════════════════════════════
    SECTION B — STRUCTURE
    Layout, spacing, typography, visibility, and our own components
    (Shorts player, Twitch panel, mini games). No colour theming here.
    ════════════════════════════════════════════════════════════ */
-
-  /* ---- colour with no token behind it (browser pseudo-elements and
-     the pre-render paint); palette-driven, so they still track it ---- */
-  html, body {
-    background-color: var(--secondary-color);
-  }
-  ::-webkit-scrollbar-track {
-    background: var(--secondary-color);
-  }
-  ::-webkit-scrollbar-thumb:hover {
-    background: hsl(from var(--post-color) h s calc(l + 4));
-  }
-  .os-scrollbar-handle {
-    background: var(--post-color) !important;
-  }
-  .os-scrollbar-track {
-    background: var(--secondary-color) !important;
-  }
-
 
   /* ---- Fonts (Cinzel = sidebar group headings, Rubik = sidebar links) ---- */
   [data-testid="standard-layout-v2-sidebar"] h3 {
@@ -472,38 +468,56 @@
     font-family: 'Rubik', sans-serif !important;
     font-weight: 400 !important;
   }
-  /* ---- Scrollbars ---- */
 
-  /* Scrollbars (narrow, secondary track, post-color thumb) */
+
+  /* ---- Scrollbars ----
+     Narrow, secondary-colour track, post-colour thumb. Browser
+     pseudo-elements, so no Circle token reaches them, but they read the
+     palette and track it. Width and colour stay together here because
+     splitting them across sections would make them harder to follow. */
   ::-webkit-scrollbar {
     width: 10px;
     height: 10px;
+  }
+  ::-webkit-scrollbar-track {
+    background: var(--secondary-color);
   }
   ::-webkit-scrollbar-thumb {
     background: var(--post-color);
     border-radius: 8px;
     border: 2px solid var(--secondary-color);
   }
+  ::-webkit-scrollbar-thumb:hover {
+    background: hsl(from var(--post-color) h s calc(l + 4));
+  }
   html {
     scrollbar-width: thin;
     scrollbar-color: var(--post-color) var(--secondary-color);
   }
-  /* Cover padding wrapper: zero horizontal padding (eats 72px in guest layout) */
+  .os-scrollbar-handle {
+    background: var(--post-color) !important;
+  }
+  .os-scrollbar-track {
+    background: var(--secondary-color) !important;
+  }
+
+
+  /* ---- Cover image: strip the horizontal padding ----
+     The wrapper eats 72px in the guest layout. */
   div:has(> [data-testid="cover-image-container"]) {
     padding-left: 0 !important;
     padding-right: 0 !important;
   }
-  /* Center embeds (X posts etc.) inside post bodies */
+
+
+  /* ---- Centre embeds (X posts etc.) inside post bodies ---- */
   .node-embed .overflow-auto > div,
   .node-embed iframe {
     margin-left: auto !important;
     margin-right: auto !important;
     display: block;
   }
-  /* Sidebar vertical divider */
-  [data-testid="standard-layout-v2-sidebar"] {
-    border-right: 1px solid var(--border-color) !important;
-  }
+
   /* ════════════════════════════════════════════
      STRUCTURE (non-color)
      ════════════════════════════════════════════ */
