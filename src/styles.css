@@ -152,7 +152,6 @@
     --color-background-brand: var(--brand-color) !important;
     --color-background-button-branded: var(--brand-color) !important;
     --color-background-slider-branded: var(--brand-color) !important;
-    --color-background-toggle-active: var(--brand-color) !important;
     --color-border-badge-branded: var(--brand-color) !important;
     --color-community-header-active-background: var(--brand-color) !important;
     --color-community-sidebar-active-background: var(--brand-color) !important;
@@ -160,8 +159,6 @@
     --color-ring-primary: var(--brand-color) !important;
     --color-text-icon-branded: var(--brand-color) !important;
     --color-text-link-branded: var(--brand-color) !important;
-    --color-toggle-checked: var(--brand-color) !important;
-    --color-toggle-circle-checked: var(--brand-color) !important;
     --compass-branded-badge-bg: var(--brand-color) !important;
     --compass-branded-badge-bg-dark: var(--brand-color) !important;
     --compass-branded-badge-border: var(--brand-color) !important;
@@ -214,7 +211,6 @@
     --color-text-primary: var(--text-color) !important;
     --color-text-selector-active: var(--text-color) !important;
     --color-text-very-dark: var(--text-color) !important;
-    --color-toggle-circle-unchecked: var(--text-color) !important;
     --dropdown-icon: var(--text-color) !important;
     --dropdown-title: var(--text-color) !important;
     --header-sticky-nav: var(--text-color) !important;
@@ -288,7 +284,6 @@
     --border-lightest: var(--border-color) !important;
     --border-medium: var(--border-color) !important;
     --button-border: var(--border-color) !important;
-    --color-background-toggle-inactive: var(--border-color) !important;
     --color-border-active: var(--border-color) !important;
     --color-border-circle-button: var(--border-color) !important;
     --color-border-circle-button-hover: var(--border-color) !important;
@@ -307,7 +302,6 @@
     --color-border-very-dark: var(--border-color) !important;
     --color-community-sidebar-border: var(--border-color) !important;
     --color-ring-secondary: var(--border-color) !important;
-    --color-toggle-unchecked: var(--border-color) !important;
     --comment-border-bottom: var(--border-color) !important;
     --divider-border: var(--border-color) !important;
     --mobile-menu-sidebar-border: var(--border-color) !important;
@@ -470,6 +464,14 @@
      Matches the bubble above so there is no seam between the two. */
   .tippy-arrow {
     color: var(--hover-color) !important;
+  }
+
+  /* ---- members directory background ----
+     .bg-primary paints both the page wrapper and the member cards. The
+     wrapper is the only one with h-full, so that is what separates them:
+     wrapper takes the page colour, cards keep --post-color. ---- */
+  .bg-primary.h-full {
+    background-color: var(--secondary-color) !important;
   }
 
   /* ---- variable shadowing (admin / settings area) ----
@@ -643,6 +645,18 @@
   body {
     overscroll-behavior: none;
   }
+
+  /* ---- sidebar scroll chaining ----
+     When the sidebar's own scroller runs out of content the wheel chains
+     up to .community__content, which spans the full window width behind
+     the sidebar — so scrolling over the sidebar scrolled the feed.
+     overscroll-behavior stops the chain at the sidebar. ---- */
+  [data-testid="standard-layout-v2-sidebar"],
+  [data-testid="standard-layout-v2-sidebar"] > div,
+  [data-testid="standard-layout-v2-sidebar"] * {
+    overscroll-behavior: contain !important;
+  }
+
   .main__wrapper,
   main.standard-layout-v2__content,
   [data-testid="chat-room-wrapper"],
