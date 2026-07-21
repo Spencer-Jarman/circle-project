@@ -438,6 +438,31 @@
     color: var(--text-color) !important;
   }
 
+  /* ---- variable shadowing (admin / settings area) ----
+     Circle's admin screens use Tailwind arbitrary-property classes that
+     bake a hex straight into the class name, e.g.
+
+         class="dark:[--color-background-primary:#34373D]"
+
+     That redefines the token ON THAT ELEMENT, for its whole subtree. Our
+     html{...!important} sets the token at the ROOT, and !important does
+     not help here — this is not a specificity fight, it is a descendant
+     shadowing an inherited variable. The only way to reach it is to match
+     the class itself and redefine the variable again. ---- */
+
+  [class*="--color-background-primary:#34373D"] {
+    --color-background-primary: var(--post-color) !important;
+  }
+  [class*="--color-background-secondary:#2B2E33"] {
+    --color-background-secondary: var(--secondary-color) !important;
+  }
+  [class*="--color-background-tertiary:#4A4E55"] {
+    --color-background-tertiary: var(--hover-color) !important;
+  }
+  [class*="--color-border-primary:#5E636B"] {
+    --color-border-primary: var(--border-color) !important;
+  }
+
   /* ---- where one token serves two roles ----
      Circle paints 127 different things from --color-background-primary,
      including both post cards and the chat room. That token is set to
