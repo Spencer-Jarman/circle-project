@@ -442,6 +442,26 @@
     background-color: var(--hover-color) !important;
   }
 
+
+  /* Profile drawer on the right of the DM view — header, tab strip, and
+     every tab (About, Posts, Comments, Spaces). These use stable BEM
+     class names rather than Tailwind utilities, so they can be targeted
+     directly. */
+  html [class*="min-h-[56px]"],
+  html .profile-drawer__header,
+  html .profile-drawer__about,
+  html .profile-drawer__about__section,
+  html .profile-posts__post,
+  html .profile-comments__item,
+  html .profile-spaces,
+  html .profile-spaces__item,
+  html [data-testid="profile-info-section"],
+  html [data-testid="profile-fields-section"],
+  html [data-testid="activity-score-section"],
+  html nav[data-testid="tab-list"]:has([data-testid="tab-button"]) {
+    background-color: var(--post-color) !important;
+  }
+
   [role="tooltip"],
   .tippy-box {
     background-color: var(--hover-color) !important;
