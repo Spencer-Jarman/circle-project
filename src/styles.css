@@ -1,12 +1,5 @@
 @import url("https://fonts.googleapis.com/css2?family=Cinzel:wght@600&family=Rubik:wght@400&display=swap");
 /* ════════════════════════════════════════════════════════════
-   endmid.gg — all styling for the community
-
-   Three sections:
-     1. COLOUR      every colour on the site
-     2. FONTS       the two custom fonts
-     3. STRUCTURE   layout, spacing, and our own features
-
    (The @import above has to stay on line 1 — browsers ignore an
    @import that appears after any other rule.)
    ════════════════════════════════════════════════════════════ */
@@ -380,56 +373,6 @@
   }
 
   /* Tooltips. Changing the color of the tooltips and tooltip arrow */
-
-
-  /* Account settings nav bar */
-  html nav.bg-primary {
-    background-color: var(--secondary-color) !important;
-  }
-
-  /* Composer title field */
-  html textarea[data-testid="post_name"] {
-    background-color: var(--secondary-color) !important;
-  }
-
-  /* Signed-in devices table, its header row and its pagination bar */
-  html table.bg-primary,
-  html table.bg-primary thead,
-  html table.bg-primary ~ .bg-primary {
-    background-color: var(--secondary-color) !important;
-  }
-
-  /* Profile panes either side of the profile modal */
-  html .bg-primary.col-span-12,
-  html .bg-primary.col-span-full,
-  html .bg-primary.border-r {
-    background-color: var(--secondary-color) !important;
-  }
-
-  /* Space title bar */
-  html [data-testid="space-header"] {
-    background-color: var(--secondary-color) !important;
-  }
-  /* Expanded post modal — the only modal that stays the card colour.
-     (Scoped with :has() to the post body, so profile, settings and the
-     dropdown panels below are not caught by it.) */
-  html [data-testid="modal"]:has([data-testid="post-body"]) .bg-primary,
-  html [data-testid="modal"]:has([data-testid="post-body"]) [data-testid="modal-header"],
-  html .post__reply.bg-primary {
-    background-color: var(--post-color) !important;
-  }
-
-  /* Every other panel — profile, settings, and the dropdown menus behind
-     the bookmark and notification buttons — takes the page colour. */
-  html [data-testid="modal"]:not(:has([data-testid="post-body"])) .bg-primary,
-  html [data-testid="dropdown"] .bg-primary,
-  html [role="menu"].bg-primary,
-  html [role="menu"] .bg-primary,
-  html [data-testid="popover"] .bg-primary,
-  html [data-headlessui-state~="open"] > .bg-primary {
-    background-color: var(--secondary-color) !important;
-  }
-
   [role="tooltip"],
   .tippy-box {
     background-color: var(--hover-color) !important;
@@ -440,12 +383,7 @@
     color: var(--hover-color) !important;
   }
 
-  /* ---- top bar buttons: split hover from active ----
-     Circle reads ONE token for both states — .bg-c-header-hover and
-     .!bg-c-header-active both resolve to
-     --color-community-header-active-background — so setting that token
-     makes hover and active the same colour. Splitting them needs rules. */
-
+  /* Top bar buttons hover hover-color then become brand color when active */
   .bg-c-header-hover,
   .hover\:bg-c-header-hover:hover,
   .hover\:\!bg-c-header-hover:hover,
@@ -467,16 +405,21 @@
     background-color: var(--hover-color) !important;
   }
 
-  /* Making the top right buttons hover and be active on the right colors */
-  header button[aria-expanded="true"],
-  header button[data-headlessui-state~="open"],
-  header [data-popup-open] > button,
-  header button[aria-expanded="true"] > div,
-  header button[data-headlessui-state~="open"] > div {
-    background-color: var(--brand-color) !important;
+  /* Making the settings area match my same theme */
+  [class*="--color-background-primary:#34373D"] {
+    --color-background-primary: var(--post-color) !important;
+  }
+  [class*="--color-background-secondary:#2B2E33"] {
+    --color-background-secondary: var(--secondary-color) !important;
+  }
+  [class*="--color-background-tertiary:#4A4E55"] {
+    --color-background-tertiary: var(--hover-color) !important;
+  }
+  [class*="--color-border-primary:#5E636B"] {
+    --color-border-primary: var(--border-color) !important;
   }
 
-  /* ---- Loading states (restored from the original stylesheet) ---- */
+  /* ---- Loading Skeletons Removed ---- */
 
   /* Top bar load placeholders */
   [data-testid="navigation-bar-wrapper"] .bg-tertiary,
@@ -512,21 +455,6 @@
     background-color: var(--post-color) !important;
   }
 
-
-  /* Making the settings area match my same theme */
-
-  [class*="--color-background-primary:#34373D"] {
-    --color-background-primary: var(--post-color) !important;
-  }
-  [class*="--color-background-secondary:#2B2E33"] {
-    --color-background-secondary: var(--secondary-color) !important;
-  }
-  [class*="--color-background-tertiary:#4A4E55"] {
-    --color-background-tertiary: var(--hover-color) !important;
-  }
-  [class*="--color-border-primary:#5E636B"] {
-    --color-border-primary: var(--border-color) !important;
-  }
 
   /* ---- where one token serves two roles ----
      Circle paints 127 different things from --color-background-primary,
