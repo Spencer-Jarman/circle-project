@@ -53,8 +53,6 @@
     --text-color: #F0F3F5;
     --text-muted-color: #A5A9AD;
     --link-color: #60A5FA;
-    --badge-color: #e02f2f;        /* unread / notification badges */
-    --live-color: #22c55e;         /* "live now" indicator */
   }
 
 
@@ -212,9 +210,6 @@
     --color-text-darkest: var(--text-color) !important;
     --color-text-feature-dark: var(--text-color) !important;
     --color-text-icon-text: var(--text-color) !important;
-    --color-text-level-basic: var(--text-color) !important;
-    --color-text-level-mid: var(--text-color) !important;
-    --color-text-level-top: var(--text-color) !important;
     --color-text-primary: var(--text-color) !important;
     --color-text-selector-active: var(--text-color) !important;
     --color-text-very-dark: var(--text-color) !important;
@@ -327,12 +322,6 @@
     --dropdown-link: var(--link-color) !important;
     --dropdown-link-hover: var(--link-color) !important;
     --user-location-links: var(--link-color) !important;
-
-    /* BADGE — the little unread-count bubbles */
-    --color-community-sidebar-badge-background: var(--badge-color) !important;
-
-    /* LIVE — the "live now" dot */
-    --color-sidebar-footer-live-indicator: var(--live-color) !important;
 
     /* OVERLAY — the dark layer that dims the page behind a modal */
     --color-background-modal-overlay: rgba(0, 0, 0, 0.6) !important;
