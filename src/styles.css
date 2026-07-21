@@ -48,7 +48,6 @@
     --link-color: #60A5FA;
   }
 
-
   /* ────────────────────────────────────────────
      CIRCLE'S COLOUR VARIABLES, BY GROUP
      Everything in a group shares one colour.
@@ -356,7 +355,6 @@
     --text-body-75: color-mix(in srgb, var(--text-color) 75%, transparent) !important;
   }
 
-
   /* ────────────────────────────────────────────
      SPECIFIC FIXES
      Things no variable can reach, so they need their own rule.
@@ -392,8 +390,6 @@
     background-color: var(--post-color) !important;
   }
 
-
-
   /* Settings content panel. It carries .bg-secondary and shows the page
      colour while a section swaps in, which is the flicker on the profile
      and privacy pages. */
@@ -419,7 +415,6 @@
     background-color: var(--post-color) !important;
   }
 
-
   /* Settings forms. The form element itself renders the page colour for a
      moment while a section loads, then goes transparent — that is the
      flash on the profile and privacy pages. Pinning it to the card colour
@@ -428,8 +423,6 @@
   html .react-form > form {
     background-color: var(--post-color) !important;
   }
-
-
 
   /* Round "more actions" buttons sit on the page, so they need the card
      colour to separate from it (.bg-primary resolves to the page). */
@@ -474,7 +467,6 @@
     background-color: var(--brand-color) !important;
     border-color: var(--brand-color) !important;
   }
-
 
   /* ────────────────────────────────────────────
      DIRECT MESSAGES — the whole section, panel colour
@@ -602,7 +594,6 @@
     border-color: var(--secondary-color) !important;
   }
 
-
   /* ── Bookmarks drawer ──────────────────────────────────────────────
      The flicker is the list container itself. While the spinner is up,
      #user-bookmarks-panel-header renders the page colour, then goes
@@ -611,22 +602,6 @@
      the card colour in both states. */
   html #user-bookmarks-panel-header {
     background-color: var(--post-color) !important;
-  }
-
-  /* Dividers between bookmarks. Circle ships none here — the rows are
-     plain siblings with nothing between them — so this draws them rather
-     than recolouring anything.
-
-     Drawn with an inset shadow, not a border, because border-top-color
-     will not move on these rows: an !important literal on an
-     id-plus-child selector still computes to Circle's default grey, even
-     though border-top-width from the very same declaration applies. The
-     shadow lands correctly, so it is used instead of spending more time
-     on the border.
-
-     :not(:first-child) keeps a line off the top row of each list. */
-  html #user-bookmarks-panel-header .infinite-scroll-component > div:not(:first-child) {
-    box-shadow: inset 0 1px 0 0 var(--border-color) !important;
   }
 
   /* Spinners — hidden outright, no swirling loaders anywhere */
@@ -648,7 +623,6 @@
   [data-testid="modal"] .bg-primary {
     background-color: var(--post-color) !important;
   }
-
 
   /* ---- where one token serves two roles ----
      Circle paints 127 different things from --color-background-primary,
@@ -712,7 +686,6 @@
     border-color: hsl(from var(--border-color) h s calc(l + 30)) !important;
   }
 
-
 /* ════════════════════════════════════════════════════════════
    ██  SECTION 2 — FONTS
    ════════════════════════════════════════════════════════════
@@ -733,7 +706,6 @@
     font-family: 'Rubik', sans-serif !important;
     font-weight: 400 !important;
   }
-
 
 /* ════════════════════════════════════════════════════════════
    ██  SECTION 3 — STRUCTURE
