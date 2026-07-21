@@ -58,6 +58,9 @@
     --background-body: var(--secondary-color) !important;
     --background-body-fullscreen: var(--secondary-color) !important;
     --color-background-content-disabled: var(--secondary-color) !important;
+    --color-background-primary: var(--secondary-color) !important;
+    --dropdown-background: var(--secondary-color) !important;
+    --new-notification-bg: var(--secondary-color) !important;
     --color-background-secondary: var(--secondary-color) !important;
     --color-background-secondary-dark: var(--secondary-color) !important;
     --color-icon-inverse: var(--secondary-color) !important;
@@ -93,16 +96,13 @@
     --color-background-disabled: var(--post-color) !important;
     --color-background-light-blue: var(--post-color) !important;
     --color-background-plus-banner: var(--post-color) !important;
-    --color-background-primary: var(--post-color) !important;
     --color-background-text-editor-modifier: var(--post-color) !important;
     --color-chip-background: var(--post-color) !important;
     --color-circle-button-background: var(--post-color) !important;
     --color-support-widget-background: var(--post-color) !important;
-    --dropdown-background: var(--post-color) !important;
     --input-background: var(--post-color) !important;
     --input-gray-background: var(--post-color) !important;
     --input-gray-darker-background: var(--post-color) !important;
-    --new-notification-bg: var(--post-color) !important;
     --post-background: var(--post-color) !important;
     --post-headline-tag-background: var(--post-color) !important;
     --post-pinned-background: var(--post-color) !important;
@@ -374,48 +374,14 @@
 
   /* Tooltips. Changing the color of the tooltips and tooltip arrow */
 
-  /* Loading flashes. These all render the page colour for a moment while
-     a section loads, which reads as a flicker against the post-coloured
-     panel around them. (Spinners are hidden, so they show as bare
-     blocks.) Covers settings sections, the profile page, and the
-     dropdown panels behind the top right buttons. */
-  html [class*="min-h-[600px]"],
-  html [class*="h-max-screen-dynamic"],
-  html textarea.form-control,
-  html [class*="space-y-0.5"][class*="overflow-y-auto"],
-  html .bg-tertiary.animate-pulse {
-    background-color: var(--post-color) !important;
-  }
-
-  /* Empty-state boxes, e.g. "No blocked members" */
-  html .bg-secondary.rounded-lg.border {
-    background-color: var(--post-color) !important;
-  }
-
-
-
-  /* Settings content panel. It carries .bg-secondary and shows the page
-     colour while a section swaps in, which is the flicker on the profile
-     and privacy pages. */
-  html [class*="ease-out"] > div.bg-secondary {
-    background-color: var(--post-color) !important;
-  }
-
-  /* Dividers between notifications. They are 1px bars painted with a
-     background, not borders, so they read as page colour instead of a line. */
-  html .bg-secondary-dark[class*="h-[1px]"] {
-    background-color: var(--border-color) !important;
-  }
-
-  /* Connections panel: the outer frame and the strip between the tabs
-     take the hover colour, the tabs themselves take the card colour.
-     (The selected tab hardcodes !bg-white dark:!bg-black, so the button
-     rule is routed through the nav to outrank it.) */
-  html [data-overlayscrollbars-contents]:has([data-testid^="connect-panel-tab-"]),
-  html nav[data-testid="tab-list"]:has([data-testid^="connect-panel-tab-"]) {
-    background-color: var(--hover-color) !important;
-  }
-  html nav[data-testid="tab-list"] button[data-testid^="connect-panel-tab-"] {
+  /* ---- what stays raised after the switch ----
+     --color-background-primary now paints the page colour, because it is
+     what Circle uses for the settings pages and the dropdown panels. The
+     handful of things that genuinely are cards opt back in here. ---- */
+  html .post.bg-primary,
+  html [data-testid="post-container"],
+  html [data-testid="modal"]:has([data-testid="post-body"]) .bg-primary,
+  html .post__reply.bg-primary {
     background-color: var(--post-color) !important;
   }
 
