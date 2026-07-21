@@ -430,18 +430,49 @@
   }
 
 
-  /* Checkboxes use Circle's own accent rather than the palette. A checked
-     box fills with currentColor, which comes from .text-light, so it was
-     picking up --text-muted-color. Same idea as leaving the toggles on
-     Circle's defaults.
-     (#506cf0 is Circle's stock accent, #545861 its default border.) */
+
+  /* Round "more actions" buttons sit on the page, so they need the card
+     colour to separate from it (.bg-primary resolves to the page). */
+  html button[data-testid="actions-dropdown-button"] {
+    background-color: var(--post-color) !important;
+  }
+  html button[data-testid="actions-dropdown-button"]:hover {
+    background-color: var(--hover-color) !important;
+  }
+
+  /* Notifications page. The container carries .bg-secondary AND
+     .!bg-primary, and the important one wins, so it renders page colour. */
+  html #notifications-full-page,
+  html .main:has(#notifications-full-page),
+  html .main:has(#notifications-full-page) .main__wrapper,
+  html .main:has(#notifications-full-page) .main__content {
+    background-color: var(--secondary-color) !important;
+  }
+
+  /* The selected filter pill — the round shape, not its text. */
+  html #notifications-full-page button.rounded-full.bg-secondary {
+    background-color: var(--hover-color) !important;
+  }
+
+  /* "Open in full page" — the section is already reachable, so the button
+     is redundant. */
+  html button[aria-label="Open in full page"] {
+    display: none !important;
+  }
+
+  /* Checkboxes: your red behind a white tick.
+     A checked box fills with currentColor, so the colour property has to
+     move too — setting background-color alone leaves currentColor showing
+     through. The tick itself is a white SVG baked into the background
+     image by Tailwind's forms plugin, so it needs nothing.
+     (#545861 is Circle's default unchecked border.) */
   html input[type="checkbox"] {
-    color: #506cf0 !important;
+    color: var(--brand-color) !important;
     border-color: #545861 !important;
   }
   html input[type="checkbox"]:checked {
-    background-color: #506cf0 !important;
-    border-color: #506cf0 !important;
+    background-color: var(--brand-color) !important;
+    border-color: var(--brand-color) !important;
   }
 
 
