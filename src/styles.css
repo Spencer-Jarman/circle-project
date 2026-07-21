@@ -374,10 +374,16 @@
 
   /* Tooltips. Changing the color of the tooltips and tooltip arrow */
 
-  /* Loading container behind the settings pages. It flashes the page
-     colour while a section loads — most visible switching to
-     Notifications. (Spinners are hidden, so this shows as a bare block.) */
-  html [class*="min-h-[600px]"] {
+  /* Loading flashes. These all render the page colour for a moment while
+     a section loads, which reads as a flicker against the post-coloured
+     panel around them. (Spinners are hidden, so they show as bare
+     blocks.) Covers settings sections, the profile page, and the
+     dropdown panels behind the top right buttons. */
+  html [class*="min-h-[600px]"],
+  html [class*="h-max-screen-dynamic"],
+  html textarea.form-control,
+  html [class*="space-y-0.5"][class*="overflow-y-auto"],
+  html .bg-tertiary.animate-pulse {
     background-color: var(--post-color) !important;
   }
 
@@ -386,21 +392,6 @@
     background-color: var(--post-color) !important;
   }
 
-
-  /* Chat threads list container */
-  html #chat-threads-header {
-    background-color: var(--post-color) !important;
-  }
-
-  /* Connections panel tab bar: the strip behind the tabs, then the tabs
-     themselves. (The selected tab carries !bg-white dark:!bg-black
-     hardcoded, so it has to be overridden rather than themed.) */
-  html nav[data-testid="tab-list"]:has([data-testid^="connect-panel-tab-"]) {
-    background-color: var(--hover-color) !important;
-  }
-  html nav[data-testid="tab-list"] button[data-testid^="connect-panel-tab-"] {
-    background-color: var(--brand-color) !important;
-  }
 
   [role="tooltip"],
   .tippy-box {
