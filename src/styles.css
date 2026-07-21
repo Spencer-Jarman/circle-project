@@ -773,11 +773,24 @@
   }
 
   /* ---- sidebar scroll chaining ----
-     When the sidebar's own scroller runs out of content the wheel chains
-     up to .community__content, which spans the full window width behind
-     the sidebar — so scrolling over the sidebar scrolled the feed.
-     overscroll-behavior stops the chain at the sidebar. ---- */
+     #panel.community__content is laid out from x=0 across the full window
+     width, so the whole sidebar sits on top of it. Both are position:
+     static with no z-index, which means the hit test is settled by paint
+     order rather than by layout — and over the right-hand part of the
+     sidebar the feed won it. The wheel there scrolled the feed while the
+     pointer was plainly over the sidebar.
+
+     Giving the sidebar its own stacking position fixes it and moves
+     nothing: relative with no offsets changes no geometry, it only puts
+     the sidebar above the panel for hit testing.
+
+     (overscroll-behavior below is a separate guard, for when the
+     sidebar's own scroller reaches its end and the wheel would chain up.
+     It was never the cause of the pointer problem — that needed the
+     stacking fix.) ---- */
   [data-testid="standard-layout-v2-sidebar"] {
+    position: relative !important;
+    z-index: 1 !important;
     overflow-y: auto !important;
     overscroll-behavior: contain !important;
   }
