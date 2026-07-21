@@ -41,6 +41,7 @@
     --secondary-color: #090b0e;
     --post-color: #111316;
     --hover-color: #15181c;
+    --post-color-selected: #1b1f25;
     --border-color: #343536;
     --brand-color: #70180d;
     --text-color: #F0F3F5;
@@ -489,10 +490,47 @@
     background-color: var(--post-color) !important;
   }
 
-  /* Selected conversation in the DM list */
-  html body:has([data-testid="new-message"]) [data-testid="chat-room-dm-list"] [aria-selected="true"],
-  html body:has([data-testid="new-message"]) [data-testid="chat-room-dm-list"] [data-selected] {
+  /* Loading states while a conversation loads. The feed rules paint
+     skeletons the page colour on purpose; inside DMs they sit on a
+     post-coloured panel, so they need to match that instead. */
+  html body:has([data-testid="new-message"]) [class*="skeleton-loader"],
+  html body:has([data-testid="new-message"]) [class*="skeleton-loader"] div,
+  html body:has([data-testid="new-message"]) .animate-pulse,
+  html body:has([data-testid="new-message"]) .bg-primary.border-l {
+    background-color: var(--post-color) !important;
+  }
+
+  /* Conversation rows: hover, then the selected one */
+  html body:has([data-testid="new-message"]) [data-testid="chat-room-dm-list"]:hover,
+  html body:has([data-testid="new-message"]) button[data-testid="chat-room-dm-list"]:hover {
     background-color: var(--hover-color) !important;
+  }
+  html body:has([data-testid="new-message"]) [data-testid="chat-room-dm-list"][aria-selected="true"],
+  html body:has([data-testid="new-message"]) [data-testid="chat-room-dm-list"][data-selected],
+  html body:has([data-testid="new-message"]) [data-testid="chat-room-dm-list"].bg-secondary-dark {
+    background-color: var(--post-color-selected) !important;
+  }
+
+
+  /* ---- connections panel ----
+     Frame and the strip behind the tabs sit at the card colour, the
+     selected tab lifts to --post-color-selected, and hovering any tab
+     gives --hover-color. (The selected tab hardcodes
+     !bg-white dark:!bg-black, so these route through the nav to outrank
+     it.) */
+  html [data-overlayscrollbars-contents]:has([data-testid^="connect-panel-tab-"]),
+  html nav[data-testid="tab-list"]:has([data-testid^="connect-panel-tab-"]) {
+    background-color: var(--post-color) !important;
+  }
+  html nav[data-testid="tab-list"] button[data-testid^="connect-panel-tab-"] {
+    background-color: var(--post-color) !important;
+  }
+  html nav[data-testid="tab-list"] button[data-testid^="connect-panel-tab-"]:hover {
+    background-color: var(--hover-color) !important;
+  }
+  html nav[data-testid="tab-list"] [data-selected] button[data-testid^="connect-panel-tab-"],
+  html nav[data-testid="tab-list"] [aria-selected="true"] button[data-testid^="connect-panel-tab-"] {
+    background-color: var(--post-color-selected) !important;
   }
 
   [role="tooltip"],
