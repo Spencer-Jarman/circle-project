@@ -429,6 +429,21 @@
     background-color: var(--post-color) !important;
   }
 
+
+  /* Checkboxes use Circle's own accent rather than the palette. A checked
+     box fills with currentColor, which comes from .text-light, so it was
+     picking up --text-muted-color. Same idea as leaving the toggles on
+     Circle's defaults.
+     (#506cf0 is Circle's stock accent, #545861 its default border.) */
+  html input[type="checkbox"] {
+    color: #506cf0 !important;
+    border-color: #545861 !important;
+  }
+  html input[type="checkbox"]:checked {
+    background-color: #506cf0 !important;
+    border-color: #506cf0 !important;
+  }
+
   [role="tooltip"],
   .tippy-box {
     background-color: var(--hover-color) !important;
