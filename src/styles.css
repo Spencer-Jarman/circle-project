@@ -466,6 +466,13 @@
     color: var(--hover-color) !important;
   }
 
+  /* Buttons whose hover class resolves to the page colour — tab pills,
+     cancel buttons, profile actions. hover:bg-secondary would leave them
+     the same colour as the surface behind them, so hover reads as dead. */
+  button.hover\:bg-secondary:hover {
+    background-color: var(--hover-color) !important;
+  }
+
   /* ---- .bg-primary surfaces that should be the page colour ----
      .bg-primary paints both page-level surfaces and raised cards. The
      token is set to --post-color for cards, so these have to opt out
@@ -477,12 +484,6 @@
   .bg-primary.border-r,
   .bg-primary.absolute.bottom-0 {
     background-color: var(--secondary-color) !important;
-  }
-
-  /* Profile / space tab pills stay raised against those surfaces */
-  [data-testid="tab-list"] button,
-  [data-testid="tab-list"] button.bg-primary {
-    background-color: var(--post-color) !important;
   }
 
   /* ---- top bar: open popover = brand ----
