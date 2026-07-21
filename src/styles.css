@@ -393,6 +393,32 @@
   }
 
 
+
+  /* Settings content panel. It carries .bg-secondary and shows the page
+     colour while a section swaps in, which is the flicker on the profile
+     and privacy pages. */
+  html [class*="ease-out"] > div.bg-secondary {
+    background-color: var(--post-color) !important;
+  }
+
+  /* Dividers between notifications. They are 1px bars painted with a
+     background, not borders, so they read as page colour instead of a line. */
+  html .bg-secondary-dark[class*="h-[1px]"] {
+    background-color: var(--border-color) !important;
+  }
+
+  /* Connections panel: the outer frame and the strip between the tabs
+     take the hover colour, the tabs themselves take the card colour.
+     (The selected tab hardcodes !bg-white dark:!bg-black, so the button
+     rule is routed through the nav to outrank it.) */
+  html [data-overlayscrollbars-contents]:has([data-testid^="connect-panel-tab-"]),
+  html nav[data-testid="tab-list"]:has([data-testid^="connect-panel-tab-"]) {
+    background-color: var(--hover-color) !important;
+  }
+  html nav[data-testid="tab-list"] button[data-testid^="connect-panel-tab-"] {
+    background-color: var(--post-color) !important;
+  }
+
   [role="tooltip"],
   .tippy-box {
     background-color: var(--hover-color) !important;
