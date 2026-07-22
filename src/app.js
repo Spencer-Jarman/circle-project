@@ -1235,7 +1235,7 @@
                any earlier and the poster and play button show through. */
             if (event.data === YT.PlayerState.PLAYING) {
               const entry = mountedFrames.get(index);
-              if (entry && index === currentIndex) entry.cover.classList.add("uncovered");
+              if (entry && index === currentIndex) uncover(entry);
             }
             /* Kept as a backstop. The watcher below should restart the video
                before it can ever reach ENDED; if it slips through, this still
@@ -1259,6 +1259,34 @@
      comfortably exceed the poll interval or a tick can straddle the end. */
   const LOOP_LEAD_S = 0.22;
   let loopWatch = null;
+
+  /* The cover exists to hide the embed's poster and play button until the
+     video is worth looking at, and normally PLAYING lifts it within a few
+     hundred ms. But PLAYING is not guaranteed — autoplay can be refused, the
+     network can stall, a backgrounded tab throttles media — and a cover with
+     no way out strands the viewer on a black rectangle, which is worse than
+     the chrome it was hiding. This bounds that: show whatever YouTube is
+     showing rather than nothing at all. */
+  const COVER_FALLBACK_MS = 2200;
+
+  function uncover(entry) {
+    if (!entry) return;
+    clearTimeout(entry.coverTimer);
+    entry.coverTimer = null;
+    entry.cover.classList.add("uncovered");
+  }
+
+  function recover(entry) {
+    if (!entry) return;
+    clearTimeout(entry.coverTimer);
+    entry.coverTimer = null;
+    entry.cover.classList.remove("uncovered");
+  }
+
+  function armCoverFallback(entry) {
+    if (!entry || entry.coverTimer || entry.cover.classList.contains("uncovered")) return;
+    entry.coverTimer = setTimeout(() => uncover(entry), COVER_FALLBACK_MS);
+  }
 
   function startLoopWatch() {
     if (loopWatch) return;
@@ -1315,6 +1343,7 @@
         player.playVideo?.();
         isPlaying = true;
         updatePlayIcon(true);
+        armCoverFallback(entry);
       } else {
         player.mute?.();
         player.pauseVideo?.();
@@ -1323,7 +1352,7 @@
            uncovered, that overlay is the first thing you would see on arrival.
            The active frame is deliberately left alone so a deliberate pause
            still shows the video. */
-        entry?.cover.classList.remove("uncovered");
+        recover(entry);
       }
     });
     startLoopWatch();
