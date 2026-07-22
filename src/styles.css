@@ -1027,8 +1027,15 @@
   .reels-player { position: relative; aspect-ratio: 9 / 16; height: 100%; width: auto; border-radius: 16px; overflow: hidden; background: #111; flex-shrink: 0; }
   .reels-scroll-track { position: absolute; top: 0; left: 0; width: 100%; height: 100%; transition: transform 0.42s cubic-bezier(0.4, 0, 0.2, 1); }
   .reels-player iframe { position: absolute; left: 0; width: 100%; height: 100%; border: none; }
+  /* The active frame stays non-interactive too. controls=0 does not stop the
+     embed drawing its own chrome — hovering it surfaces the title bar, the
+     centre play/mute overlay and the watermark, all painted inside the iframe
+     where no CSS of ours can reach them. Denying it the cursor is what keeps
+     them away, since YouTube only draws them in response to hover.
+     Trade-off: nothing inside the frame is clickable now, which includes the
+     watermark's link back to the watch page. The custom controls sit above it
+     in .reels-top-left and are unaffected. */
   .reels-player iframe.reels-frame { pointer-events: none; }
-  .reels-player iframe.reels-frame.active { pointer-events: auto; }
   .reels-loader, .reels-empty-message { position: absolute; inset: 0; display: grid; place-items: center; color: rgba(255,255,255,0.78); font-size: 13px; text-align: center; padding: 24px; z-index: 2; }
   .reels-loader::before { content: ""; width: 42px; height: 42px; border-radius: 50%; border: 2px solid rgba(255,255,255,0.15); border-top-color: rgba(255,255,255,0.9); animation: reelsSpin 0.8s linear infinite; }
   @keyframes reelsSpin { to { transform: rotate(360deg); } }
