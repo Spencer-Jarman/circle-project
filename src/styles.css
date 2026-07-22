@@ -1026,7 +1026,17 @@
   .reels-main:has(.reels-comments.open) { transform: translateX(0); }
   .reels-player { position: relative; aspect-ratio: 9 / 16; height: 100%; width: auto; border-radius: 16px; overflow: hidden; background: #111; flex-shrink: 0; }
   .reels-scroll-track { position: absolute; top: 0; left: 0; width: 100%; height: 100%; transition: transform 0.42s cubic-bezier(0.4, 0, 0.2, 1); }
-  .reels-player iframe { position: absolute; left: 0; width: 100%; height: 100%; border: none; }
+  /* Each frame lives in a cell so it can carry its own cover. The cell takes
+     the per-index offset the iframe used to hold inline. */
+  .reels-cell { position: absolute; left: 0; width: 100%; height: 100%; }
+  .reels-player iframe { position: absolute; left: 0; top: 0; width: 100%; height: 100%; border: none; }
+  /* Opaque until the frame is genuinely playing. controls=0 does not stop the
+     embed showing its poster and a large play button while it sits idle, and
+     every buffered frame sits idle until you reach it — which is why the
+     chrome reappeared on each new video. Nothing inside a cross-origin frame
+     can be hidden, so the frame is covered instead until it is worth seeing. */
+  .reels-cell-cover { position: absolute; inset: 0; background: #000; z-index: 3; pointer-events: none; opacity: 1; transition: opacity 0.18s ease; }
+  .reels-cell-cover.uncovered { opacity: 0; }
   /* The active frame stays non-interactive too. controls=0 does not stop the
      embed drawing its own chrome — hovering it surfaces the title bar, the
      centre play/mute overlay and the watermark, all painted inside the iframe
@@ -1059,9 +1069,9 @@
      left a 44px content box, and Circle's reset puts max-width: 100% on
      images — which silently squeezed the 48px channel avatar to 44px while
      the sibling icon circles, being spans, overflowed instead.
-     90px bottom padding clears the attribution strip at the foot of the video,
-     so the rail's last item sits above it rather than level with it. */
-  .reels-sidebar { display: flex; flex-direction: column; align-items: center; justify-content: flex-end; padding-bottom: 90px; padding-left: 16px; gap: 18px; flex-shrink: 0; width: 80px; }
+     24px bottom padding drops the channel avatar close to the foot of the
+     player, level with the attribution strip beside it, as Shorts has it. */
+  .reels-sidebar { display: flex; flex-direction: column; align-items: center; justify-content: flex-end; padding-bottom: 24px; padding-left: 16px; gap: 18px; flex-shrink: 0; width: 80px; }
   /* Two of these are <button> now, so the UA button styling has to go or
      they render boxed and mis-aligned next to the plain div. */
   /* Shorts format: icon inside a translucent circle, count in bold beneath.
@@ -1087,8 +1097,13 @@
      YouTube's own watermark link is dead; this is the only remaining route to
      the channel and the video, and it should not be something you have to
      discover by hovering. */
-  .reels-attribution { position: absolute; left: 0; right: 0; bottom: 0; z-index: 12; display: flex; align-items: center; gap: 10px; padding: 34px 14px 14px; background: linear-gradient(to top, rgba(0,0,0,0.82), rgba(0,0,0,0)); }
+  .reels-attribution { position: absolute; left: 0; right: 0; bottom: 0; z-index: 12; display: flex; align-items: flex-end; gap: 10px; padding: 40px 14px 14px; background: linear-gradient(to top, rgba(0,0,0,0.85), rgba(0,0,0,0)); }
+  .reels-attr-main { display: flex; flex-direction: column; gap: 7px; min-width: 0; flex: 1; }
   .reels-attr-channel { display: flex; align-items: center; gap: 9px; text-decoration: none; min-width: 0; }
+  /* Two lines then ellipsis, as Shorts does — these titles run long and are
+     mostly hashtags past the first clause. */
+  .reels-attr-title { color: #fff; font-size: 13px; line-height: 1.35; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; text-shadow: 0 1px 3px rgba(0,0,0,0.7); overflow-wrap: anywhere; }
+  .reels-attr-title:empty { display: none; }
   .reels-attr-avatar { width: 32px; height: 32px; border-radius: 50%; flex-shrink: 0; object-fit: cover; background: var(--hover-color); border: 1px solid rgba(255,255,255,0.7); }
   .reels-attr-handle { color: #fff; font-size: 14px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; text-shadow: 0 1px 3px rgba(0,0,0,0.6); }
   .reels-attr-channel:hover .reels-attr-handle { text-decoration: underline; }

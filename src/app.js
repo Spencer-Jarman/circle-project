@@ -666,6 +666,10 @@
   let youtubeApiPromise = null;
   let currentVolume = DEFAULT_VOLUME;
   let isMuted = false;
+  /* Module scope because three things drive playback now — the pill, a click
+     on the video, and syncPlayers on navigation — and they have to agree on
+     the state or the icon desyncs from what the video is doing. */
+  let isPlaying = true;
   const players = new Map();
   const mountedFrames = new Map();
 
@@ -864,6 +868,16 @@
     if (railLink) railLink.style.display = avatar || chUrl ? "" : "none";
 
     if (attrHandle) attrHandle.textContent = label;
+
+    /* The shorts API's title is the same string YouTube shows. "YouTube Short"
+       is normalizeShort's placeholder for a missing one — printing it would be
+       worse than printing nothing, and :empty hides the row. */
+    const titleEl = document.getElementById("reels-attr-title");
+    if (titleEl) {
+      const t = short?.title || "";
+      titleEl.textContent = t === "YouTube Short" ? "" : t;
+    }
+
     if (ytLink && short) ytLink.href = videoUrl(short);
   }
 
@@ -1094,10 +1108,23 @@
     }
   }
 
-  function updatePlayIcon(isPlaying) {
+  function togglePlayback() {
+    const player = players.get(currentIndex);
+    if (!player) return;
+    if (isPlaying) {
+      player.pauseVideo?.();
+      isPlaying = false;
+    } else {
+      player.playVideo?.();
+      isPlaying = true;
+    }
+    updatePlayIcon(isPlaying);
+  }
+
+  function updatePlayIcon(playing) {
     const icon = document.getElementById("reels-play-icon");
     if (!icon) return;
-    if (isPlaying) {
+    if (playing) {
       icon.innerHTML = '<line x1="6" y1="4" x2="6" y2="20"/><line x1="18" y1="4" x2="18" y2="20"/>';
     } else {
       icon.innerHTML = '<polygon points="5 3 19 12 5 21 5 3"/>';
@@ -1178,15 +1205,21 @@
     const short = shorts[index];
     if (!short || mountedFrames.has(index)) return;
     const track = getOrCreateScrollTrack();
+    const cell = document.createElement("div");
+    cell.className = "reels-cell";
+    cell.style.top = `${index * 100}%`;
     const iframe = document.createElement("iframe");
     iframe.className = "reels-frame";
     iframe.setAttribute("allow", "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share");
     iframe.setAttribute("allowfullscreen", "true");
     iframe.setAttribute("title", short.title);
     iframe.setAttribute("src", getEmbedUrl(short.videoId));
-    iframe.style.top = `${index * 100}%`;
-    track.appendChild(iframe);
-    mountedFrames.set(index, { iframe, player: null });
+    cell.appendChild(iframe);
+    const cover = document.createElement("div");
+    cover.className = "reels-cell-cover";
+    cell.appendChild(cover);
+    track.appendChild(cell);
+    mountedFrames.set(index, { iframe, cell, cover, player: null });
     loadYoutubeApi().then((YT) => {
       if (!mountedFrames.has(index)) return;
       const player = new YT.Player(iframe, {
@@ -1198,6 +1231,15 @@
             syncPlayers();
           },
           onStateChange: (event) => {
+            /* The cover comes off only once the frame is actually playing —
+               any earlier and the poster and play button show through. */
+            if (event.data === YT.PlayerState.PLAYING) {
+              const entry = mountedFrames.get(index);
+              if (entry && index === currentIndex) entry.cover.classList.add("uncovered");
+            }
+            /* Kept as a backstop. The watcher below should restart the video
+               before it can ever reach ENDED; if it slips through, this still
+               loops, just with the end screen the watcher exists to avoid. */
             if (event.data === YT.PlayerState.ENDED) {
               event.target.seekTo(0, true);
               event.target.playVideo();
@@ -1210,6 +1252,30 @@
     });
   }
 
+  /* Looping by letting the video END and seeking back is what made the chrome
+     flash on every repeat: YouTube paints its replay screen the instant the
+     video finishes, before the seek lands. Restarting a fraction early means
+     it never finishes, so there is no end screen to paint. The lead has to
+     comfortably exceed the poll interval or a tick can straddle the end. */
+  const LOOP_LEAD_S = 0.22;
+  let loopWatch = null;
+
+  function startLoopWatch() {
+    if (loopWatch) return;
+    loopWatch = setInterval(() => {
+      if (!isShortsVisible()) return;
+      const player = players.get(currentIndex);
+      if (!player || typeof player.getDuration !== "function") return;
+      const duration = player.getDuration() || 0;
+      const now = player.getCurrentTime?.() || 0;
+      if (duration > 0 && duration - now <= LOOP_LEAD_S) {
+        player.seekTo(0, true);
+        player.playVideo?.();
+      }
+    }, 60);
+  }
+
+
   function renderBufferedFrames() {
     const preloadRadius = Math.max(1, Math.floor(PRELOAD_COUNT / 2));
     const start = Math.max(0, currentIndex - preloadRadius);
@@ -1221,7 +1287,7 @@
       if (index < start || index > end) {
         players.delete(index);
         entry.player?.destroy?.();
-        entry.iframe.remove();
+        entry.cell.remove();
         mountedFrames.delete(index);
       } else {
         entry.iframe.classList.toggle("active", index === currentIndex);
@@ -1237,6 +1303,7 @@
   function syncPlayers(resetActive) {
     if (!isShortsVisible()) return; /* don't autoplay while hidden */
     players.forEach((player, index) => {
+      const entry = mountedFrames.get(index);
       if (index === currentIndex) {
         if (isMuted || currentVolume === 0) {
           player.mute?.();
@@ -1246,11 +1313,20 @@
         }
         if (resetActive) player.seekTo?.(0, true);
         player.playVideo?.();
+        isPlaying = true;
+        updatePlayIcon(true);
       } else {
         player.mute?.();
         player.pauseVideo?.();
+        /* Re-cover anything in the background. A paused embed shows its play
+           overlay, and these sit paused off-screen until you scroll to them —
+           uncovered, that overlay is the first thing you would see on arrival.
+           The active frame is deliberately left alone so a deliberate pause
+           still shows the video. */
+        entry?.cover.classList.remove("uncovered");
       }
     });
+    startLoopWatch();
   }
 
   function updateNavigationState() {
@@ -1307,13 +1383,12 @@
       ?.addEventListener("click", () => setCommentsOpen(false));
 
     /* The frame takes no pointer events, so a click on the video lands here.
-       Opening the watch page restores the route the dead watermark link used
-       to provide. The controls and the attribution strip handle their own
-       clicks and must not also open the video. */
+       Attribution is handled by the two channel links and the YouTube pill, so
+       this is free to be play/pause. Those and the top-left controls own their
+       own clicks and must not also toggle playback. */
     document.getElementById("reels-player")?.addEventListener("click", (e) => {
       if (e.target.closest(".reels-attribution, .reels-top-left")) return;
-      const short = shorts[currentIndex];
-      if (short) window.open(videoUrl(short), "_blank", "noopener");
+      togglePlayback();
     });
 
     /* The panel scrolls its own list; without this the wheel handler further
@@ -1321,20 +1396,8 @@
     document.getElementById("reels-comments-panel")
       ?.addEventListener("wheel", (e) => e.stopPropagation());
 
-    const playBtn = document.getElementById("reels-play-btn");
-    let isPlaying = true;
-    playBtn.addEventListener("click", () => {
-      const player = players.get(currentIndex);
-      if (!player) return;
-      if (isPlaying) {
-        player.pauseVideo?.();
-        isPlaying = false;
-      } else {
-        player.playVideo?.();
-        isPlaying = true;
-      }
-      updatePlayIcon(isPlaying);
-    });
+    document.getElementById("reels-play-btn")
+      .addEventListener("click", togglePlayback);
 
     volumeSlider.addEventListener("input", () => {
       currentVolume = parseInt(volumeSlider.value, 10);
