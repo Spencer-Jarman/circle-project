@@ -73,12 +73,44 @@ export const handler = async (event) => {
       const ids = query.id || "";
       if (!ids) return reply({ error: "missing id" }, 400);
 
+      /* snippet rides along for channelId, which is the only way to reach a
+         channel's avatar and handle — the shorts API carries neither. The
+         fields mask keeps that from dragging in the description, tags and
+         five thumbnail sizes nobody reads. */
       const res = await fetch(
         "https://www.googleapis.com/youtube/v3/videos" +
-          `?part=statistics&id=${encodeURIComponent(ids)}` +
+          `?part=statistics,snippet&id=${encodeURIComponent(ids)}` +
+          "&fields=items(id,statistics,snippet(channelId,channelTitle))" +
           `&key=${process.env.YT_DATA_API_KEY}`
       );
       return reply(await res.text(), res.status);
+    }
+
+    if (path === "/youtube/channels") {
+      const ids = query.id || "";
+      if (!ids) return reply({ error: "missing id" }, 400);
+
+      const res = await fetch(
+        "https://www.googleapis.com/youtube/v3/channels" +
+          `?part=snippet&id=${encodeURIComponent(ids)}` +
+          "&fields=items(id,snippet(title,customUrl,thumbnails/default/url))" +
+          `&key=${process.env.YT_DATA_API_KEY}`
+      );
+      const data = await res.json();
+      if (!res.ok) {
+        const reason = data?.error?.errors?.[0]?.reason || "";
+        return reply({ error: reason || "upstream failure" }, res.status);
+      }
+
+      /* customUrl is the @handle. It is absent on channels that never claimed
+         one, so the caller has to fall back to the title. */
+      const items = (data.items || []).map((c) => ({
+        id: c.id,
+        title: c.snippet?.title || "",
+        handle: c.snippet?.customUrl || "",
+        avatar: c.snippet?.thumbnails?.default?.url || "",
+      }));
+      return reply({ items });
     }
 
     if (path === "/youtube/comments") {
