@@ -1319,7 +1319,7 @@
     }
   }
 
-  function syncPlayers(resetActive) {
+  function syncPlayers() {
     if (!isShortsVisible()) return; /* don't autoplay while hidden */
     players.forEach((player, index) => {
       const entry = mountedFrames.get(index);
@@ -1330,7 +1330,15 @@
           player.unMute?.();
           player.setVolume?.(currentVolume);
         }
-        if (resetActive) player.seekTo?.(0, true);
+        /* No seek here, deliberately. Any seek makes the embed raise its
+           controls, and because the frame takes no pointer events YouTube
+           never sees the mouse activity its auto-hide timer runs on — so
+           those controls come up and never leave. Verified on the live
+           player: chrome still overlaid nine seconds and several loops after
+           a single seekTo, with the video playing and the cursor elsewhere.
+           A seek to restart a rewatched video therefore costs permanent
+           chrome, which is a bad trade. Videos resume where they were left
+           instead. */
         player.playVideo?.();
         isPlaying = true;
         updatePlayIcon(true);
@@ -1360,7 +1368,7 @@
     if (index < 0 || index >= shorts.length) return;
     currentIndex = index;
     renderBufferedFrames();
-    syncPlayers(true);
+    syncPlayers();
     updateNavigationState();
     updateEngagementPanel(index);
     if (shorts.length > 0 && currentIndex >= shorts.length - FETCH_AHEAD) {
