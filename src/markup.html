@@ -26,10 +26,14 @@
       </div>
       <!-- Attribution. The iframe is pointer-events: none, so YouTube's own
            watermark link is unreachable; these restore the route back. Sits
-           above the scroll track so its clicks do not open the video. -->
+           above the scroll track so its clicks do not open the video.
+           No loading="lazy" on either avatar here or in the rail: this markup
+           is injected while #reels-wrapper is display:none, and a lazy image
+           inside a hidden container is never scheduled — it stays at
+           naturalWidth 0 even after the container is shown. -->
       <div class="reels-attribution" id="reels-attribution">
         <a class="reels-attr-channel" id="reels-attr-channel" href="#" target="_blank" rel="noopener noreferrer">
-          <img class="reels-attr-avatar" id="reels-attr-avatar" alt="" loading="lazy">
+          <img class="reels-attr-avatar" id="reels-attr-avatar" alt="">
           <span class="reels-attr-handle" id="reels-attr-handle"></span>
         </a>
         <a class="reels-attr-yt" id="reels-attr-yt" href="#" target="_blank" rel="noopener noreferrer" aria-label="Watch this video on YouTube">
@@ -55,7 +59,7 @@
            flex-end, so adding this pushes the three above it upward on its
            own — no offsets to retune. -->
       <a class="reels-engagement-item reels-channel-item" id="reels-channel-link" href="#" target="_blank" rel="noopener noreferrer" aria-label="Open this channel on YouTube">
-        <img class="reels-channel-avatar" id="reels-channel-avatar" alt="" loading="lazy">
+        <img class="reels-channel-avatar" id="reels-channel-avatar" alt="">
       </a>
     </div>
     <!-- Height comes from the flex row, so it tracks the player at every
