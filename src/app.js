@@ -1237,12 +1237,20 @@
               const entry = mountedFrames.get(index);
               if (entry && index === currentIndex) uncover(entry);
             }
-            /* Kept as a backstop. The watcher below should restart the video
-               before it can ever reach ENDED; if it slips through, this still
-               loops, just with the end screen the watcher exists to avoid. */
+            /* Backstop only, and deliberately late. loop=1 in the embed URL
+               restarts the video by itself and does so without drawing any
+               chrome — an API seek is what summons the overlay, so seeking
+               here immediately would cause the exact flash this avoids. If
+               the native loop has not taken over within a second, something
+               is wrong and a visible restart beats a stuck video. */
             if (event.data === YT.PlayerState.ENDED) {
-              event.target.seekTo(0, true);
-              event.target.playVideo();
+              const player = event.target;
+              setTimeout(() => {
+                if (player.getPlayerState?.() === YT.PlayerState.ENDED) {
+                  player.seekTo(0, true);
+                  player.playVideo();
+                }
+              }, 1000);
             }
           },
         },
@@ -1252,13 +1260,12 @@
     });
   }
 
-  /* Looping by letting the video END and seeking back is what made the chrome
-     flash on every repeat: YouTube paints its replay screen the instant the
-     video finishes, before the seek lands. Restarting a fraction early means
-     it never finishes, so there is no end screen to paint. The lead has to
-     comfortably exceed the poll interval or a tick can straddle the end. */
-  const LOOP_LEAD_S = 0.22;
-  let loopWatch = null;
+  /* There was a watcher here that restarted the video 0.22s early, on the
+     theory that the flash was YouTube's end screen. It was not. Instrumenting
+     the live player showed ENDED never fires at all — loop=1 restarts the
+     video first — while the overlay reproduced perfectly on a bare
+     seekTo(0). The seek was the cause, so the watcher was the cause, and
+     removing it is the fix. YouTube's own loop is silent; ours was not. */
 
   /* The cover exists to hide the embed's poster and play button until the
      video is worth looking at, and normally PLAYING lifts it within a few
@@ -1287,22 +1294,6 @@
     if (!entry || entry.coverTimer || entry.cover.classList.contains("uncovered")) return;
     entry.coverTimer = setTimeout(() => uncover(entry), COVER_FALLBACK_MS);
   }
-
-  function startLoopWatch() {
-    if (loopWatch) return;
-    loopWatch = setInterval(() => {
-      if (!isShortsVisible()) return;
-      const player = players.get(currentIndex);
-      if (!player || typeof player.getDuration !== "function") return;
-      const duration = player.getDuration() || 0;
-      const now = player.getCurrentTime?.() || 0;
-      if (duration > 0 && duration - now <= LOOP_LEAD_S) {
-        player.seekTo(0, true);
-        player.playVideo?.();
-      }
-    }, 60);
-  }
-
 
   function renderBufferedFrames() {
     const preloadRadius = Math.max(1, Math.floor(PRELOAD_COUNT / 2));
@@ -1355,7 +1346,6 @@
         recover(entry);
       }
     });
-    startLoopWatch();
   }
 
   function updateNavigationState() {
@@ -1484,9 +1474,16 @@
 
     document.addEventListener("keydown", (e) => {
       if (!isShortsVisible()) return;
+      /* Never swallow a space someone is typing — Circle has composers and
+         search fields on the page behind this, and the volume slider answers
+         to space itself once focused. */
+      const el = document.activeElement;
+      if (el && (el.tagName === "INPUT" || el.tagName === "TEXTAREA" || el.isContentEditable)) return;
       switch (e.key) {
         case "ArrowUp": e.preventDefault(); navigateVideo("up"); break;
         case "ArrowDown": e.preventDefault(); navigateVideo("down"); break;
+        case " ":
+        case "Spacebar": e.preventDefault(); togglePlayback(); break;
         case "Escape": if (commentsOpen) { e.preventDefault(); setCommentsOpen(false); } break;
       }
     });
