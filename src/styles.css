@@ -1026,33 +1026,16 @@
   .reels-main:has(.reels-comments.open) { transform: translateX(0); }
   .reels-player { position: relative; aspect-ratio: 9 / 16; height: 100%; width: auto; border-radius: 16px; overflow: hidden; background: #111; flex-shrink: 0; }
   .reels-scroll-track { position: absolute; top: 0; left: 0; width: 100%; height: 100%; transition: transform 0.42s cubic-bezier(0.4, 0, 0.2, 1); }
-  /* Each frame lives in a cell so it can carry its own cover. The cell takes
-     the per-index offset the iframe used to hold inline. */
-  .reels-cell { position: absolute; left: 0; width: 100%; height: 100%; }
-  .reels-player iframe { position: absolute; left: 0; top: 0; width: 100%; height: 100%; border: none; }
-  /* Opaque until the frame is genuinely playing. controls=0 does not stop the
-     embed showing its poster and a large play button while it sits idle, and
-     every buffered frame sits idle until you reach it — which is why the
-     chrome reappeared on each new video. Nothing inside a cross-origin frame
-     can be hidden, so the frame is covered instead until it is worth seeing. */
-  .reels-cell-cover { position: absolute; inset: 0; background: #000; z-index: 3; pointer-events: none; opacity: 1; transition: opacity 0.18s ease; display: grid; place-items: center; }
-  .reels-cell-cover.uncovered { opacity: 0; }
-  /* An idle frame should say why it is idle rather than reading as a dead
-     black rectangle. Loading spins; paused shows the glyph that says the
-     video is waiting on you. */
-  .reels-cell-cover::before { content: ""; width: 54px; height: 54px; border-radius: 50%; display: none; }
-  .reels-cell-cover[data-mode="loading"]::before { display: block; border: 3px solid rgba(255,255,255,0.16); border-top-color: rgba(255,255,255,0.85); animation: reelsSpin 0.8s linear infinite; }
-  .reels-cell-cover[data-mode="paused"]::before { display: block; background: rgba(255,255,255,0.14); clip-path: none; box-shadow: inset 0 0 0 1px rgba(255,255,255,0.18); }
-  .reels-cell-cover[data-mode="paused"]::after { content: ""; position: absolute; width: 0; height: 0; border-left: 17px solid rgba(255,255,255,0.9); border-top: 11px solid transparent; border-bottom: 11px solid transparent; margin-left: 5px; }
-  /* The active frame stays non-interactive too. controls=0 does not stop the
-     embed drawing its own chrome — hovering it surfaces the title bar, the
-     centre play/mute overlay and the watermark, all painted inside the iframe
-     where no CSS of ours can reach them. Denying it the cursor is what keeps
-     them away, since YouTube only draws them in response to hover.
-     Trade-off: nothing inside the frame is clickable now, which includes the
-     watermark's link back to the watch page. The custom controls sit above it
-     in .reels-top-left and are unaffected. */
-  .reels-player iframe.reels-frame { pointer-events: none; }
+  .reels-player iframe { position: absolute; left: 0; width: 100%; height: 100%; border: none; }
+  /* pointer-events: none used to sit here to stop hover raising the embed's
+     chrome. It is gone on purpose and must not come back. It disabled player
+     functionality, which YouTube's developer policies prohibit outright, and
+     the concrete cost was worse than the policy line: a skippable ad's Skip
+     button became unclickable, so viewers were held through ads YouTube
+     intended them to be able to skip. It also killed the watermark's link
+     back to the watch page and, because the player then never received the
+     mouse activity its auto-hide timer runs on, any controls it did raise
+     stayed up permanently. */
   .reels-loader, .reels-empty-message { position: absolute; inset: 0; display: grid; place-items: center; color: rgba(255,255,255,0.78); font-size: 13px; text-align: center; padding: 24px; z-index: 2; }
   .reels-loader::before { content: ""; width: 42px; height: 42px; border-radius: 50%; border: 2px solid rgba(255,255,255,0.15); border-top-color: rgba(255,255,255,0.9); animation: reelsSpin 0.8s linear infinite; }
   @keyframes reelsSpin { to { transform: rotate(360deg); } }

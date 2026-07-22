@@ -697,8 +697,17 @@
     return youtubeApiPromise;
   }
 
+  /* autoplay=1, not 0. With 0 the frame sits in the cued state — poster,
+     title bar, play button — from the moment it mounts until playVideo()
+     reaches it, and that gap is the chrome at the start of every video. With
+     1 there is no idle state to draw controls for. Allowed because mute=1 is
+     already set, which is what browsers require for autoplay.
+     This is the compliant shape of the fix: a documented player parameter
+     changes what the player does, where the overlays and pointer-events
+     tricks that preceded it were fighting the player from outside, which
+     YouTube's developer policies prohibit and which never fully worked. */
   function getEmbedUrl(id) {
-    return `https://www.youtube.com/embed/${id}?enablejsapi=1&autoplay=0&mute=1&controls=0&disablekb=1&fs=0&iv_load_policy=3&loop=1&modestbranding=1&playsinline=1&rel=0&playlist=${id}`;
+    return `https://www.youtube.com/embed/${id}?enablejsapi=1&autoplay=1&mute=1&controls=0&disablekb=1&fs=0&iv_load_policy=3&loop=1&modestbranding=1&playsinline=1&rel=0&playlist=${id}`;
   }
 
   function setPlayerState(message) {
@@ -1205,21 +1214,15 @@
     const short = shorts[index];
     if (!short || mountedFrames.has(index)) return;
     const track = getOrCreateScrollTrack();
-    const cell = document.createElement("div");
-    cell.className = "reels-cell";
-    cell.style.top = `${index * 100}%`;
     const iframe = document.createElement("iframe");
     iframe.className = "reels-frame";
     iframe.setAttribute("allow", "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share");
     iframe.setAttribute("allowfullscreen", "true");
     iframe.setAttribute("title", short.title);
     iframe.setAttribute("src", getEmbedUrl(short.videoId));
-    cell.appendChild(iframe);
-    const cover = document.createElement("div");
-    cover.className = "reels-cell-cover";
-    cell.appendChild(cover);
-    track.appendChild(cell);
-    mountedFrames.set(index, { iframe, cell, cover, player: null });
+    iframe.style.top = `${index * 100}%`;
+    track.appendChild(iframe);
+    mountedFrames.set(index, { iframe, player: null });
     loadYoutubeApi().then((YT) => {
       if (!mountedFrames.has(index)) return;
       const player = new YT.Player(iframe, {
@@ -1231,21 +1234,17 @@
             syncPlayers();
           },
           onStateChange: (event) => {
-            /* The cover comes off only once the frame is actually playing —
-               any earlier and the poster and play button show through. */
-            /* The embed shows its controls whenever it is not actively
-               playing — paused, buffering, cued, ended, all of them. No
-               player parameter suppresses that, so the cover has to track
-               playback exactly: down only while the video is genuinely
-               running, up the moment it is not. */
-            const entry = mountedFrames.get(index);
-            if (entry && index === currentIndex) {
+            /* The frame takes pointer events again, so YouTube handles a
+               click on the video itself. That means playback can change
+               without going through togglePlayback, and our icon has to
+               follow the player rather than the other way round. */
+            if (index === currentIndex) {
               if (event.data === YT.PlayerState.PLAYING) {
-                uncover(entry);
+                isPlaying = true;
+                updatePlayIcon(true);
               } else if (event.data === YT.PlayerState.PAUSED) {
-                recover(entry, "paused");
-              } else {
-                recover(entry, "loading");
+                isPlaying = false;
+                updatePlayIcon(false);
               }
             }
             /* Backstop only, and deliberately late. loop=1 in the embed URL
@@ -1278,27 +1277,11 @@
      seekTo(0). The seek was the cause, so the watcher was the cause, and
      removing it is the fix. YouTube's own loop is silent; ours was not. */
 
-  /* There was a timed fallback here that lifted the cover after 2.2s whether
-     or not the video had started, so a black rectangle could never strand the
-     viewer. It was the wrong answer to a real problem: what it actually did
-     was lift the cover onto YouTube's paused controls, which is exactly the
-     chrome the cover exists to hide, on every navigation where playback did
-     not start promptly.
-     The cover now follows playback state strictly and carries its own label
-     instead — a spinner while loading, a play glyph while paused — so an
-     idle frame explains itself rather than either sitting blank or handing
-     the screen back to YouTube. */
-  function uncover(entry) {
-    if (!entry) return;
-    entry.cover.classList.add("uncovered");
-    entry.cover.removeAttribute("data-mode");
-  }
-
-  function recover(entry, mode) {
-    if (!entry) return;
-    entry.cover.classList.remove("uncovered");
-    entry.cover.setAttribute("data-mode", mode || "loading");
-  }
+  /* The opaque per-frame cover that used to live here is gone. YouTube's
+     developer policies prohibit displaying overlays in front of any part of
+     an embedded player, naming player controls specifically, and the cover
+     was exactly that. autoplay=1 removes most of what it was hiding anyway,
+     by never letting the frame sit idle. */
 
   function renderBufferedFrames() {
     const preloadRadius = Math.max(1, Math.floor(PRELOAD_COUNT / 2));
@@ -1311,7 +1294,7 @@
       if (index < start || index > end) {
         players.delete(index);
         entry.player?.destroy?.();
-        entry.cell.remove();
+        entry.iframe.remove();
         mountedFrames.delete(index);
       } else {
         entry.iframe.classList.toggle("active", index === currentIndex);
@@ -1327,7 +1310,6 @@
   function syncPlayers() {
     if (!isShortsVisible()) return; /* don't autoplay while hidden */
     players.forEach((player, index) => {
-      const entry = mountedFrames.get(index);
       if (index === currentIndex) {
         if (isMuted || currentVolume === 0) {
           player.mute?.();
@@ -1335,29 +1317,13 @@
           player.unMute?.();
           player.setVolume?.(currentVolume);
         }
-        /* No seek here, deliberately. Any seek makes the embed raise its
-           controls, and because the frame takes no pointer events YouTube
-           never sees the mouse activity its auto-hide timer runs on — so
-           those controls come up and never leave. Verified on the live
-           player: chrome still overlaid nine seconds and several loops after
-           a single seekTo, with the video playing and the cursor elsewhere.
-           A seek to restart a rewatched video therefore costs permanent
-           chrome, which is a bad trade. Videos resume where they were left
-           instead. */
+        /* Still no seek. A seek makes the embed raise its controls, so
+           restarting a rewatched video would cost chrome every time; videos
+           resume where they were left instead. */
         player.playVideo?.();
-        isPlaying = true;
-        updatePlayIcon(true);
-        /* Covered until PLAYING actually arrives; the state handler lifts it. */
-        if (player.getPlayerState?.() !== 1) recover(entry, "loading");
       } else {
         player.mute?.();
         player.pauseVideo?.();
-        /* Re-cover anything in the background. A paused embed shows its play
-           overlay, and these sit paused off-screen until you scroll to them —
-           uncovered, that overlay is the first thing you would see on arrival.
-           The active frame is deliberately left alone so a deliberate pause
-           still shows the video. */
-        recover(entry, "loading");
       }
     });
   }
