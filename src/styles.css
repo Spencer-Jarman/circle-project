@@ -1041,24 +1041,58 @@
   @keyframes reelsSpin { to { transform: rotate(360deg); } }
   .reels-top-left { position: absolute; top: 16px; left: 16px; display: flex; gap: 10px; z-index: 10; opacity: 0; transition: opacity 0.2s ease; pointer-events: none; }
   .reels-player:hover .reels-top-left { opacity: 1; pointer-events: auto; }
-  .reels-play-pill { display: flex; align-items: center; justify-content: center; background: rgba(40,40,40,0.65); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); border-radius: 999px; border: none; width: 40px; height: 40px; cursor: pointer; color: #fff; flex-shrink: 0; transition: background 0.15s; }
-  .reels-play-pill:hover { background: rgba(55,55,55,0.8); }
-  .reels-volume-pill { display: flex; align-items: center; gap: 8px; background: rgba(40,40,40,0.65); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); border-radius: 999px; padding: 0 14px 0 10px; height: 40px; cursor: pointer; overflow: hidden; transition: background 0.15s; }
-  .reels-volume-pill:hover { background: rgba(55,55,55,0.8); }
-  .reels-volume-pill-icon { display: flex; align-items: center; justify-content: center; flex-shrink: 0; color: #fff; width: 20px; }
-  .reels-volume-pill-slider { width: 90px; height: 4px; appearance: none; -webkit-appearance: none; background: rgba(255,255,255,0.35); border-radius: 2px; outline: none; cursor: pointer; flex-shrink: 0; }
+  /* Both controls are 48px circles at rest, matching the rail and the Shorts
+     layout. The volume one widens on hover to expose its slider — YouTube
+     offers only a mute toggle here, but collapsing to a circle keeps that look
+     without giving up the finer control. */
+  .reels-play-pill { display: flex; align-items: center; justify-content: center; background: rgba(0,0,0,0.55); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); border-radius: 999px; border: none; width: 48px; height: 48px; cursor: pointer; color: #fff; flex-shrink: 0; transition: background 0.15s; }
+  .reels-play-pill:hover { background: rgba(0,0,0,0.75); }
+  .reels-volume-pill { display: flex; align-items: center; justify-content: center; gap: 0; background: rgba(0,0,0,0.55); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); border-radius: 999px; padding: 0; width: 48px; height: 48px; cursor: pointer; overflow: hidden; flex-shrink: 0; transition: background 0.15s ease, width 0.22s ease, padding 0.22s ease, gap 0.22s ease; }
+  .reels-volume-pill:hover { background: rgba(0,0,0,0.75); width: 154px; padding: 0 14px 0 13px; gap: 9px; justify-content: flex-start; }
+  .reels-volume-pill-icon { display: flex; align-items: center; justify-content: center; flex-shrink: 0; color: #fff; width: 22px; }
+  /* Zero-width until the pill opens, so it cannot spill out of the circle. */
+  .reels-volume-pill-slider { width: 0; height: 4px; appearance: none; -webkit-appearance: none; background: rgba(255,255,255,0.35); border-radius: 2px; outline: none; cursor: pointer; flex-shrink: 0; opacity: 0; transition: width 0.22s ease, opacity 0.18s ease; }
+  .reels-volume-pill:hover .reels-volume-pill-slider { width: 90px; opacity: 1; }
   .reels-volume-pill-slider::-webkit-slider-thumb { -webkit-appearance: none; width: 14px; height: 14px; border-radius: 50%; background: #fff; cursor: pointer; box-shadow: 0 1px 4px rgba(0,0,0,0.4); }
   .reels-volume-pill-slider::-moz-range-thumb { width: 14px; height: 14px; border-radius: 50%; background: #fff; cursor: pointer; border: none; box-shadow: 0 1px 4px rgba(0,0,0,0.4); }
-  .reels-sidebar { display: flex; flex-direction: column; align-items: center; justify-content: flex-end; padding-bottom: 80px; padding-left: 16px; gap: 20px; flex-shrink: 0; width: 60px; }
+  /* 90px clears the attribution strip at the foot of the video, so the rail's
+     last item sits just above it rather than level with it. */
+  .reels-sidebar { display: flex; flex-direction: column; align-items: center; justify-content: flex-end; padding-bottom: 90px; padding-left: 16px; gap: 18px; flex-shrink: 0; width: 60px; }
   /* Two of these are <button> now, so the UA button styling has to go or
      they render boxed and mis-aligned next to the plain div. */
-  .reels-engagement-item { display: flex; flex-direction: column; align-items: center; gap: 4px; cursor: pointer; background: none; border: 0; padding: 0; font: inherit; }
+  /* Shorts format: icon inside a translucent circle, count in bold beneath.
+     The rail sits over arbitrary video frames, so the circle is white at low
+     alpha rather than a theme colour — it has to read against both a bright
+     explosion and a dark treeline. */
+  .reels-engagement-item { display: flex; flex-direction: column; align-items: center; gap: 6px; cursor: pointer; background: none; border: 0; padding: 0; font: inherit; text-decoration: none; }
+  .reels-icon-circle { width: 48px; height: 48px; border-radius: 50%; display: flex; align-items: center; justify-content: center; background: rgba(255,255,255,0.13); backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px); transition: background 0.15s ease; }
+  .reels-engagement-item:hover .reels-icon-circle { background: rgba(255,255,255,0.22); }
   .reels-engagement-item svg { color: #fff; display: block; }
-  .reels-engagement-count { font-size: 12px; color: #fff; font-weight: 500; text-align: center; }
-  button.reels-engagement-item { transition: transform 0.12s ease; }
-  button.reels-engagement-item:hover { transform: scale(1.08); }
-  button.reels-engagement-item:active { transform: scale(0.94); }
-  button.reels-engagement-item[aria-expanded="true"] svg { color: var(--brand-color); }
+  .reels-engagement-count { font-size: 13px; color: #fff; font-weight: 600; text-align: center; text-shadow: 0 1px 3px rgba(0,0,0,0.6); }
+  button.reels-engagement-item, a.reels-engagement-item { transition: transform 0.12s ease; }
+  button.reels-engagement-item:hover, a.reels-engagement-item:hover { transform: scale(1.08); }
+  button.reels-engagement-item:active, a.reels-engagement-item:active { transform: scale(0.94); }
+  button.reels-engagement-item[aria-expanded="true"] .reels-icon-circle { background: var(--brand-color); }
+
+  /* Channel avatar closing the rail. Ringed so it reads as an avatar rather
+     than another icon button. */
+  .reels-channel-avatar { width: 48px; height: 48px; border-radius: 50%; display: block; object-fit: cover; background: var(--hover-color); border: 2px solid rgba(255,255,255,0.9); }
+
+  /* ── Attribution strip ──
+     Always visible, not hover-revealed. The iframe takes no pointer events, so
+     YouTube's own watermark link is dead; this is the only remaining route to
+     the channel and the video, and it should not be something you have to
+     discover by hovering. */
+  .reels-attribution { position: absolute; left: 0; right: 0; bottom: 0; z-index: 12; display: flex; align-items: center; gap: 10px; padding: 34px 14px 14px; background: linear-gradient(to top, rgba(0,0,0,0.82), rgba(0,0,0,0)); }
+  .reels-attr-channel { display: flex; align-items: center; gap: 9px; text-decoration: none; min-width: 0; }
+  .reels-attr-avatar { width: 32px; height: 32px; border-radius: 50%; flex-shrink: 0; object-fit: cover; background: var(--hover-color); border: 1px solid rgba(255,255,255,0.7); }
+  .reels-attr-handle { color: #fff; font-size: 14px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; text-shadow: 0 1px 3px rgba(0,0,0,0.6); }
+  .reels-attr-channel:hover .reels-attr-handle { text-decoration: underline; }
+  .reels-attr-yt { margin-left: auto; flex-shrink: 0; display: flex; align-items: center; gap: 6px; color: #fff; text-decoration: none; font-size: 13px; font-weight: 600; background: rgba(0,0,0,0.5); border: 1px solid rgba(255,255,255,0.28); padding: 6px 12px; border-radius: 999px; transition: background 0.15s ease, border-color 0.15s ease; }
+  .reels-attr-yt:hover { background: rgba(0,0,0,0.75); border-color: rgba(255,255,255,0.55); }
+  /* Monochrome mark, which YouTube permits over video, and it avoids dropping
+     a second unrelated red next to --brand-color. */
+  .reels-attr-yt svg { color: #fff; flex-shrink: 0; }
 
   /* ── Comments panel ──
      A third flex child of .reels-main, so height: 100% resolves against the

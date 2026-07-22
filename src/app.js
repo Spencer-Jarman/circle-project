@@ -723,6 +723,10 @@
          `shares` any more: the Data API has no share count to read. */
       likes: null,
       comments: null,
+      /* Nor any channel id, avatar or handle — all three come from YouTube. */
+      channelId: "",
+      channelHandle: "",
+      channelAvatar: "",
     };
   }
 
@@ -765,6 +769,8 @@
         map[item.id] = {
           likes:    toCount(item.statistics.likeCount),
           comments: toCount(item.statistics.commentCount),
+          channelId:    item.snippet?.channelId || "",
+          channelTitle: item.snippet?.channelTitle || "",
         };
       }
       return map;
@@ -773,13 +779,92 @@
     }
   }
 
+  /* Channel avatars and handles, keyed by channel id. Cached for the session
+     because a playlist tends to revisit the same few channels, and every
+     repeat lookup would otherwise cost another quota unit. */
+  const channelCache = new Map();
+
+  async function fetchChannels(channelIds) {
+    const missing = [...new Set(channelIds.filter((id) => id && !channelCache.has(id)))];
+    if (missing.length === 0) return channelCache;
+    try {
+      const res = await fetch(
+        `${PROXY_BASE}/youtube/channels?id=${encodeURIComponent(missing.join(","))}`
+      );
+      if (res.ok) {
+        const data = await res.json();
+        for (const c of data.items || []) channelCache.set(c.id, c);
+      }
+    } catch (_) {}
+    /* Cache the misses too, otherwise a channel the API will not return keeps
+       being re-requested on every page of shorts. */
+    for (const id of missing) if (!channelCache.has(id)) channelCache.set(id, null);
+    return channelCache;
+  }
+
+  function videoUrl(short) {
+    return `https://www.youtube.com/shorts/${short.videoId}`;
+  }
+
+  /* A claimed @handle gives the readable /@name URL; without one the only
+     stable address is /channel/<id>. */
+  function channelUrl(short) {
+    if (short.channelHandle) return `https://www.youtube.com/${short.channelHandle}`;
+    if (short.channelId) return `https://www.youtube.com/channel/${short.channelId}`;
+    return "";
+  }
+
   function updateEngagementPanel(index) {
     const short = shorts[index];
     const likesEl    = document.getElementById("reels-likes-count");
     const commentsEl = document.getElementById("reels-comments-count");
     if (likesEl)    likesEl.textContent    = short ? formatCount(short.likes)    : "—";
     if (commentsEl) commentsEl.textContent = short ? formatCount(short.comments) : "—";
+    updateAttribution(short);
     syncCommentsPanel();
+  }
+
+  function updateAttribution(short) {
+    const railLink   = document.getElementById("reels-channel-link");
+    const railAvatar = document.getElementById("reels-channel-avatar");
+    const attrLink   = document.getElementById("reels-attr-channel");
+    const attrAvatar = document.getElementById("reels-attr-avatar");
+    const attrHandle = document.getElementById("reels-attr-handle");
+    const ytLink     = document.getElementById("reels-attr-yt");
+
+    const chUrl = short ? channelUrl(short) : "";
+    const avatar = short?.channelAvatar || "";
+    /* Handle when the channel claimed one, otherwise the plain title — never
+       an empty @, which is what a bare customUrl fallback would render. */
+    const label = short ? (short.channelHandle || short.channel || "") : "";
+
+    [railLink, attrLink].forEach((el) => {
+      if (!el) return;
+      if (chUrl) {
+        el.href = chUrl;
+        el.removeAttribute("aria-disabled");
+        el.style.visibility = "";
+      } else {
+        el.removeAttribute("href");
+        el.setAttribute("aria-disabled", "true");
+      }
+    });
+
+    [railAvatar, attrAvatar].forEach((el) => {
+      if (!el) return;
+      /* Leave the element in place with its placeholder background when there
+         is no avatar; clearing src would draw a broken-image glyph. */
+      if (avatar) el.src = avatar;
+      else el.removeAttribute("src");
+      el.alt = label ? `${label} channel avatar` : "";
+    });
+
+    /* The rail avatar is the only rail item that can be empty, so hide it
+       rather than leaving a bare ring floating under Share. */
+    if (railLink) railLink.style.display = avatar || chUrl ? "" : "none";
+
+    if (attrHandle) attrHandle.textContent = label;
+    if (ytLink && short) ytLink.href = videoUrl(short);
   }
 
   /* ---------- share ---------- */
@@ -1046,6 +1131,18 @@
           if (yt) {
             s.likes = yt.likes;
             s.comments = yt.comments;
+            s.channelId = yt.channelId;
+            if (yt.channelTitle) s.channel = yt.channelTitle;
+          }
+        });
+        /* One batched lookup for the whole page rather than one per video. */
+        const channels = await fetchChannels(incoming.map((s) => s.channelId));
+        incoming.forEach((s) => {
+          const c = channels.get(s.channelId);
+          if (c) {
+            s.channelAvatar = c.avatar || "";
+            s.channelHandle = c.handle || "";
+            if (c.title) s.channel = c.title;
           }
         });
       }
@@ -1208,6 +1305,16 @@
       ?.addEventListener("click", () => setCommentsOpen(!commentsOpen));
     document.getElementById("reels-comments-close")
       ?.addEventListener("click", () => setCommentsOpen(false));
+
+    /* The frame takes no pointer events, so a click on the video lands here.
+       Opening the watch page restores the route the dead watermark link used
+       to provide. The controls and the attribution strip handle their own
+       clicks and must not also open the video. */
+    document.getElementById("reels-player")?.addEventListener("click", (e) => {
+      if (e.target.closest(".reels-attribution, .reels-top-left")) return;
+      const short = shorts[currentIndex];
+      if (short) window.open(videoUrl(short), "_blank", "noopener");
+    });
 
     /* The panel scrolls its own list; without this the wheel handler further
        down would read it as a swipe and jump to the next video. */

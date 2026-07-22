@@ -24,20 +24,39 @@
           <input type="range" class="reels-volume-pill-slider" id="reels-volume-slider" min="0" max="100" value="40" step="1">
         </div>
       </div>
+      <!-- Attribution. The iframe is pointer-events: none, so YouTube's own
+           watermark link is unreachable; these restore the route back. Sits
+           above the scroll track so its clicks do not open the video. -->
+      <div class="reels-attribution" id="reels-attribution">
+        <a class="reels-attr-channel" id="reels-attr-channel" href="#" target="_blank" rel="noopener noreferrer">
+          <img class="reels-attr-avatar" id="reels-attr-avatar" alt="" loading="lazy">
+          <span class="reels-attr-handle" id="reels-attr-handle"></span>
+        </a>
+        <a class="reels-attr-yt" id="reels-attr-yt" href="#" target="_blank" rel="noopener noreferrer" aria-label="Watch this video on YouTube">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M21.6 7.2s-.2-1.5-.9-2.1c-.8-.9-1.7-.9-2.1-1C15.9 3.8 12 3.8 12 3.8s-3.9 0-6.6.3c-.4.1-1.3.1-2.1 1-.6.6-.9 2.1-.9 2.1S2.2 9 2.2 10.8v1.7c0 1.8.2 3.6.2 3.6s.2 1.5.9 2.1c.8.9 1.9.9 2.4 1 1.7.2 6.3.3 6.3.3s3.9 0 6.6-.3c.4-.1 1.3-.1 2.1-1 .6-.6.9-2.1.9-2.1s.2-1.8.2-3.6v-1.7c0-1.8-.2-3.6-.2-3.6zM9.8 14.9V8.7l5.6 3.1-5.6 3.1z"/></svg>
+          <span>YouTube</span>
+        </a>
+      </div>
     </div>
     <div class="reels-sidebar">
       <div class="reels-engagement-item">
-        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 9V5a3 3 0 0 0-3-3l-4 9v11h11.28a2 2 0 0 0 2-1.7l1.38-9a2 2 0 0 0-2-2.3H14z"/><path d="M7 22H4a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2h3"/></svg>
+        <span class="reels-icon-circle"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 9V5a3 3 0 0 0-3-3l-4 9v11h11.28a2 2 0 0 0 2-1.7l1.38-9a2 2 0 0 0-2-2.3H14z"/><path d="M7 22H4a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2h3"/></svg></span>
         <span class="reels-engagement-count" id="reels-likes-count">—</span>
       </div>
       <button class="reels-engagement-item" id="reels-comments-btn" type="button" aria-label="Show comments" aria-expanded="false" aria-controls="reels-comments-panel">
-        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+        <span class="reels-icon-circle"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></span>
         <span class="reels-engagement-count" id="reels-comments-count">—</span>
       </button>
       <button class="reels-engagement-item" id="reels-share-btn" type="button" aria-label="Share this video">
-        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
+        <span class="reels-icon-circle"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg></span>
         <span class="reels-engagement-count" id="reels-share-label">Share</span>
       </button>
+      <!-- Bottom of the rail, matching Shorts. The column is justify-content:
+           flex-end, so adding this pushes the three above it upward on its
+           own — no offsets to retune. -->
+      <a class="reels-engagement-item reels-channel-item" id="reels-channel-link" href="#" target="_blank" rel="noopener noreferrer" aria-label="Open this channel on YouTube">
+        <img class="reels-channel-avatar" id="reels-channel-avatar" alt="" loading="lazy">
+      </a>
     </div>
     <!-- Height comes from the flex row, so it tracks the player at every
          viewport size without JavaScript measuring anything. -->
