@@ -1233,9 +1233,20 @@
           onStateChange: (event) => {
             /* The cover comes off only once the frame is actually playing —
                any earlier and the poster and play button show through. */
-            if (event.data === YT.PlayerState.PLAYING) {
-              const entry = mountedFrames.get(index);
-              if (entry && index === currentIndex) uncover(entry);
+            /* The embed shows its controls whenever it is not actively
+               playing — paused, buffering, cued, ended, all of them. No
+               player parameter suppresses that, so the cover has to track
+               playback exactly: down only while the video is genuinely
+               running, up the moment it is not. */
+            const entry = mountedFrames.get(index);
+            if (entry && index === currentIndex) {
+              if (event.data === YT.PlayerState.PLAYING) {
+                uncover(entry);
+              } else if (event.data === YT.PlayerState.PAUSED) {
+                recover(entry, "paused");
+              } else {
+                recover(entry, "loading");
+              }
             }
             /* Backstop only, and deliberately late. loop=1 in the embed URL
                restarts the video by itself and does so without drawing any
@@ -1267,32 +1278,26 @@
      seekTo(0). The seek was the cause, so the watcher was the cause, and
      removing it is the fix. YouTube's own loop is silent; ours was not. */
 
-  /* The cover exists to hide the embed's poster and play button until the
-     video is worth looking at, and normally PLAYING lifts it within a few
-     hundred ms. But PLAYING is not guaranteed — autoplay can be refused, the
-     network can stall, a backgrounded tab throttles media — and a cover with
-     no way out strands the viewer on a black rectangle, which is worse than
-     the chrome it was hiding. This bounds that: show whatever YouTube is
-     showing rather than nothing at all. */
-  const COVER_FALLBACK_MS = 2200;
-
+  /* There was a timed fallback here that lifted the cover after 2.2s whether
+     or not the video had started, so a black rectangle could never strand the
+     viewer. It was the wrong answer to a real problem: what it actually did
+     was lift the cover onto YouTube's paused controls, which is exactly the
+     chrome the cover exists to hide, on every navigation where playback did
+     not start promptly.
+     The cover now follows playback state strictly and carries its own label
+     instead — a spinner while loading, a play glyph while paused — so an
+     idle frame explains itself rather than either sitting blank or handing
+     the screen back to YouTube. */
   function uncover(entry) {
     if (!entry) return;
-    clearTimeout(entry.coverTimer);
-    entry.coverTimer = null;
     entry.cover.classList.add("uncovered");
+    entry.cover.removeAttribute("data-mode");
   }
 
-  function recover(entry) {
+  function recover(entry, mode) {
     if (!entry) return;
-    clearTimeout(entry.coverTimer);
-    entry.coverTimer = null;
     entry.cover.classList.remove("uncovered");
-  }
-
-  function armCoverFallback(entry) {
-    if (!entry || entry.coverTimer || entry.cover.classList.contains("uncovered")) return;
-    entry.coverTimer = setTimeout(() => uncover(entry), COVER_FALLBACK_MS);
+    entry.cover.setAttribute("data-mode", mode || "loading");
   }
 
   function renderBufferedFrames() {
@@ -1342,7 +1347,8 @@
         player.playVideo?.();
         isPlaying = true;
         updatePlayIcon(true);
-        armCoverFallback(entry);
+        /* Covered until PLAYING actually arrives; the state handler lifts it. */
+        if (player.getPlayerState?.() !== 1) recover(entry, "loading");
       } else {
         player.mute?.();
         player.pauseVideo?.();
@@ -1351,7 +1357,7 @@
            uncovered, that overlay is the first thing you would see on arrival.
            The active frame is deliberately left alone so a deliberate pause
            still shows the video. */
-        recover(entry);
+        recover(entry, "loading");
       }
     });
   }

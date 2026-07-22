@@ -1035,8 +1035,15 @@
      every buffered frame sits idle until you reach it — which is why the
      chrome reappeared on each new video. Nothing inside a cross-origin frame
      can be hidden, so the frame is covered instead until it is worth seeing. */
-  .reels-cell-cover { position: absolute; inset: 0; background: #000; z-index: 3; pointer-events: none; opacity: 1; transition: opacity 0.18s ease; }
+  .reels-cell-cover { position: absolute; inset: 0; background: #000; z-index: 3; pointer-events: none; opacity: 1; transition: opacity 0.18s ease; display: grid; place-items: center; }
   .reels-cell-cover.uncovered { opacity: 0; }
+  /* An idle frame should say why it is idle rather than reading as a dead
+     black rectangle. Loading spins; paused shows the glyph that says the
+     video is waiting on you. */
+  .reels-cell-cover::before { content: ""; width: 54px; height: 54px; border-radius: 50%; display: none; }
+  .reels-cell-cover[data-mode="loading"]::before { display: block; border: 3px solid rgba(255,255,255,0.16); border-top-color: rgba(255,255,255,0.85); animation: reelsSpin 0.8s linear infinite; }
+  .reels-cell-cover[data-mode="paused"]::before { display: block; background: rgba(255,255,255,0.14); clip-path: none; box-shadow: inset 0 0 0 1px rgba(255,255,255,0.18); }
+  .reels-cell-cover[data-mode="paused"]::after { content: ""; position: absolute; width: 0; height: 0; border-left: 17px solid rgba(255,255,255,0.9); border-top: 11px solid transparent; border-bottom: 11px solid transparent; margin-left: 5px; }
   /* The active frame stays non-interactive too. controls=0 does not stop the
      embed drawing its own chrome — hovering it surfaces the title bar, the
      centre play/mute overlay and the watermark, all painted inside the iframe
@@ -1086,7 +1093,6 @@
   button.reels-engagement-item, a.reels-engagement-item { transition: transform 0.12s ease; }
   button.reels-engagement-item:hover, a.reels-engagement-item:hover { transform: scale(1.08); }
   button.reels-engagement-item:active, a.reels-engagement-item:active { transform: scale(0.94); }
-  button.reels-engagement-item[aria-expanded="true"] .reels-icon-circle { background: var(--brand-color); }
 
   /* Channel avatar closing the rail. Ringed so it reads as an avatar rather
      than another icon button. */
