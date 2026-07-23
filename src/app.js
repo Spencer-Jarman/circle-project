@@ -154,17 +154,38 @@
     sessionStorage.setItem('cc-last-' + listView, normPath(p));
   }
 
+  /* Sidebar groups that live under the YouTube tab, in the order they should
+     appear there. Everything not listed belongs to the chats tab.
+
+     Circle derives a group's id from its name, so renaming a group in the
+     admin changes its id and silently drops it out of this list. That is the
+     first thing to check if a group turns up under the wrong tab: read the
+     real ids off the live sidebar rather than guessing them from the labels,
+     because the transform is not always obvious ("NEWS/X" becomes "news-x"). */
+  var YOUTUBE_GROUPS = ['news-x', 'youtube', 'test-area'];
+
+  function youtubeRank(g) {
+    return YOUTUBE_GROUPS.indexOf(g.id);
+  }
+
+  function groupsForView(sidebar, v) {
+    var all = [].slice.call(sidebar.querySelectorAll('div.group.relative[id]'));
+    if (v !== 'youtube') {
+      return all.filter(function (g) { return youtubeRank(g) === -1; });
+    }
+    return all
+      .filter(function (g) { return youtubeRank(g) !== -1; })
+      .sort(function (a, b) { return youtubeRank(a) - youtubeRank(b); });
+  }
+
   function firstSpaceLink(v) {
     /* first link in the first visible sidebar group for this view */
     var sidebar = document.querySelector('[data-testid="standard-layout-v2-sidebar"]');
     if (!sidebar) return null;
-    var groups = sidebar.querySelectorAll('div.group.relative[id]');
+    var groups = groupsForView(sidebar, v);
     for (var i = 0; i < groups.length; i++) {
-      var isYt = groups[i].id.indexOf('youtube') === 0;
-      if (isYt === (v === 'youtube')) {
-        var a = groups[i].querySelector('a[href^="/c/"]');
-        if (a) return a;
-      }
+      var a = groups[i].querySelector('a[href^="/c/"]');
+      if (a) return a;
     }
     return null;
   }
@@ -192,8 +213,13 @@
     var sidebar = document.querySelector('[data-testid="standard-layout-v2-sidebar"]');
     if (!sidebar) return;
     sidebar.querySelectorAll('div.group.relative[id]').forEach(function (g) {
-      var isYt = g.id.indexOf('youtube') === 0;
+      var rank = youtubeRank(g);
+      var isYt = rank !== -1;
       g.style.display = (isYt === showYoutube) ? '' : 'none';
+      /* Circle renders these in its own sequence, which is not the one we
+         want. The container is a flex column, so order sorts them without
+         moving anything in the DOM. */
+      if (isYt) g.style.order = String(rank + 1);
     });
     sidebar.querySelectorAll('a').forEach(function (a) {
       if (a.textContent.trim() === 'Feed') a.style.display = showYoutube ? 'none' : '';
