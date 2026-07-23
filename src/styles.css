@@ -95,7 +95,6 @@
     --color-background-primary: var(--post-color) !important;
     --color-background-text-editor-modifier: var(--post-color) !important;
     --color-chip-background: var(--post-color) !important;
-    --color-circle-button-background: var(--post-color) !important;
     --color-support-widget-background: var(--post-color) !important;
     --dropdown-background: var(--post-color) !important;
     --input-background: var(--post-color) !important;
@@ -123,7 +122,6 @@
     --color-background-tertiary: var(--hover-color) !important;
     --color-background-text-editor-modifier-active: var(--hover-color) !important;
     --color-background-text-editor-modifier-hover: var(--hover-color) !important;
-    --color-circle-button-background-hover: var(--hover-color) !important;
     --color-community-header-hover-background: var(--hover-color) !important;
     --color-message-highlight-background: var(--hover-color) !important;
     --color-stroke-background: var(--hover-color) !important;
@@ -150,6 +148,15 @@
     --color-background-button-branded: var(--brand-color) !important;
     --color-background-slider-branded: var(--brand-color) !important;
     --color-border-badge-branded: var(--brand-color) !important;
+    /* Circle's primary action button — Publish, Save, Create. These four sat
+       in the panel/border groups, which is why Publish read as another dark
+       panel rather than the main call to action. Hover lifts the same red
+       rather than introducing a second one, so this still derives from the
+       nine roots. */
+    --color-border-circle-button: var(--brand-color) !important;
+    --color-border-circle-button-hover: color-mix(in srgb, var(--brand-color) 82%, white) !important;
+    --color-circle-button-background: var(--brand-color) !important;
+    --color-circle-button-background-hover: color-mix(in srgb, var(--brand-color) 82%, white) !important;
     --color-community-header-active-background: var(--post-color) !important;
     --color-community-sidebar-active-background: var(--brand-color) !important;
     --color-community-sidebar-hover-background: var(--brand-color) !important;
@@ -280,8 +287,6 @@
     --border-medium: var(--border-color) !important;
     --button-border: var(--border-color) !important;
     --color-border-active: var(--border-color) !important;
-    --color-border-circle-button: var(--border-color) !important;
-    --color-border-circle-button-hover: var(--border-color) !important;
     --color-border-dark: var(--border-color) !important;
     --color-border-default: var(--border-color) !important;
     --color-border-disabled: var(--border-color) !important;
@@ -932,6 +937,25 @@
   #standard-layout-header-child button.bg-brand,
   #sidebar--right__btn-quick-post {
     display: none !important;
+  }
+  /* …except in the spaces that are not post spaces, where the button is the
+     only way to add anything and hiding it removes the feature.
+
+     Keyed on the space id Circle puts on <body> (view-space--<id>) rather
+     than on the space's type, because the type is not in the DOM anywhere a
+     stylesheet can reach: every space renders the same body classes and the
+     same header testids, differing only by that number. The nearest content
+     signal, [data-testid="post_section"], is no good — it is absent from an
+     empty post space, and it arrives after first paint, so the button would
+     flash on every load before being hidden again.
+
+     The trade is that a new non-post space needs its id adding here. To find
+     it: open the space and read the view-space--<id> class off <body>.
+       2694675  Community Events
+       2748877  test image space */
+  body.view-space--2694675 #standard-layout-header-child button.bg-brand,
+  body.view-space--2748877 #standard-layout-header-child button.bg-brand {
+    display: inline-flex !important;
   }
   /* Chat column height (overrides inline calc(100vh - 136px); header removed, bar 64px) */
   .main__wrapper.bg-primary .bg-primary.w-full.overflow-auto {
