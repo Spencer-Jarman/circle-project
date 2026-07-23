@@ -212,17 +212,76 @@
     var showYoutube = listView === 'youtube';
     var sidebar = document.querySelector('[data-testid="standard-layout-v2-sidebar"]');
     if (!sidebar) return;
+    /* Every write here is guarded by a read. This runs on each DOM mutation,
+       and assigning the same style value still dirties layout — with the
+       sidebar being a scroller, repeated churn is enough to shift its scroll
+       position. Writing only on an actual change makes the common case, where
+       nothing has changed, completely free. */
     sidebar.querySelectorAll('div.group.relative[id]').forEach(function (g) {
       var rank = youtubeRank(g);
       var isYt = rank !== -1;
-      g.style.display = (isYt === showYoutube) ? '' : 'none';
+      var want = (isYt === showYoutube) ? '' : 'none';
+      if (g.style.display !== want) g.style.display = want;
       /* Circle renders these in its own sequence, which is not the one we
          want. The container is a flex column, so order sorts them without
          moving anything in the DOM. */
-      if (isYt) g.style.order = String(rank + 1);
+      if (isYt) {
+        var o = String(rank + 1);
+        if (g.style.order !== o) g.style.order = o;
+      }
     });
     sidebar.querySelectorAll('a').forEach(function (a) {
-      if (a.textContent.trim() === 'Feed') a.style.display = showYoutube ? 'none' : '';
+      if (a.textContent.trim() !== 'Feed') return;
+      var want = showYoutube ? 'none' : '';
+      if (a.style.display !== want) a.style.display = want;
+    });
+  }
+
+  /* ---------- sidebar scroll lock ----------
+     The sidebar scrolls through an OverlayScrollbars viewport, not through
+     the element carrying the sidebar testid, and that viewport gets moved by
+     things other than the reader: focusing a link on navigation scrolls it
+     into view, and any content-height change lets scroll anchoring rebase it.
+     Both read as the list jumping on its own after a click.
+
+     So the position is treated as the reader's property. Their own gestures
+     update it; anything else is put straight back. Gestures counted are the
+     wheel, touch, the scroll keys, and a drag of the OverlayScrollbars handle
+     — that last one matters because dragging the bar fires no wheel or touch
+     event and would otherwise be undone as if it were a jump. */
+  var SCROLL_KEYS = {
+    ArrowUp: 1, ArrowDown: 1, PageUp: 1, PageDown: 1, Home: 1, End: 1, ' ': 1,
+  };
+
+  function lockSidebarScroll() {
+    var sidebar = document.querySelector('[data-testid="standard-layout-v2-sidebar"]');
+    if (!sidebar) return;
+    var vp = sidebar.querySelector('[data-overlayscrollbars-viewport]') || sidebar;
+    if (vp.hasAttribute('data-cc-scrolllock')) return;
+    vp.setAttribute('data-cc-scrolllock', '1');
+
+    var desired = vp.scrollTop;
+    var byUser = false;
+    var settle;
+
+    function mark() {
+      byUser = true;
+      clearTimeout(settle);
+      /* Momentum keeps firing scroll events after the gesture ends, and those
+         are still the reader's. The window closes once they stop. */
+      settle = setTimeout(function () { byUser = false; }, 400);
+    }
+
+    vp.addEventListener('wheel', mark, { passive: true });
+    vp.addEventListener('touchmove', mark, { passive: true });
+    vp.addEventListener('keydown', function (e) { if (SCROLL_KEYS[e.key]) mark(); }, true);
+    sidebar.addEventListener('pointerdown', function (e) {
+      if (e.target.closest && e.target.closest('.os-scrollbar')) mark();
+    }, true);
+
+    vp.addEventListener('scroll', function () {
+      if (byUser) { desired = vp.scrollTop; return; }
+      if (Math.abs(vp.scrollTop - desired) > 1) vp.scrollTop = desired;
     });
   }
 
@@ -563,7 +622,7 @@
   }
 
   /* ---------- observers ---------- */
-  function applyAll() { updateActive(); applySidebar(); applyOverlay(); centerContent(); layoutHeaderControls(); }
+  function applyAll() { updateActive(); applySidebar(); lockSidebarScroll(); applyOverlay(); centerContent(); layoutHeaderControls(); }
 
   function observeSizes() {
     if (!window.ResizeObserver) return;
@@ -592,6 +651,7 @@
       ensureOverlay();
       ensureActiveInit();
       applySidebar();
+      lockSidebarScroll();
       centerContent();
       layoutHeaderControls();
       observeSizes();
@@ -1259,35 +1319,16 @@
           onStateChange: (event) => {
             /* The cover comes off only once the frame is actually playing —
                any earlier and the poster and play button show through. */
-            /* The embed shows its controls whenever it is not actively
-               playing — paused, buffering, cued, ended, all of them. No
-               player parameter suppresses that, so the cover has to track
-               playback exactly: down only while the video is genuinely
-               running, up the moment it is not. */
-            const entry = mountedFrames.get(index);
-            if (entry && index === currentIndex) {
-              if (event.data === YT.PlayerState.PLAYING) {
-                uncover(entry);
-              } else if (event.data === YT.PlayerState.PAUSED) {
-                recover(entry, "paused");
-              } else {
-                recover(entry, "loading");
-              }
+            if (event.data === YT.PlayerState.PLAYING) {
+              const entry = mountedFrames.get(index);
+              if (entry && index === currentIndex) uncover(entry);
             }
-            /* Backstop only, and deliberately late. loop=1 in the embed URL
-               restarts the video by itself and does so without drawing any
-               chrome — an API seek is what summons the overlay, so seeking
-               here immediately would cause the exact flash this avoids. If
-               the native loop has not taken over within a second, something
-               is wrong and a visible restart beats a stuck video. */
+            /* Kept as a backstop. The watcher below should restart the video
+               before it can ever reach ENDED; if it slips through, this still
+               loops, just with the end screen the watcher exists to avoid. */
             if (event.data === YT.PlayerState.ENDED) {
-              const player = event.target;
-              setTimeout(() => {
-                if (player.getPlayerState?.() === YT.PlayerState.ENDED) {
-                  player.seekTo(0, true);
-                  player.playVideo();
-                }
-              }, 1000);
+              event.target.seekTo(0, true);
+              event.target.playVideo();
             }
           },
         },
@@ -1297,34 +1338,57 @@
     });
   }
 
-  /* There was a watcher here that restarted the video 0.22s early, on the
-     theory that the flash was YouTube's end screen. It was not. Instrumenting
-     the live player showed ENDED never fires at all — loop=1 restarts the
-     video first — while the overlay reproduced perfectly on a bare
-     seekTo(0). The seek was the cause, so the watcher was the cause, and
-     removing it is the fix. YouTube's own loop is silent; ours was not. */
+  /* Looping by letting the video END and seeking back is what made the chrome
+     flash on every repeat: YouTube paints its replay screen the instant the
+     video finishes, before the seek lands. Restarting a fraction early means
+     it never finishes, so there is no end screen to paint. The lead has to
+     comfortably exceed the poll interval or a tick can straddle the end. */
+  const LOOP_LEAD_S = 0.22;
+  let loopWatch = null;
 
-  /* There was a timed fallback here that lifted the cover after 2.2s whether
-     or not the video had started, so a black rectangle could never strand the
-     viewer. It was the wrong answer to a real problem: what it actually did
-     was lift the cover onto YouTube's paused controls, which is exactly the
-     chrome the cover exists to hide, on every navigation where playback did
-     not start promptly.
-     The cover now follows playback state strictly and carries its own label
-     instead — a spinner while loading, a play glyph while paused — so an
-     idle frame explains itself rather than either sitting blank or handing
-     the screen back to YouTube. */
+  /* The cover exists to hide the embed's poster and play button until the
+     video is worth looking at, and normally PLAYING lifts it within a few
+     hundred ms. But PLAYING is not guaranteed — autoplay can be refused, the
+     network can stall, a backgrounded tab throttles media — and a cover with
+     no way out strands the viewer on a black rectangle, which is worse than
+     the chrome it was hiding. This bounds that: show whatever YouTube is
+     showing rather than nothing at all. */
+  const COVER_FALLBACK_MS = 2200;
+
   function uncover(entry) {
     if (!entry) return;
+    clearTimeout(entry.coverTimer);
+    entry.coverTimer = null;
     entry.cover.classList.add("uncovered");
-    entry.cover.removeAttribute("data-mode");
   }
 
-  function recover(entry, mode) {
+  function recover(entry) {
     if (!entry) return;
+    clearTimeout(entry.coverTimer);
+    entry.coverTimer = null;
     entry.cover.classList.remove("uncovered");
-    entry.cover.setAttribute("data-mode", mode || "loading");
   }
+
+  function armCoverFallback(entry) {
+    if (!entry || entry.coverTimer || entry.cover.classList.contains("uncovered")) return;
+    entry.coverTimer = setTimeout(() => uncover(entry), COVER_FALLBACK_MS);
+  }
+
+  function startLoopWatch() {
+    if (loopWatch) return;
+    loopWatch = setInterval(() => {
+      if (!isShortsVisible()) return;
+      const player = players.get(currentIndex);
+      if (!player || typeof player.getDuration !== "function") return;
+      const duration = player.getDuration() || 0;
+      const now = player.getCurrentTime?.() || 0;
+      if (duration > 0 && duration - now <= LOOP_LEAD_S) {
+        player.seekTo(0, true);
+        player.playVideo?.();
+      }
+    }, 60);
+  }
+
 
   function renderBufferedFrames() {
     const preloadRadius = Math.max(1, Math.floor(PRELOAD_COUNT / 2));
@@ -1350,7 +1414,7 @@
     }
   }
 
-  function syncPlayers() {
+  function syncPlayers(resetActive) {
     if (!isShortsVisible()) return; /* don't autoplay while hidden */
     players.forEach((player, index) => {
       const entry = mountedFrames.get(index);
@@ -1361,20 +1425,11 @@
           player.unMute?.();
           player.setVolume?.(currentVolume);
         }
-        /* No seek here, deliberately. Any seek makes the embed raise its
-           controls, and because the frame takes no pointer events YouTube
-           never sees the mouse activity its auto-hide timer runs on — so
-           those controls come up and never leave. Verified on the live
-           player: chrome still overlaid nine seconds and several loops after
-           a single seekTo, with the video playing and the cursor elsewhere.
-           A seek to restart a rewatched video therefore costs permanent
-           chrome, which is a bad trade. Videos resume where they were left
-           instead. */
+        if (resetActive) player.seekTo?.(0, true);
         player.playVideo?.();
         isPlaying = true;
         updatePlayIcon(true);
-        /* Covered until PLAYING actually arrives; the state handler lifts it. */
-        if (player.getPlayerState?.() !== 1) recover(entry, "loading");
+        armCoverFallback(entry);
       } else {
         player.mute?.();
         player.pauseVideo?.();
@@ -1383,9 +1438,10 @@
            uncovered, that overlay is the first thing you would see on arrival.
            The active frame is deliberately left alone so a deliberate pause
            still shows the video. */
-        recover(entry, "loading");
+        recover(entry);
       }
     });
+    startLoopWatch();
   }
 
   function updateNavigationState() {
@@ -1400,7 +1456,7 @@
     if (index < 0 || index >= shorts.length) return;
     currentIndex = index;
     renderBufferedFrames();
-    syncPlayers();
+    syncPlayers(true);
     updateNavigationState();
     updateEngagementPanel(index);
     if (shorts.length > 0 && currentIndex >= shorts.length - FETCH_AHEAD) {
