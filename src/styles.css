@@ -807,11 +807,31 @@
     background: var(--secondary-color) !important;
   }
 
-  /* Cover image: strip the horizontal padding 
+  /* Cover image: strip the horizontal padding
      The wrapper eats 72px in the guest layout. */
   div:has(> [data-testid="cover-image-container"]) {
     padding-left: 0 !important;
     padding-right: 0 !important;
+  }
+
+  /* The box behind the cover image. It carries .bg-primary, which resolves to
+     the card colour, and shows wherever the image does not reach.
+
+     Two selectors because the element differs by role, and a fix keyed on
+     either one alone is invisible to half the audience:
+       • Guests get data-testid="cover-image-container" on the box itself.
+       • Admins get no testid there — only a cover-image-overlay child holding
+         the Change cover and Remove buttons. That overlay does not exist for
+         guests, which is why it cannot be the sole anchor. (getCoverRoot in
+         app.js splits on the same distinction.)
+     Both branches require .bg-primary so this cannot spread to the 127 other
+     things Circle paints from that class; on a real space page it matches one
+     element out of four. The outer #standard-layout-v2-cover-image-container
+     carries the same testid but no .bg-primary, so it stays transparent and
+     its padding keeps showing the page colour. */
+  [data-testid="cover-image-container"].bg-primary,
+  .bg-primary:has(> [data-testid="cover-image-overlay"]) {
+    background-color: var(--secondary-color) !important;
   }
 
   /* Centre embeds (X posts etc.) inside post bodies */
